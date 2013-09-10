@@ -4,7 +4,7 @@ public class Move {
 	private byte[] destination;
 	private byte[][] waypoints;
 	private Piece movePiece;
-	//private int jumpsContained; I THOUGHT IT MIGHT BE EASIER JUST TO FIND LENGTH OF PIECESTOJUMP BUT IF YOU WANNT IT FEEL FREE TO TAKE OUT COMMENT MARKS.
+	private int jumpsContained;
 	private Piece[] piecesToJump;
 
 	public Move (Piece startPiece, byte[] startSource, byte[] startDestination) {
@@ -15,11 +15,6 @@ public class Move {
 		//constructor implementation
 	}
 
-	public boolean getIsViable () {
-		//implementation
-		//see line 3 comment
-	}
-
 	public byte[] getSource () {
 		//implementation
 	}
@@ -28,7 +23,7 @@ public class Move {
 		//implementation
 	}
 
-	public Byte[][] getWaypoints () {
+	public byte[][] getWaypoints () {
 		//implementation
 	}
 
@@ -36,15 +31,11 @@ public class Move {
 		//implementation
 	}
 
-	//public boolean getJumpsContained () {
-	//	//implementation
-	//}
-
-	public Piece getPiecesToJump () {
+	public boolean getJumpsContained () {
 		//implementation
 	}
 
-	public void perform () {
+	public Piece getPiecesToJump () {
 		//implementation
 	}
 }
