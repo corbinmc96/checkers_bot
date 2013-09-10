@@ -11,7 +11,7 @@ public class Board {
 		//implementation
 	}
 
-	public Piece removePiece (Piece pieceToRemove) {
+	public void removePiece (Piece pieceToRemove) {
 		//implementation
 	}
 }

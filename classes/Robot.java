@@ -3,17 +3,21 @@ public class Robot {
 	private byte[] armLocation;
 	private boolean isHoldingPiece;
 
+	public byte[] getArmLocation() {
+		//implementation
+	}
+	
 	public boolean getIsHoldingPiece() {
 		//implementation
 	}
 
-	public void moveToX(byte newX) {
+	public void moveToXY(byte[] newXY) {
 		//implementation
 	}
 	
-	public void moveToY(byte newY) {
-		//implementation
-	}
+	//public void moveToY(byte newY) {
+	//	//implementation
+	//}
 	
 	public void resetPosition() {
 		//implementation

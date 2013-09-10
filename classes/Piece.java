@@ -24,7 +24,7 @@ public class Piece {
 		//implementation
 	}
 
-	public String getPlayer () {
+	public Player getPlayer () {
 		//getPlayer implementation
 	}
 }

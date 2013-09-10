@@ -28,7 +28,7 @@ public class Move {
 		//implementation
 	}
 
-	public void getWaypoints () {
+	public Byte[][] getWaypoints () {
 		//implementation
 	}
 
