@@ -15,10 +15,9 @@ public class SimPlayer extends Player {
 	}
 
 	public void performMove(Move myMove) {
-		if (gameRobot == null) {
-			super.performMove()
-		} else {
-			//implementation
+		super.performMove(myMove);
+		if (this.gameRobot!=null) {
+			//extra code to move the Robot.
 		}
-	} //if game is to be simulated without a robot arm the performMove method of Player() will be called.
+	} 
 }
