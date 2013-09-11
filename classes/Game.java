@@ -5,23 +5,25 @@ public class Game {
 	private Player player2;
 
 	public Game () {
-		//constructor implementation
+		this.gameBoard = new Board();
+		this.player1, this.player2 = new Player(), new Player();
 	}
 
 	public Game (Robot startGameRobot) {
-		//constructor implementation
+		this.Game();
+		this.gameRobot = startGameRobot;
 		//indicates robot arm will be used. this must be passed into any simplayers so they know to use the robot arm. 
 	}
 
 	public void play() {
-		//implementation
+		//implementation will be done later
 	}
 
 	public Board getGameBoard () {
-		//implementation
+		return this.gameBoard;
 	}
 
 	public Player[] getPlayers () {
-		//implementation
+		return Player[2]{this.player1,this.player2};
 	}
 }

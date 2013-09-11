@@ -3,12 +3,12 @@ public class Board {
 
 	private Piece[] piecesOnBoard;
 
-	public Board (Piece[] startPieces) {
+	public Board () {
 		//constructor implementation
 	}
 
 	public Piece[] getPiecesOnBoard () {
-		//implementation
+		return this.piecesOnBoard;
 	}
 
 	public void removePiece (Piece pieceToRemove) {
