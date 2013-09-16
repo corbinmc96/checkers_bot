@@ -8,34 +8,37 @@ public class Move {
 	private Piece[] piecesToJump;
 
 	public Move (Piece startPiece, byte[] startSource, byte[] startDestination) {
-		//constructor implementation
+		this.movePiece = startPiece;
+		this.source = startSource;
+		this.destination = startDestination;
+		if this.destination[0] = 
 	}
 
 	public Move (Piece startPiece, byte[] startSource, byte[] startDestination, byte[][] startWaypoints) {
-		//constructor implementation
+		this.Move(startPiece, startSource, startDestination);
 	}
 
 	public byte[] getSource () {
-		//implementation
+		return this.source;
 	}
 
 	public byte[] getDestination () {
-		//implementation
+		return this.destination;
 	}
 
 	public byte[][] getWaypoints () {
-		//implementation
+		return this.waypoints;
 	}
 
 	public Piece getMovePiece () {
-		//implementation
+		return this.movePiece;
 	}
 
-	public boolean getJumpsContained () {
-		//implementation
+	public int getJumpsContained () {
+		return this.jumpsContained;
 	}
 
-	public Piece getPiecesToJump () {
-		//implementation
+	public Piece[] getPiecesToJump () {
+		return this.piecesToJump;
 	}
 }
