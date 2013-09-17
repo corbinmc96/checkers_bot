@@ -4,7 +4,6 @@ public class Move {
 	//waypoints are in order and include the starting point and the destination
 	private byte[][] waypoints;
 	private int jumpsContained;
-	private Piece[] piecesToJump;
 
 	public Move (Piece startPiece, byte[][] startWaypoints) {
 		this.movePiece = startPiece;
@@ -32,7 +31,17 @@ public class Move {
 		return this.jumpsContained;
 	}
 
-	public Piece[] getPiecesToJump () {
-		return this.piecesToJump;
+	public Piece[] calculatePiecesToJump () {
+		if (this.jumpsContained == 0) {
+			return new Piece[0];
+		}
+		else {
+			List<Piece> result;
+			for (int i=1; i<=this.waypoints.length-1;i++) {
+				byte[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2,(this.waypoints[i][1]+this.waypoints[i-1][1])/2};
+				result.add(Piece.getPieceAtLocation(midpoint));
+			}
+			return result.toArray();
+		}
 	}
 }

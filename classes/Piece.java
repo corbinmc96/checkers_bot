@@ -29,4 +29,16 @@ public class Piece {
 	public Player getPlayer () {
 		return this.owningPlayer;
 	}
+
+	public static Piece[] getAllPieces() {
+		return owningPlayer.getBoard().getPiecesOnBoard();
+	}
+
+	public static Piece getPieceAtLocation(byte[] checkLocation) {
+		for (checkPiece : this.getAllPieces()) {
+			if (checkPiece.getLocation() == checkLocation) {
+				return checkPiece;
+			}
+		}
+	}
 }

@@ -26,4 +26,8 @@ public class Player {
 	public void performMove(Move myMove) {
 		//implementation
 	}
+
+	public Board getBoard () {
+		returnthis.myBoard;
+	}
 }
