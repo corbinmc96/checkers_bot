@@ -5,7 +5,7 @@ public class Board {
 	private ArrayList<Piece> piecesOnBoard;
 
 	public Board (Player[] players) {
-		piecesOnBoard = new ArrayList<Piece>;
+		piecesOnBoard = new ArrayList<Piece>();
 		for (byte i=0; i<3; i++) {
 			for (byte j=0; j<4; j++) {
 				piecesOnBoard.add(new Piece({2*j+(i%2), i}, players[0]));
