@@ -1,29 +1,23 @@
 public class Move {
 
-	private byte[] source;
-	private byte[] destination;
-	private byte[][] waypoints;
 	private Piece movePiece;
+	//waypoints are in order and include the starting point and the destination
+	private byte[][] waypoints;
 	private int jumpsContained;
 	private Piece[] piecesToJump;
 
-	public Move (Piece startPiece, byte[] startSource, byte[] startDestination) {
+	public Move (Piece startPiece, byte[][] startWaypoints) {
 		this.movePiece = startPiece;
-		this.source = startSource;
-		this.destination = startDestination;
-		if this.destination[0] = 
-	}
-
-	public Move (Piece startPiece, byte[] startSource, byte[] startDestination, byte[][] startWaypoints) {
-		this.Move(startPiece, startSource, startDestination);
+		this.waypoints=startWaypoints;
+		this.getJumpsContained = startWaypoints[].length - 2;
 	}
 
 	public byte[] getSource () {
-		return this.source;
+		return this.waypoints[0];
 	}
 
 	public byte[] getDestination () {
-		return this.destination;
+		return this.waypoints[this.waypoints.length-1];
 	}
 
 	public byte[][] getWaypoints () {

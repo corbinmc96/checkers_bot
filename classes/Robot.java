@@ -15,10 +15,6 @@ public class Robot {
 		//implementation
 	}
 	
-	//public void moveToY(byte newY) {
-	//	//implementation
-	//}
-	
 	public void resetPosition() {
 		//implementation
 	}

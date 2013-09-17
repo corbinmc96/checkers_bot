@@ -3,6 +3,7 @@ public class SimPlayer extends Player {
 	private Robot gameRobot;
 
 	public SimPlayer () {
+		super();
 		//constructor implementation
 	}
 
