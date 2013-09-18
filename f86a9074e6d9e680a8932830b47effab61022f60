@@ -1,0 +1,1 @@
+added new constructor to Board, and changed performMove method of Player to make it static
