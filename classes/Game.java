@@ -12,7 +12,7 @@ public class Game {
 	
 	public Game (Robot startGameRobot) {
 		this();
-		this.gameRobot = 
+		this.gameRobot = startGameRobot;
 	}
 
 	public void play() {
