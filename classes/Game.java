@@ -5,9 +5,9 @@ public class Game {
 	private Player player1;
 	private Player player2;
 
-	public Game () {
+	public Game (Player p1, Player p2) {
 		this.gameBoard = new Board();
-		this.player1, this.player2 = new Player(), new Player();
+		this.player1, this.player2 = p1, p2;
 	}
 	
 	public Game (Robot startGameRobot) {

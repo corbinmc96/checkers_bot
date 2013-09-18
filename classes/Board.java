@@ -18,6 +18,14 @@ public class Board {
 		return piecesOnBoard;
 	}
 
+	public Piece getPieceAtLocation(byte[] location) {
+		for (Piece piece : piecesOnBoard) {
+			if (piece.getLocation() == location) {
+				return piece;
+			}
+		}
+	}
+
 	public void removePiece (Piece pieceToRemove) {
 		piecesOnBoard.remove(pieceToRemove);
 	}

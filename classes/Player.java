@@ -22,10 +22,10 @@ public class Player {
 		//implementation
 	}
 
-	public void performMove(Move myMove) {
+	public static void performMove(Move myMove, Board board) {
 		myMove.getMovePiece().setLocation(myMove.getDestination());
 		for (deadPiece : myMove.calculatePiecesToJump()) {
-			this.myBoard.removePiece(deadPiece);
+			board.removePiece(deadPiece);
 		}
 	}
 
