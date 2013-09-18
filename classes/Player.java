@@ -6,7 +6,6 @@ public class Player {
 
 	public Player (Board : startBoard) {
 		this.myBoard = startBoard;
-		//constructor implementation
 	}
 
 	public Piece[] getPlayerPieces () {
@@ -24,10 +23,13 @@ public class Player {
 	}
 
 	public void performMove(Move myMove) {
-		//implementation
+		myMove.getMovePiece().setLocation(myMove.getDestination());
+		for (deadPiece : myMove.calculatePiecesToJump()) {
+			this.myBoard.removePiece(deadPiece);
+		}
 	}
 
 	public Board getBoard () {
-		returnthis.myBoard;
+		return this.myBoard;
 	}
 }

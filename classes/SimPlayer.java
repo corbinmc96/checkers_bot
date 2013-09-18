@@ -4,15 +4,15 @@ public class SimPlayer extends Player {
 
 	public SimPlayer () {
 		super();
-		//constructor implementation
 	}
 
 	public SimPlayer (Robot startGameRobot) {
-		//implementation
+		super();
+		this.gameRobot = startGameRobot;
 	}
 
 	public void takeTurn() {
-		//implementation
+		this.performMove(super.caluclateBestMove());
 	}
 
 	public void performMove(Move myMove) {
