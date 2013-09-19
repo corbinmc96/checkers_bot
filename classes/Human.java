@@ -1,15 +1,18 @@
 public class Human extends Player {
 
-	public Human () {
-		super();
+	private Robot gameRobot;
+
+	public Human (Board startBoard) {
+		super(startBoard);
 	}
 	
-	public Human (Robot startGameRobot) {
-		
+	public Human (Board, startBoard, Robot startGameRobot) {
+		this(startBoard);
+		this.gameRobot=startGameRobot;
 	}
 
 	public void takeTurn() {
-		performMove(this.inputMove());
+		super.performMove(this.inputMove());
 	}
 
 	public Move inputMove() {

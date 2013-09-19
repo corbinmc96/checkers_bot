@@ -16,9 +16,17 @@ public class SimPlayer extends Player {
 	}
 
 	public void performMove(Move myMove) {
-		super.performMove(myMove);
+		Player.performMove(myMove,super.getBoard());
 		if (this.gameRobot!=null) {
-			//extra code to move the Robot.
+			this.gameRobot.moveToXY(myMove.getSource());
+			this.gameRobot.pickUpPiece();
+			this.gameRobot.moveToXY(myMove.getDestination());
+			this.gameRobot.dropPiece();
+			if (myMove.) {
+				for (int i=1;i>myMove.getWaypoints().length-1;i++) {
+					Piece de
+				} // still working here -- Corbin
+			}
 		}
 	} 
 }

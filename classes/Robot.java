@@ -31,11 +31,11 @@ public class Robot {
 		//implementation
 	}
 
-	public void pickUpPiece(byte[] location) {
+	public void pickUpPiece() {
 		//implementation
 	}
 
-	public void dropPiece(byte[] location) {
+	public void dropPiece() {
 		//implementation
 	}
 }
