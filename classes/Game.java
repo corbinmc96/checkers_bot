@@ -10,8 +10,8 @@ public class Game {
 		this.player1, this.player2 = p1, p2;
 	}
 	
-	public Game (Robot startGameRobot) {
-		this();
+	public Game (Player p1, Player p2, Robot startGameRobot) {
+		this(p1,p2);
 		this.gameRobot = startGameRobot;
 	}
 

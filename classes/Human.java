@@ -2,13 +2,12 @@ public class Human extends Player {
 
 	private Robot gameRobot;
 
-	public Human (Board startBoard) {
-		super(startBoard);
+	public Human () {
+		//nothing
 	}
 	
-	public Human (Board, startBoard, Robot startGameRobot) {
-		this(startBoard);
-		this.gameRobot=startGameRobot;
+	public Human (Robot startGameRobot) {
+		super(startGameRobot);
 	}
 
 	public void takeTurn() {

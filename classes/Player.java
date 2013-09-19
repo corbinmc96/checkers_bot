@@ -3,9 +3,14 @@ import java.util.ArrayList;
 public class Player {
 
 	private Board myBoard;
-
-	public Player (Board : startBoard) {
-		this.myBoard = startBoard;
+	private Robot gameRobot;
+	
+	public Player () {
+		//nothing
+	}
+	
+	public Player (Robot startGameRobot) {
+		this.gameRobot = startGameRobot;
 	}
 
 	public Piece[] getPlayerPieces () {
@@ -27,6 +32,10 @@ public class Player {
 		for (deadPiece : myMove.calculatePiecesToJump()) {
 			board.removePiece(deadPiece);
 		}
+	}
+	
+	public void setBoard (Board newBoard) {
+		this.myBoard = newBoard;
 	}
 
 	public Board getBoard () {
