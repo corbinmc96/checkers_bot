@@ -1,15 +1,16 @@
 import java.util.ArrayList;
 
-public class Player {
+public abstract class Player {
 
 	private Board myBoard;
 	private Robot gameRobot;
-	
+
 	public Player () {
 		//nothing
 	}
-	
+
 	public Player (Robot startGameRobot) {
+		this.myBoard = null;
 		this.gameRobot = startGameRobot;
 	}
 
@@ -22,9 +23,6 @@ public class Player {
 		}
 		return result;
 	}
-
-	// public void takeTurn() {
-	// }
 
 	public Move calculateBestMove () {
 		//implementation
@@ -44,4 +42,6 @@ public class Player {
 	public Board getBoard () {
 		return this.myBoard;
 	}
+
+	public abstract void takeTurn();
 }

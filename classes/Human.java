@@ -1,8 +1,6 @@
 public class Human extends Player {
-
-	private Robot gameRobot;
-
-	public Human () {
+	
+	public Human() {
 		//nothing
 	}
 	

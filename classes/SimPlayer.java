@@ -1,6 +1,6 @@
 public class SimPlayer extends Player {
 
-	public SimPlayer () {
+	public SimPlayer() {
 		//nothing
 	}
 
