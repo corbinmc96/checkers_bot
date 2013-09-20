@@ -16,7 +16,11 @@ public class Game {
 	}
 
 	public void play() {
-		//implementation will be done later
+		while (this.gameBoard.totalPiecesLeft(player1)>0 && this.gameBoard.totalPiecesLeft(player2)>0) {
+			this.player1.takeTurn();
+			this.player2.takeTurn();
+		}
+		
 	}
 
 	public Board getGameBoard () {

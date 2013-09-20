@@ -23,6 +23,9 @@ public class Player {
 		return result;
 	}
 
+	// public void takeTurn() {
+	// }
+
 	public Move calculateBestMove () {
 		//implementation
 	}

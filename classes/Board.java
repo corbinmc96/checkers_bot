@@ -14,12 +14,17 @@ public class Board {
 		}
 	}
 
+	public Board (Board previousBoard, Move newMove) {
+		this.piecesOnBoard = previousBoard.getPiecesOnBoard();
+		Player.performMove(newMove, this);
+	}
+
 	public ArrayList<Piece> getPiecesOnBoard () {
-		return piecesOnBoard;
+		return this.piecesOnBoard;
 	}
 
 	public Piece getPieceAtLocation(byte[] location) {
-		for (Piece piece : piecesOnBoard) {
+		for (Piece piece : this.piecesOnBoard) {
 			if (piece.getLocation() == location) {
 				return piece;
 			}
@@ -28,5 +33,35 @@ public class Board {
 
 	public void removePiece (Piece pieceToRemove) {
 		piecesOnBoard.remove(pieceToRemove);
+	}
+
+	public int totalPiecesLeft(Player p) {
+		int count = 0;
+		for (Piece piece : piecesOnBoard) {
+			if (piece.getPlayer()==p) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int normalPiecesLeft(Player p) {
+		int count = 0;
+		for (Piece piece : piecesOnBoard) {
+			if (piece.getPlayer()==p && !piece.getIsKing()) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int kingsLeft(Player p) {
+		int count = 0;
+		for (Piece piece : piecesOnBoard) {
+			if (piece.getPlayer()==p && piece.getIsKing()) {
+				count++;
+			}
+		}
+		return count;
 	}
 }
