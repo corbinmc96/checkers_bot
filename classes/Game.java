@@ -20,7 +20,6 @@ public class Game {
 			this.player1.takeTurn();
 			this.player2.takeTurn();
 		}
-		
 	}
 
 	public Board getGameBoard () {
