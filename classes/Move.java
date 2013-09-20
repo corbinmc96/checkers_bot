@@ -5,43 +5,55 @@ public class Move {
 	private Piece movePiece;
 	//waypoints are in order and include the starting point and the destination
 	private byte[][] waypoints;
+	//number of jumps contained
 	private int jumpsContained;
 
 	public Move (Piece startPiece, byte[][] startWaypoints) {
+		//instantiate all the variables
 		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
+		//calculate the number of pieces to be jumped
 		this.getJumpsContained = startWaypoints[].length - 2;
 	}
-
+	
+	//get the souce locaation: the position the moving Piece is originating from
 	public byte[] getSource () {
 		return this.waypoints[0];
 	}
 
+	//get the final destination of the moving piece
 	public byte[] getDestination () {
 		return this.waypoints[this.waypoints.length-1];
 	}
 
+	//get an array of every waypoint the moving piece will stop at
 	public byte[][] getWaypoints () {
 		return this.waypoints;
 	}
 
+	//get the piece the that is moving
 	public Piece getMovePiece () {
 		return this.movePiece;
 	}
 
+	//get the number of jumps that the piece will perform
 	public int getJumpsContained () {
 		return this.jumpsContained;
 	}
-
+	
+	//calculate an array of all the Piece objects that will be jumped during the move
 	public Piece[] calculatePiecesToJump () {
+		//if no jumps, return empty list
 		if (this.jumpsContained == 0) {
 			return new Piece[0];
 		}
 		else {
 			ArrayList<Piece> result = new ArrayList<Piece>();
+			//cycle through all the movements the piece makes
 			for (int i=1; i<=this.waypoints.length-1;i++) {
+				//find the location that is being jumped over
 				byte[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2,(this.waypoints[i][1]+this.waypoints[i-1][1])/2};
-				result.add(Piece.getPieceAtLocation(midpoint));
+				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray();
 		}
