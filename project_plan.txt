@@ -5,7 +5,7 @@ Quarter 1:
 Quarter 2: 
 	The Robot will be completed and operational, and work will be started on the Robot class. Fine tuning of controls will not be completed until the 3rd Quarter. The AI will be typed and in the debugging/improvement stages.
 Quarter 3: 
-	The Robot will be fully operational. The scripting will be fully operational. A game will be effecively played by the robot against a Homo Sapien(or other intelligent lifeform).
+	Final adjustments will be made to the robot, so that it is fully operational by the end of the quarter. The scripting will be fully operational. A game will be effecively played by the robot against a Homo Sapien(or other intelligent lifeform).
 Quarter 4: 
 	Sounds will be added (mockery), and aesthetic improvements will be made to Robot if needed. 
 For Extra Credit: 
@@ -21,4 +21,4 @@ Project Summary:
 
 Software: Eight classes will be used: Game(), Board(), Player(), Human(), SimPlayer(), Piece(), Move(), and Robot(). Human and SimPlayer will be subclasses of Player. The AI will be contained within the Player class and will function recursively by applying all possible moves to a board object. Likely, moves that, from the beginning, do not look like opportune moves will not be evaluated as deeply as seemingly opportunistic moves. Value of a specific outcome will be determined mainly by a pieces captured to pieces taken ratio (with higher value for kings) and also by forward movement of non-King pieces towards the opposite side of the board.  The values of possible moves will then be compared, and the best move will be chosen and returned.
 
-Hardware:
+Hardware: The hardware we will use will be based off of the NXT kits.  We are going to buy the extra pieces needed to build the robot.  We will have a base with a gear powered track connected to an apparatus that holds and moves the magnet and sensor.
