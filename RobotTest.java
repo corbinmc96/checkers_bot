@@ -20,6 +20,10 @@ public class RobotTest {
 					this.currentMotorIndex = ++this.currentMotorIndex%3;
 					printMotor();
 				}
+				
+				while (Button.ENTER.isDown()) {
+					Button.waitForAnyEvent(1000);
+				}
 			}
 		}
 	}
