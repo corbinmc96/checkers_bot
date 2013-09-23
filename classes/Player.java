@@ -5,10 +5,6 @@ public abstract class Player {
 	private Board myBoard;
 	private Robot gameRobot;
 
-	public Player () {
-		//nothing
-	}
-
 	public Player (Robot startGameRobot) {
 		this.myBoard = null;
 		this.gameRobot = startGameRobot;
