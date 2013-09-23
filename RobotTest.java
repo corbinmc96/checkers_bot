@@ -1,24 +1,23 @@
-import lejos.nxt.*
+import lejos.nxt.*;
 
 public class RobotTest {
 
-	private byte currentMotorIndex = 0;
-
 	public static void main(String[] args) {
-		printMotor();
+		int currentMotorIndex = 0;
+		printMotor(currentMotorIndex);
 		while (true) {
 			if (Button.ESCAPE.isDown()) {
 				break;
 			} else if (Button.RIGHT.isDown()) {
-				Motor.getInstance(this.currentMotorIndex).forward();
+				Motor.getInstance(currentMotorIndex).forward();
 			} else if (Button.LEFT.isDown()) {
-				Motor.getInstance(this.currentMotorIndex).backward();
+				Motor.getInstance(currentMotorIndex).backward();
 			} else if (Button.ENTER.isDown()) {
-				if (Motor.getInstance(this.currentMotorIndex).isMoving()) {
-					Motor.getInstance(this.currentMotorIndex).stop();
+				if (Motor.getInstance(currentMotorIndex).isMoving()) {
+					Motor.getInstance(currentMotorIndex).stop();
 				} else {
-					this.currentMotorIndex = ++this.currentMotorIndex%3;
-					printMotor();
+					currentMotorIndex = ++currentMotorIndex%3;
+					printMotor(currentMotorIndex);
 				}
 				
 				while (Button.ENTER.isDown()) {
@@ -28,12 +27,12 @@ public class RobotTest {
 		}
 	}
 
-	private static void printMotor() {
-		if (this.currentMotorIndex==0) {
+	private static void printMotor(int motorIndex) {
+		if (motorIndex==0) {
 			System.out.println("A");
-		} else if (this.currentMotorIndex==1) {
+		} else if (motorIndex==1) {
 			System.out.println("B");
-		} else if (this.currentMotorIndex==2) {
+		} else if (motorIndex==2) {
 			System.out.println("C");
 		} else {
 			System.out.println("INVALID MOTOR INDEX");
