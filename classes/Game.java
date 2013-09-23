@@ -7,7 +7,8 @@ public class Game {
 
 	public Game (Player p1, Player p2) {
 		this.gameBoard = new Board();
-		this.player1, this.player2 = p1, p2;
+		this.player1 = p1;
+		this.player2 = p2;
 	}
 	
 	public Game (Player p1, Player p2, Robot startGameRobot) {
@@ -27,6 +28,6 @@ public class Game {
 	}
 
 	public Player[] getPlayers () {
-		return Player[2]{this.player1,this.player2};
+		return new Player[]{this.player1,this.player2};
 	}
 }

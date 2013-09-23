@@ -30,7 +30,7 @@ public abstract class Player {
 
 	public static void performMove(Move myMove, Board theBoard) {
 		myMove.getMovePiece().setLocation(myMove.getDestination());
-		for (deadPiece : myMove.calculatePiecesToJump()) {
+		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
 			board.removePiece(deadPiece);
 		}
 	}

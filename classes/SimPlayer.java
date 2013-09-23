@@ -27,13 +27,13 @@ public class SimPlayer extends Player {
 			//tests if their are any pieces to jump
 			if (myMove.calculatePiecesToJump()) {
 				//iterates thorough all jumped pieces
-				for (deadPiece : myMove.calculatePiecesToJump()) {
+				for (Piece deadPiece : myMove.calculatePiecesToJump()) {
 					//move arm over the piece that was jumped
 					this.gameRobot.moveToXY(deadPiece.getLocation());
 					//picks up jumped piece
 					this.gameRobot.pickUpPiece();
 					//moves arm over drop point for dead pieces
-					this.gameRobot.moveToXY(???????);
+					this.gameRobot.moveToXY();
 					//drops the piece
 					this.gameRobot.dropPiece();
 				}

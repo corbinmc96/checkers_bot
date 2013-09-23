@@ -13,7 +13,7 @@ public class Move {
 		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
 		//calculate the number of pieces to be jumped
-		this.getJumpsContained = startWaypoints[].length - 2;
+		this.getJumpsContained = startWaypoints.length - 2;
 	}
 	
 	//get the souce locaation: the position the moving Piece is originating from
