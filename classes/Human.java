@@ -13,6 +13,10 @@ public class Human extends Player {
 	}
 
 	public Move inputMove() {
-		//implementation
+		Move[] possibleMoves = this.rankBestMoves();
+		for (Move m : possibleMoves) {
+			String color = this.gameRobot.examineLocation(/*add location here*/);
+			//finish implementation
+		}
 	}
 }

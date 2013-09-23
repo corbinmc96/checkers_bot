@@ -24,6 +24,10 @@ public abstract class Player {
 		//implementation
 	}
 
+	public Move[] rankBestMoves () {
+		//implementation
+	}
+
 	public static void performMove(Move myMove, Board theBoard) {
 		myMove.getMovePiece().setLocation(myMove.getDestination());
 		for (deadPiece : myMove.calculatePiecesToJump()) {
