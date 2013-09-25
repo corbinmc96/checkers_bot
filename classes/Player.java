@@ -6,7 +6,6 @@ public abstract class Player {
 	private Robot gameRobot;
 
 	public Player (Robot startGameRobot) {
-		this.myBoard = null;
 		this.gameRobot = startGameRobot;
 	}
 
@@ -20,12 +19,12 @@ public abstract class Player {
 		return result;
 	}
 
-	public Move calculateBestMove () {
-		//implementation
+	public Move calculateBestMove (Board b, int recursionDepth) {
+		return this.rankBestMoves(b,recursionDepth)[0];
 	}
 
-	public Move[] rankBestMoves () {
-		//implementation
+	public Move[] rankBestMoves (Board b, int recursionDepth) {
+		
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
@@ -41,6 +40,20 @@ public abstract class Player {
 
 	public Board getBoard () {
 		return this.myBoard;
+	}
+
+	public Move[] getAllMoves () {
+		ArrayList<Piece> result;
+		for (playerPiece : this.getPlayerPieces()) {
+			if (playerPiece.getIsKing()) {
+				for (byte[] displacement : new byte[][]{new byte[]{1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}) {
+					byte[] potentialEndpoint
+				}
+			}
+			else {
+				for (byte[] displacement : new byte[][]{new byte[]{1,1}, new byte[] {-1,1})
+			}
+		}
 	}
 
 	public abstract void takeTurn();

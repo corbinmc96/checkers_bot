@@ -8,8 +8,8 @@ public class Board {
 		piecesOnBoard = new ArrayList<Piece>();
 		for (byte i=0; i<3; i++) {
 			for (byte j=0; j<4; j++) {
-				piecesOnBoard.add(new Piece(new byte[] {(byte) (2*j+(i%2)), (byte) i}, players[0]));
-				piecesOnBoard.add(new Piece(new byte[] {(byte) (7-2*j+(i%2)), (byte) (7-i)}, players[1]));
+				piecesOnBoard.add(new Piece(new byte[] {(2*j+(i%2)), i}, players[0]));
+				piecesOnBoard.add(new Piece(new byte[] {(7-2*j+(i%2)), (7-i)}, players[1]));
 			}
 		}
 	}
@@ -29,6 +29,7 @@ public class Board {
 				return piece;
 			}
 		}
+		return null;
 	}
 
 	public void removePiece (Piece pieceToRemove) {
