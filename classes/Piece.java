@@ -5,12 +5,12 @@ public class Piece {
 	private Player owningPlayer; 
 
 	public Piece (byte[] startLocation, Player startPlayer) {
-		this.isKing=False;
+		this.isKing = false;
 		this.location=startLocation;
 		this.owningPlayer=startPlayer;
 	}
 
-	public boolean getIsking () {
+	public boolean getIsKing () {
 		return this.isKing;	
 	}
 

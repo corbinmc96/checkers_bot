@@ -13,7 +13,7 @@ public class Move {
 		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
 		//calculate the number of pieces to be jumped
-		this.getJumpsContained = startWaypoints.length - 2;
+		this.jumpsContained = startWaypoints.length - 2;
 	}
 	
 	//get the souce locaation: the position the moving Piece is originating from
@@ -52,10 +52,10 @@ public class Move {
 			//cycle through all the movements the piece makes
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
-				byte[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2,(this.waypoints[i][1]+this.waypoints[i-1][1])/2};
+				byte[] midpoint = {((byte) (this.waypoints[i][0]+this.waypoints[i-1][0])/2), ((byte) (this.waypoints[i][1]+this.waypoints[i-1][1])/2)};
 				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
-			return result.toArray();
+			return result.toArray(new Piece[result.size()]);
 		}
 	}
 }
