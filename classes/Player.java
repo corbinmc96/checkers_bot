@@ -45,7 +45,7 @@ public abstract class Player {
 
 	public Move[] getAllMoves () {
 		ArrayList<Piece> result;
-		for (playerPiece : this.getPlayerPieces()) {
+		for (Piece playerPiece : this.getPlayerPieces()) {
 			if (playerPiece.getIsKing()) {
 				for (byte[] displacement : new byte[][]{new byte[]{1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}) {
 					byte[] potentialEndpoint

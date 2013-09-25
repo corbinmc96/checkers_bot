@@ -6,7 +6,7 @@ public class Game {
 	private Player player2;
 
 	public Game (Player p1, Player p2) {
-		this.gameBoard = new Board();
+		this.gameBoard = new Board(new Player[]{p1, p2});
 		this.player1 = p1;
 		this.player2 = p2;
 	}

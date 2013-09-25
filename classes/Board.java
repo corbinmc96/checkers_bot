@@ -1,5 +1,5 @@
-// import java.util.ArrayList;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
 
@@ -10,13 +10,13 @@ public class Board {
 		for (byte i=0; i<3; i++) {
 			for (byte j=0; j<4; j++) {
 				piecesOnBoard.add(new Piece(new byte[] {(2*j+(i%2)), i}, players[0]));
-				piecesOnBoard.add(new Piece(new byte[] {(7-2*j+(i%2)), (7-i)}, players[1]));
+				piecesOnBoard.add(new Piece(new byte[] {((byte) 7) - 2*j+(i%2), ((byte) 7)-i}, players[1]));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = new ArrayList<Piece>(Arrays.asList(Piece, previousBoard.getPiecesOnBoard()));
+		this.piecesOnBoard = new ArrayList<Piece>(Arrays.asList(previousBoard.getPiecesOnBoard()));
 		Player.performMove(newMove, this);
 	}
 
