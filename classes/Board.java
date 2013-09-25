@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+// import java.util.ArrayList;
+import java.util.*;
 
 public class Board {
 
@@ -15,12 +16,12 @@ public class Board {
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = previousBoard.getPiecesOnBoard();
+		this.piecesOnBoard = new ArrayList<Piece>(Arrays.asList(Piece, previousBoard.getPiecesOnBoard()));
 		Player.performMove(newMove, this);
 	}
 
-	public ArrayList<Piece> getPiecesOnBoard () {
-		return this.piecesOnBoard;
+	public Piece[] getPiecesOnBoard () {
+		return this.piecesOnBoard.toArray(new Piece[this.piecesOnBoard.size()]);
 	}
 
 	public Piece getPieceAtLocation(byte[] location) {

@@ -10,10 +10,11 @@ public abstract class Player {
 	}
 
 	public Piece[] getPlayerPieces () {
-		ArrayList<Piece> result;
+		Piece[] result = new Piece[this.myBoard.totalPiecesLeft(this)];
+		int i = 0;
 		for (Piece p : this.myBoard.getPiecesOnBoard()) {
 			if (p.getPlayer() == this) {
-				result.add(p);
+				result[i++] = p;
 			}
 		}
 		return result;
@@ -30,7 +31,7 @@ public abstract class Player {
 	public static void performMove(Move myMove, Board theBoard) {
 		myMove.getMovePiece().setLocation(myMove.getDestination());
 		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
-			board.removePiece(deadPiece);
+			theBoard.removePiece(deadPiece);
 		}
 	}
 	
