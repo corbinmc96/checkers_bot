@@ -66,4 +66,14 @@ public class Board {
 		}
 		return count;
 	}
+
+	public boolean locationIsInBounds (byte[] testLocation) {
+		byte[] boardValues = new byte[] {0,1,2,3,4,5,6,7};
+		if (Arrays.asList(boardValues).contains(testLocation[0] && Arrays.asList(boardValues).contains(testLocation[1]) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
