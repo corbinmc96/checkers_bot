@@ -29,4 +29,8 @@ public class Piece {
 	public Player getPlayer () {
 		return this.owningPlayer;
 	}
+
+	public Move[] getMovesOfPiece() {
+		//implementation
+	}
 }
