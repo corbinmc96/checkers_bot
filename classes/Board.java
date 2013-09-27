@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Board {
+public class Board implements Comparable<Board> {
 
 	private ArrayList<Piece> piecesOnBoard;
 
@@ -123,5 +123,9 @@ public class Board {
 		}
 
 		return p1Value/p2Value;
+	}
+	
+	public int compareTo(Board b2) {
+		return this.calculateValue().compareTo(b2.calculateValue());
 	}
 }

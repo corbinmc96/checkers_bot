@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.ArrayList;
 
 public abstract class Player {
@@ -36,7 +37,11 @@ public abstract class Player {
 	}
 
 	public Move[] rankBestMoves (Board b, int recursionDepth) {
-		
+		Move[] moves = this.getAllMoves();
+		Board[] boards = new Board[moves.lengths];
+		for (int i = 0; i<moves.length; i++) {
+			boards[i] = new Board(this.myBoard, moves[i]);
+		}
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
