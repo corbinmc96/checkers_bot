@@ -69,11 +69,59 @@ public class Board {
 
 	public boolean locationIsInBounds (byte[] testLocation) {
 		byte[] boardValues = new byte[] {0,1,2,3,4,5,6,7};
-		if (Arrays.asList(boardValues).contains(testLocation[0] && Arrays.asList(boardValues).contains(testLocation[1]) {
+		if (Arrays.asList(boardValues).contains(testLocation[0] && Arrays.asList(boardValues).contains(testLocation[1]))) {
 			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	public float calculateValue(Player p) {
+		double p1Value = 0;
+		double p2Value = 0;
+
+		//iterates over every piece on the board
+		for (Piece piece : this.piecesOnBoard) {
+			//determines if the piece is owned by player 1
+			if (piece.getOwningPlayer()==p) {
+				//determines if the piece is a king
+				if (piece.getIsKing()) {
+					//adds 3 to the player's total value for the board
+					p1Value += 3;
+				//the piece is not a king
+				} else {
+					//determines which side of the board the player is on
+					if (p.getIsOnZeroSide()) {
+						//adds value based on distance down the board
+						p1Value += 1 + 0.125*piece.getLocation()[1];
+					//the player is on the side of the board with index 7
+					} else {
+						//adds value based on distance down the board
+						p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					}
+				}
+			//the piece is owned by player 2
+			} else {
+				//determines if the piece is a king
+				if (piece.getIsKing()) {
+					//adds 3 to the player's total value for the board
+					p2Value += 3;
+				//the piece is not a king
+				} else {
+					//determines which side of the board the player is on
+					if (piece.getOwningPlayer().getIsOnZeroSide()) {
+						//adds value based on distance down the board
+						p2Value += 1 + 0.125*piece.getLocation()[1];
+					//the player is on the side of the board with index 7
+					} else {
+						//adds value based on distance down the board
+						p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					}
+				}
+			}
+		}
+
+		return p1Value/p2Value;
 	}
 }

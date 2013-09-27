@@ -4,9 +4,20 @@ public abstract class Player {
 
 	private Board myBoard;
 	private Robot gameRobot;
+	//true if the player is located on the side of the board marked with index 0
+	private boolean isOnZeroSide;
 
-	public Player (Robot startGameRobot) {
+	public Player (boolean startsOnZeroSide) {
+		this.isOnZeroSide = startsOnZeroSide;
+	}
+
+	public Player (boolean startsOnZeroSide, Robot startGameRobot) {
+		this.isOnZeroSide = startsOnZeroSide;
 		this.gameRobot = startGameRobot;
+	}
+
+	public boolean getIsOnZeroSide() {
+		return this.isOnZeroSide;
 	}
 
 	public Piece[] getPlayerPieces () {

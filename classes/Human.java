@@ -1,11 +1,11 @@
 public class Human extends Player {
 	
-	public Human() {
-		//nothing
+	public Human(boolean startsOnZeroSide) {
+		super(startsOnZeroSide);
 	}
 	
-	public Human (Robot startGameRobot) {
-		super(startGameRobot);
+	public Human (boolean startsOnZeroSide, Robot startGameRobot) {
+		super(startsOnZeroSide, startGameRobot);
 	}
 
 	public void takeTurn() {

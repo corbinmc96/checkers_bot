@@ -1,11 +1,11 @@
 public class SimPlayer extends Player {
 
-	public SimPlayer() {
-		//nothing
+	public SimPlayer(boolean startsOnZeroSide) {
+		super(startsOnZeroSide);
 	}
 
-	public SimPlayer (Robot startGameRobot) {
-		super(startGameRobot);
+	public SimPlayer (boolean startsOnZeroSide, Robot startGameRobot) {
+		super(startsOnZeroSide, startGameRobot);
 	}
 
 	public void takeTurn() {
