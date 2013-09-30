@@ -69,8 +69,8 @@ public abstract class Player {
 
 	public Move[] getAllMoves () {
 		ArrayList<Move> result = new ArrayList<Move>();
-		for (playerPiece : this.getPlayerPieces()) {
-			for (pieceMove : playerPiece.getMovesOfPiece()) {
+		for (Piece playerPiece : this.getPlayerPieces()) {
+			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
 				result.add(pieceMove);
 			}
 		}

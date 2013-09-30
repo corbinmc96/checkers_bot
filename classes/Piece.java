@@ -45,7 +45,7 @@ public class Piece {
 		ArrayList<byte[][][]> result = new ArrayList<byte[][][]>();
 		if (this.isKing) {
 			if (!mustBeJump) {
-				for (displacement : new byte[][] {new byte[] {1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}}) {
+				for (byte[] displacement : new byte[][] {new byte[] {1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}}) {
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null) {
 						result.add(new byte[][] {this.location,testDestination});
@@ -54,7 +54,40 @@ public class Piece {
 			}
 			for (byte[] displacement : new byte[][] {new byte[] {2,2}, new byte[] {2,-2}, new byte[] {-2,2}, new byte[] {-2,-2}}) {
 				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
-				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2}
+				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
+				if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+					result.add(new byte[][] {this.locaation,testDestination});
+					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
+						restult.add(potentialMove);
+					}
+					return result;
+				}
+			}
+		}
+		else {
+			if (!mustBeJump) {
+				if (this.owningPlayer.getIsOnZeroSide() == true) {
+					byte[][] regularDisplacements = new byte[][] {new byte[] {1,1}, new byte[] {-1,1}};
+				}
+				else {
+					byte[][] regularDisplacements = new byte[][] {new byte[] {1,-1}, new byte[] {1,-1}};
+				}
+				for (byte[] displacement : regularDisplacements) {
+					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null) {
+						result.add(new byte[][] {this.location,testDestination});
+					}
+				}
+			}
+			if (this.owningPlayer.getIsOnZeroSide() == true) {
+					byte[][] jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
+				}
+				else {
+					byte[][] jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
+				}
+			for (byte[] displacement : jumpDisplacements) {
+				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
 					result.add(new byte[][] {this.locaation,testDestination});
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
