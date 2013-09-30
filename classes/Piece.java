@@ -33,7 +33,12 @@ public class Piece {
 	}
 
 	public Move[] getMovesOfPiece () {
+		ArrayList<Move> result = new ArrayList<Move>();
 		byte[][][] allWaypoints = this.getMovesFromLocation(this.location, false);
+		for (byte[][] theWaypoints : allWaypoints) {
+			result.add(Move(this, theWaypoints));
+		}
+		return result;
 	}
 
 	public byte[][][] getMovesFromLocation (byte[] pieceLocation, boolean mustBeJump) {
@@ -47,11 +52,15 @@ public class Piece {
 					}
 				}
 			}
-			for (displacement : new byte[][] {new byte[] {2,2}, new byte[] {2,-2}, new byte[] {-2,2}, new byte[] {-2,-2}}) {
+			for (byte[] displacement : new byte[][] {new byte[] {2,2}, new byte[] {2,-2}, new byte[] {-2,2}, new byte[] {-2,-2}}) {
 				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2}
 				if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
-					result.add(new byte[][] {this.locaation,testDestination}) // still working here -- Corbin
+					result.add(new byte[][] {this.locaation,testDestination});
+					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
+						restult.add(potentialMove);
+					}
+					return result;
 				}
 			}
 		}

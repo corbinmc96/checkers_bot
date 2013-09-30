@@ -9,6 +9,8 @@ public class Game {
 		this.gameBoard = new Board(new Player[]{p1, p2});
 		this.player1 = p1;
 		this.player2 = p2;
+		this.player1.setBoard(gameBoard);
+		this.player2.setBoard(gameBoard);
 	}
 	
 	public Game (Player p1, Player p2, Robot startGameRobot) {
