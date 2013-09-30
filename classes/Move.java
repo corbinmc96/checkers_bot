@@ -16,7 +16,7 @@ public class Move {
 		this.jumpsContained = startWaypoints.length - 2;
 	}
 	
-	//get the souce locaation: the position the moving Piece is originating from
+	//get the souce location: the position the moving Piece is originating from
 	public byte[] getSource () {
 		return this.waypoints[0];
 	}
