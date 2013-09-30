@@ -5,6 +5,8 @@ public class Board implements Comparable<Board> {
 
 	private ArrayList<Piece> piecesOnBoard;
 
+	public static String color = "black";
+
 	public Board (Player[] players) {
 		piecesOnBoard = new ArrayList<Piece>();
 		for (byte i=0; i<3; i++) {

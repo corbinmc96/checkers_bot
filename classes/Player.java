@@ -7,18 +7,26 @@ public abstract class Player {
 	private Robot gameRobot;
 	//true if the player is located on the side of the board marked with index 0
 	private boolean isOnZeroSide;
+	//contains the piece color
+	private String color;
 
-	public Player (boolean startsOnZeroSide) {
+	public Player (String startColor, boolean startsOnZeroSide) {
+		this.color = startColor;
 		this.isOnZeroSide = startsOnZeroSide;
 	}
 
-	public Player (boolean startsOnZeroSide, Robot startGameRobot) {
+	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
+		this.color = startColor;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.gameRobot = startGameRobot;
 	}
 
 	public boolean getIsOnZeroSide() {
 		return this.isOnZeroSide;
+	}
+
+	public String getColor() {
+		return this.color;
 	}
 
 	public Piece[] getPlayerPieces () {
