@@ -31,6 +31,17 @@ public class Piece {
 	}
 
 	public Move[] getMovesOfPiece() {
-		//implementation
+		this.getMovesOfPiece(new byte[][] {this.location}, false);
+	}
+
+	public Move[] getMovesOfPiece(byte[][] waypointStack, boolean mustBeJump) {
+		if (this.isKing) {
+			for (byte[] displacement : new byte[][] {new byte[]{1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {}
+		}
+		else {
+			if (!mustBeJump) {
+				for byte[] displacement // still working here -- Corbin
+			}
+		}
 	}
 }
