@@ -68,12 +68,18 @@ public abstract class Player {
 	}
 
 	public Move[] getAllMoves () {
+		//creates an ArrayList to return later
 		ArrayList<Move> result = new ArrayList<Move>();
+		//iterates over each of the player's pieces
 		for (Piece playerPiece : this.getPlayerPieces()) {
+			//iterates over all of that piece's moves
 			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
+				//adds each move to the return ArrayList
 				result.add(pieceMove);
 			}
 		}
+		//returns the final result
+		return result;
 	}
 
 	public abstract void takeTurn();

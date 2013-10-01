@@ -33,34 +33,51 @@ public class Piece {
 	}
 
 	public Move[] getMovesOfPiece () {
+		//creates return ArrayList
 		ArrayList<Move> result = new ArrayList<Move>();
+		//gets array of all sets of waypoints
 		byte[][][] allWaypoints = this.getMovesFromLocation(this.location, false);
+		//iterates through each ser
 		for (byte[][] theWaypoints : allWaypoints) {
+			//creates move and adds to return string
 			result.add(Move(this, theWaypoints));
 		}
+		//returns final result
 		return result;
 	}
 
 	public byte[][][] getMovesFromLocation (byte[] pieceLocation, boolean mustBeJump) {
+		//creates return array
 		ArrayList<byte[][][]> result = new ArrayList<byte[][][]>();
+		//tests if this piece is king
 		if (this.isKing) {
+			//tests if this move does not need to be a jump
 			if (!mustBeJump) {
+				//loops through all displacements
 				for (byte[] displacement : new byte[][] {new byte[] {1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}}) {
+					//finds potential destination
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
-					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null) {
-						result.add(new byte[][] {this.location,testDestination});
+					//if destination empty and inbounds
+					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+						//add waypoint set to return array
+						result.add(new byte[][] {pieceLocation,testDestination});
 					}
 				}
 			}
+			//loops through jump displacements
 			for (byte[] displacement : new byte[][] {new byte[] {2,2}, new byte[] {2,-2}, new byte[] {-2,2}, new byte[] {-2,-2}}) {
+				//finds potential destinations
 				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+				//finds location being jumped over
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
-				if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
-					result.add(new byte[][] {this.locaation,testDestination});
+				//tests that destination is in bounds, destination is unoccupied, and opponent piece is being jumped over
+				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+					//adds move to return array
+					result.add(new byte[][] {pieceLocation,testDestination});
+					//cycles through possible multi-jump scenarios
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
-						restult.add(potentialMove);
+						result.add(ArrayUtils.addAll(new byte[][] {pieceLocation, testDestination},potentialMove));
 					}
-					return result;
 				}
 			}
 		}
@@ -74,8 +91,8 @@ public class Piece {
 				}
 				for (byte[] displacement : regularDisplacements) {
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
-					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null) {
-						result.add(new byte[][] {this.location,testDestination});
+					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+						result.add(new byte[][] {pieceLocation,testDestination});
 					}
 				}
 			}
@@ -88,12 +105,11 @@ public class Piece {
 			for (byte[] displacement : jumpDisplacements) {
 				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
-				if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
-					result.add(new byte[][] {this.locaation,testDestination});
+				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+					result.add(new byte[][] {pieceLocation,testDestination});
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
-						restult.add(potentialMove);
+						result.add(ArrayUtils.addAll(new byte[][] {pieceLocation, testDestination},potentialMove));
 					}
-					return result;
 				}
 			}
 		}
