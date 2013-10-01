@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Hashtable;
 
 public class Human extends Player {
 	
@@ -17,7 +18,7 @@ public class Human extends Player {
 	public Move inputMove() {
 		if (this.startGameRobot!=null) {
 			//creates dictionary to hold scanned values
-			Hashtable<byte[], String> scannedLocations = new Hashtable<byte[], String>();
+			Hashtable<String, String> scannedLocations = new Hashtable<String, String>();
 			//gets list of moves from best to worst
 			Move[] possibleMoves = this.rankBestMoves();
 			
@@ -32,11 +33,11 @@ public class Human extends Player {
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
 				for (byte[] waypoint : Arrays.copyOfRange(waypoints, 0, waypoints.length-1))) {
-					if (/*location is in hashtable*/) {
-						pointColor = /*color from hashtable*/;
+					if (scannedLocations.containsKey(new String(waypoint))) {
+						pointColor = scannedLocations.get(new String(waypoint));
 					} else {
 						pointColor = this.gameRobot.examineLocation(waypoint);
-						//put location in hashtable
+						scannedLocations.put(new String(waypoint), pointColor);
 					}
 					//checks if the square is not empty
 					if (pointColor!=Board.color) {
@@ -50,11 +51,11 @@ public class Human extends Player {
 				}
 				
 				//checks the color of the last waypoint
-				if (/*location is in hashtable*/) {
-					pointColor = /*color from hashtable*/;
+				if (scannedLocations.containsKey(new String(waypoint))) {
+					pointColor = scannedLocations.get(new String(waypoint));
 				} else {
 					pointColor = this.gameRobot.examineLocation(waypoints[waypoints.length-1]);
-					//put location in hashtable
+					scannedLocations.put(new String(waypoint), pointColor);
 				}
 				//checks if the correct piece is not on the square
 				if (pointColor!=this.color) {
