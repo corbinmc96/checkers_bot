@@ -82,36 +82,58 @@ public class Piece {
 			}
 		}
 		else {
+			//confirms that move doesnt need to be a jump
 			if (!mustBeJump) {
+				//is on zero side of the board (robot side)
 				if (this.owningPlayer.getIsOnZeroSide() == true) {
+					//sets displacement values
 					byte[][] regularDisplacements = new byte[][] {new byte[] {1,1}, new byte[] {-1,1}};
 				}
+				//is not on zero side (human side)
 				else {
+					//sets different displacement values
 					byte[][] regularDisplacements = new byte[][] {new byte[] {1,-1}, new byte[] {1,-1}};
 				}
+				//iterates through all displacements
 				for (byte[] displacement : regularDisplacements) {
+					//calculates potential destination
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+					//tests that location is in bounds and unoccupied
 					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+						//adds waypoint set to the return array
 						result.add(new byte[][] {pieceLocation,testDestination});
 					}
 				}
 			}
+			//tests if player is on the zero side
 			if (this.owningPlayer.getIsOnZeroSide() == true) {
-					byte[][] jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
-				}
-				else {
-					byte[][] jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
-				}
+				//sets displacements for jumps
+				byte[][] jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
+			}
+			//called if player is on the non-zero side
+			else {
+				//sets different displacement values for jumps
+				byte[][] jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
+			}
+			//iterates over all displacements
 			for (byte[] displacement : jumpDisplacements) {
+				//calculates potential endpoint
 				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+				//calculates location being jumped over
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
+				//tests if destination is in bounds, unoccupied, and that midpoint is occupied by opponent's piece
 				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+					//adds waypoint set
 					result.add(new byte[][] {pieceLocation,testDestination});
+					//finds all potential multi-jumps
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
-						result.add(ArrayUtils.addAll(new byte[][] {pieceLocation, testDestination},potentialMove));
+						//adds multi-jump scenarios
+						result.add(ArrayUtils.addAll(pieceLocaton, potentialMove));
 					}
 				}
 			}
 		}
+	//returns the result
+	return result;
 	}
 }

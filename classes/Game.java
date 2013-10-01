@@ -18,10 +18,16 @@ public class Game {
 		this.gameRobot = startGameRobot;
 	}
 
-	public void play() {
-		while (this.gameBoard.totalPiecesLeft(player1)>0 && this.gameBoard.totalPiecesLeft(player2)>0) {
+	public Player play() {
+		while (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
 			this.player1.takeTurn();
 			this.player2.takeTurn();
+		}
+		if (this.gameBoard.totalPiecesLeft(player1)>0) {
+			return this.player1;
+		}
+		else {
+			return this.player2;
 		}
 	}
 

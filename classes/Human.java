@@ -16,39 +16,48 @@ public class Human extends Player {
 	}
 
 	public Move inputMove() {
-		Hashtable<byte[], String> scannedLocations = new Hashtable<byte[], String>();
-		ArrayList<Move> possibleMoves = new ArrayList<Move>(Arrays.asList(this.rankBestMoves()));
-		for (Move m : possibleMoves) {
-			String startColor = this.gameRobot.examineLocation(m.getSource());
-			if (startColor==this.color) {
-				possibleMoves.remove(m);
-				if (possibleMoves.getLength()==1) {
-					break;
-				}
-			}
-		}
-
-		for (Move m2 : possibleMoves) {
-			String endColor = this.gameRobot.examineLocation(m2.getDestination());
-			if (endColor!=this.color) {
-				possibleMoves.remove(m2);
-				if (possibleMoves.getLength()==1) {
-					break;
-				}
-			}
-		}
-
-		for (Move m3 : possibleMoves) {
-			for (byte[] waypoint : Arrays.copyOfRange(m3.getWaypoints(), 1, m3.getJumpsContained()+1)) {
-				String pointColor = this.gameRobot.examineLocation(waypoint);
-				if (pointColor!=Board.color) {
-					possibleMoves.remove(m3);
+		if (!this.startGameRobot.equals(null)) {
+			Hashtable<byte[], String> scannedLocations = new Hashtable<byte[], String>();
+			ArrayList<Move> possibleMoves = new ArrayList<Move>(Arrays.asList(this.rankBestMoves()));
+			for (Move m : possibleMoves) {
+				String startColor = this.gameRobot.examineLocation(m.getSource());
+				if (startColor==this.color) {
+					possibleMoves.remove(m);
 					if (possibleMoves.getLength()==1) {
 						break;
 					}
 				}
 			}
+
+			for (Move m2 : possibleMoves) {
+				String endColor = this.gameRobot.examineLocation(m2.getDestination());
+				if (endColor!=this.color) {
+					possibleMoves.remove(m2);
+					if (possibleMoves.getLength()==1) {
+						break;
+					}
+				}
+			}
+
+			for (Move m3 : possibleMoves) {
+				for (byte[] waypoint : Arrays.copyOfRange(m3.getWaypoints(), 1, m3.getJumpsContained()+1)) {
+					String pointColor = this.gameRobot.examineLocation(waypoint);
+					if (pointColor!=Board.color) {
+						possibleMoves.remove(m3);
+						if (possibleMoves.getLength()==1) {
+							break;
+						}
+					}
+				}
+			}
+		//finish implementation - Aaron
 		}
-	//finish implementation - Aaron
+		else {
+			for (x : new byte[] {0,1,2,3,4,5,6,7}) {
+				for (y : new byte[] {0,1,2,3,4,5,6,7}) {
+					//working here -- Corbin
+				}
+			}
+		}
 	}
 }
