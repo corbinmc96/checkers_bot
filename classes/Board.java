@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Board implements Comparable<Board> {
+public class Board {
 
 	private ArrayList<Piece> piecesOnBoard;
 
@@ -79,7 +79,7 @@ public class Board implements Comparable<Board> {
 		}
 	}
 
-	public float calculateValue(Player p) {
+	public double calculateValue(Player p) {
 		double p1Value = 0;
 		double p2Value = 0;
 
@@ -125,9 +125,5 @@ public class Board implements Comparable<Board> {
 		}
 
 		return p1Value/p2Value;
-	}
-	
-	public int compareTo(Board b2) {
-		return this.calculateValue().compareTo(b2.calculateValue());
 	}
 }

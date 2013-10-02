@@ -38,4 +38,12 @@ public class Game {
 	public Player[] getPlayers () {
 		return new Player[]{this.player1,this.player2};
 	}
+
+	public Player getOtherPlayer(Player p) {
+		if (this.player1==p) {
+			return this.player2;
+		} else {
+			return this.player1;
+		}
+	}
 }

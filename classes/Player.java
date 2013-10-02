@@ -41,15 +41,60 @@ public abstract class Player {
 	}
 
 	public Move calculateBestMove (Board b, int recursionDepth) {
-		return this.rankBestMoves(b,recursionDepth)[0];
+		return this.rankBestMoves(b, recursionDepth)[0];
 	}
 
 	public Move[] rankBestMoves (Board b, int recursionDepth) {
+		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves();
-		Board[] boards = new Board[moves.lengths];
+
+		//creates empty array to hold boards created from moves
+		Board[] boards = new Board[moves.length];
+		//iterates over all moves, applying them to fill boards
 		for (int i = 0; i<moves.length; i++) {
 			boards[i] = new Board(this.myBoard, moves[i]);
 		}
+
+		//creates array to hold values of boards
+		double[] boardValues = new double[boards.length];
+
+		//if recursionDepth is one, calculate direct values of moves
+		if (recursionDepth==1) {			
+			//iterates over all boards and calculates values to put in boardValues
+			for (int i = 0; i<boards.length; i++) {
+				boardValues[i] = boards[i].calculateValue();
+			}
+
+		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
+		} else {
+			//iterates over all boards and calculates value based on best opponent move
+			for (int i = 0; i<boards.length; i++) {
+				boardValues[i] = //needs work here!!!!!!!!
+			}
+		}
+
+		//creates array to hold sorted values from lowest to highest
+		double[] boardValuesSorted = Arrays.sort(Arrays.copyOf(boardValues));
+
+		//creates array to hold final list of moves
+		Move[] sortedMoves = new Move[moves.length];
+		//creates variable to hold index of move in original list
+		int index = 0;
+		//iterates over all values of boardValuesSorted
+		for (int i = 0; i<boardValuesSorted.length; i++) {
+			//finds the index of the current values in the original move list
+			index = Arrays.binarySearch(boardValues, boardValuesSorted[i]);
+			//sets the value at index to -1 so that the same move is not used again, even if multiple moves have equal values
+			boardValues[index] = -1;
+			//puts the correct move in the correct position in the final array
+			sortedMoves[moves.length-index-1] = moves[index];
+		}
+
+		return sortedMoves;
+	}
+
+	public double valueOfBestMove(Board b, int recursionDepth) {
+		//implementation here
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
