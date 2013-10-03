@@ -3,12 +3,26 @@ import java.util.Hashtable;
 
 public class Human extends Player {
 	
+	private String xo;
+
 	public Human(String startColor, boolean startsOnZeroSide) {
 		super(startColor, startsOnZeroSide);
 	}
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
+	}
+
+	public Human (String startXO, boolean startOnZeroSide) {
+		super(startOnZeroSide);
+		this.xo = startXO;
+	}
+
+	public String getXO() {
+		if (this.xo ==null) {
+			return " ";
+		}
+		return this.xo;
 	}
 
 	public void takeTurn() {
@@ -32,7 +46,7 @@ public class Human extends Player {
 				//declares variable to determine if the loop needs to continue
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
-				for (byte[] waypoint : Arrays.copyOfRange(waypoints, 0, waypoints.length-1))) {
+				for (byte[] waypoint : Arrays.copyOfRange(waypoints, 0, waypoints.length-1)) {
 					if (scannedLocations.containsKey(new String(waypoint))) {
 						pointColor = scannedLocations.get(new String(waypoint));
 					} else {
@@ -70,10 +84,12 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			for (x : new byte[] {0,1,2,3,4,5,6,7}) {
-				for (y : new byte[] {0,1,2,3,4,5,6,7}) {
-					//working here -- Corbin
+			for (byte y : new byte[] {0,1,2,3,4,5,6,7}) {
+				Piece[] theLine = new Piece[8];
+				for (byte x : new byte[] {0,1,2,3,4,5,6,7}) {
+					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getXO();
 				}
+				System.out.prinln(Arrays.toString(theLine));
 			}
 		}
 	}

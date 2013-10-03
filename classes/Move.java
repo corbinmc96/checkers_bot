@@ -58,4 +58,10 @@ public class Move {
 			return result.toArray(new Piece[result.size()]);
 		}
 	}
+
+	public boolean checkIfValid() {
+		for (int i = 0; i<this.waypoints.length-1;i++) {
+			//working here -- Corbin
+		}
+	}
 }

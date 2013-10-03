@@ -21,6 +21,10 @@ public abstract class Player {
 		this.gameRobot = startGameRobot;
 	}
 
+	public Player (boolean startsOnZeroSide) {
+		this.isOnZeroSide = startsOnZeroSide;
+	}
+
 	public boolean getIsOnZeroSide() {
 		return this.isOnZeroSide;
 	}
