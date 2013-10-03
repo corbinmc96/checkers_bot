@@ -20,7 +20,7 @@ public class Human extends Player {
 			//creates dictionary to hold scanned values
 			Hashtable<String, String> scannedLocations = new Hashtable<String, String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.rankBestMoves();
+			Move[] possibleMoves = this.rankBestMoves(this.myBoard, 1);
 			
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
