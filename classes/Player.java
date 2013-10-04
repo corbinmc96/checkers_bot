@@ -44,11 +44,11 @@ public abstract class Player {
 		return result;
 	}
 
-	public Move calculateBestMove (Board b, int recursionDepth) {
-		return this.rankBestMoves(b, recursionDepth)[0];
+	public Move calculateBestMove (Game g, int recursionDepth) {
+		return this.rankBestMoves(g, recursionDepth)[0];
 	}
 
-	public Move[] rankBestMoves (Board b, int recursionDepth) {
+	public Move[] rankBestMoves (Game g, int recursionDepth) {
 		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves();
 
@@ -56,7 +56,7 @@ public abstract class Player {
 		Board[] boards = new Board[moves.length];
 		//iterates over all moves, applying them to fill boards
 		for (int i = 0; i<moves.length; i++) {
-			boards[i] = new Board(this.myBoard, moves[i]);
+			boards[i] = new Board(g.getGameBoard(), moves[i]);
 		}
 
 		//creates array to hold values of boards
@@ -66,19 +66,20 @@ public abstract class Player {
 		if (recursionDepth==1) {			
 			//iterates over all boards and calculates values to put in boardValues
 			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = boards[i].calculateValue();
+				boardValues[i] = boards[i].calculateValue(this);
 			}
 
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
 			//iterates over all boards and calculates value based on best opponent move
 			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = //needs work here!!!!!!!!
+				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(g, recursionDepth-1);
 			}
 		}
 
 		//creates array to hold sorted values from lowest to highest
-		double[] boardValuesSorted = Arrays.sort(Arrays.copyOf(boardValues));
+		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
+		Arrays.sort(boardValuesSorted);
 
 		//creates array to hold final list of moves
 		Move[] sortedMoves = new Move[moves.length];
@@ -97,8 +98,45 @@ public abstract class Player {
 		return sortedMoves;
 	}
 
-	public double valueOfBestMove(Board b, int recursionDepth) {
-		//implementation here
+	public double valueOfBestMove(Game g, int recursionDepth) {
+		//creates array to hold all possible moves
+		Move[] moves = this.getAllMoves();
+
+		//creates empty array to hold boards created from moves
+		Board[] boards = new Board[moves.length];
+		//iterates over all moves, applying them to fill boards
+		for (int i = 0; i<moves.length; i++) {
+			boards[i] = new Board(g.getGameBoard(), moves[i]);
+		}
+
+		//creates array to hold values of boards
+		double[] boardValues = new double[boards.length];
+
+		//if recursionDepth is one, calculate direct values of moves
+		if (recursionDepth==1) {
+			//iterates over all boards and calculates values to put in boardValues
+			for (int i = 0; i<boards.length; i++) {
+				boardValues[i] = boards[i].calculateValue(this);
+			}
+		
+		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
+		} else {
+			//iterates over all boards and calculates value based on best opponent move
+			for (int i = 0; i<boards.length; i++) {
+				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(g, recursionDepth-1);
+			}
+		}
+
+		//creates array to hold sorted values from lowest to highest
+		double[] boardValuesSorted = Arrays.sort(Arrays.copyOf(boardValues));
+
+		//creates variable to hold result value
+		double result = Math.pow(boardValuesSorted[0], 7);
+		//iterates over all values except the first
+		for (int i = 1; i<sortedMoves.length; i++) {
+			result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
+		}
+		return Math.pow(result, 0.1);
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
