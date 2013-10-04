@@ -128,12 +128,13 @@ public abstract class Player {
 		}
 
 		//creates array to hold sorted values from lowest to highest
-		double[] boardValuesSorted = Arrays.sort(Arrays.copyOf(boardValues));
+		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
+		Arrays.sort(boardValuesSorted);
 
 		//creates variable to hold result value
 		double result = Math.pow(boardValuesSorted[0], 7);
 		//iterates over all values except the first
-		for (int i = 1; i<sortedMoves.length; i++) {
+		for (int i = 1; i<boardValuesSorted.length; i++) {
 			result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
 		}
 		return Math.pow(result, 0.1);
@@ -166,7 +167,7 @@ public abstract class Player {
 			}
 		}
 		//returns the final result
-		return result;
+		return result.toArray(new Move[result.size()]);
 	}
 
 	public abstract void takeTurn();

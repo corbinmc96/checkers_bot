@@ -71,7 +71,7 @@ public class Board {
 
 	public static boolean locationIsInBounds (byte[] testLocation) {
 		byte[] boardValues = new byte[] {0,1,2,3,4,5,6,7};
-		if (Arrays.asList(boardValues).contains(testLocation[0] && Arrays.asList(boardValues).contains(testLocation[1]))) {
+		if (Arrays.asList(boardValues).contains(testLocation[0]) && Arrays.asList(boardValues).contains(testLocation[1])) {
 			return true;
 		}
 		else {
@@ -86,7 +86,7 @@ public class Board {
 		//iterates over every piece on the board
 		for (Piece piece : this.piecesOnBoard) {
 			//determines if the piece is owned by player 1
-			if (piece.getOwningPlayer()==p) {
+			if (piece.getPlayer()==p) {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					//adds 3 to the player's total value for the board
@@ -112,7 +112,7 @@ public class Board {
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
-					if (piece.getOwningPlayer().getIsOnZeroSide()) {
+					if (piece.getPlayer().getIsOnZeroSide()) {
 						//adds value based on distance down the board
 						p2Value += 1 + 0.125*piece.getLocation()[1];
 					//the player is on the side of the board with index 7

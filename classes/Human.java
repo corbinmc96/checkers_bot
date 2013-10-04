@@ -89,7 +89,7 @@ public class Human extends Player {
 				for (byte x : new byte[] {0,1,2,3,4,5,6,7}) {
 					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getXO();
 				}
-				System.out.prinln(Arrays.toString(theLine));
+				System.out.println(Arrays.toString(theLine));
 			}
 		}
 	}
