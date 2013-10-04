@@ -7,6 +7,9 @@ public class Move {
 	private byte[][] waypoints;
 	//number of jumps contained
 	private int jumpsContained;
+	//is the move valid
+	private boolean isValid;
+
 
 	public Move (Piece startPiece, byte[][] startWaypoints) {
 		//instantiate all the variables
@@ -14,6 +17,7 @@ public class Move {
 		this.waypoints=startWaypoints;
 		//calculate the number of pieces to be jumped
 		this.jumpsContained = startWaypoints.length - 2;
+		//implementation here to check if move is valid.
 	}
 	
 	//get the souce location: the position the moving Piece is originating from
@@ -56,12 +60,6 @@ public class Move {
 				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new Piece[result.size()]);
-		}
-	}
-
-	public boolean checkIfValid() {
-		for (int i = 0; i<this.waypoints.length-1;i++) {
-			//working here -- Corbin
 		}
 	}
 }
