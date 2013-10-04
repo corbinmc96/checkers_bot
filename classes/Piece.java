@@ -40,15 +40,15 @@ public class Piece {
 		//iterates through each ser
 		for (byte[][] theWaypoints : allWaypoints) {
 			//creates move and adds to return string
-			result.add(Move(this, theWaypoints));
+			result.add(new Move(this, theWaypoints));
 		}
 		//returns final result
-		return result;
+		return result.toArray(new Move[result.size()]);
 	}
 
 	public byte[][][] getMovesFromLocation (byte[] pieceLocation, boolean mustBeJump) {
 		//creates return array
-		ArrayList<byte[][][]> result = new ArrayList<byte[][][]>();
+		ArrayList<byte[][]> result = new ArrayList<byte[][]>();
 		//tests if this piece is king
 		if (this.isKing) {
 			//tests if this move does not need to be a jump
@@ -58,7 +58,7 @@ public class Piece {
 					//finds potential destination
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//if destination empty and inbounds
-					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+					if (this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 						//add waypoint set to return array
 						result.add(new byte[][] {pieceLocation,testDestination});
 					}
@@ -71,7 +71,7 @@ public class Piece {
 				//finds location being jumped over
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests that destination is in bounds, destination is unoccupied, and opponent piece is being jumped over
-				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
 					//adds move to return array
 					result.add(new byte[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
@@ -84,22 +84,24 @@ public class Piece {
 		else {
 			//confirms that move doesnt need to be a jump
 			if (!mustBeJump) {
+				//declares regularDisplacements
+				byte[][] regularDisplacements;
 				//is on zero side of the board (robot side)
 				if (this.owningPlayer.getIsOnZeroSide() == true) {
 					//sets displacement values
-					byte[][] regularDisplacements = new byte[][] {new byte[] {1,1}, new byte[] {-1,1}};
+					regularDisplacements = new byte[][] {new byte[] {1,1}, new byte[] {-1,1}};
 				}
 				//is not on zero side (human side)
 				else {
 					//sets different displacement values
-					byte[][] regularDisplacements = new byte[][] {new byte[] {1,-1}, new byte[] {1,-1}};
+					regularDisplacements = new byte[][] {new byte[] {1,-1}, new byte[] {1,-1}};
 				}
 				//iterates through all displacements
 				for (byte[] displacement : regularDisplacements) {
 					//calculates potential destination
 					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//tests that location is in bounds and unoccupied
-					if (this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+					if (this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 						//adds waypoint set to the return array
 						result.add(new byte[][] {pieceLocation,testDestination});
 					}
