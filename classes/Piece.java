@@ -107,15 +107,18 @@ public class Piece {
 					}
 				}
 			}
+			
+			// declares jumpDisplacements
+			byte[][] jumpDisplacements;
 			//tests if player is on the zero side
 			if (this.owningPlayer.getIsOnZeroSide() == true) {
 				//sets displacements for jumps
-				byte[][] jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
+				jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
 			}
 			//called if player is on the non-zero side
 			else {
 				//sets different displacement values for jumps
-				byte[][] jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
+				jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
 			}
 			//iterates over all displacements
 			for (byte[] displacement : jumpDisplacements) {
@@ -124,18 +127,18 @@ public class Piece {
 				//calculates location being jumped over
 				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests if destination is in bounds, unoccupied, and that midpoint is occupied by opponent's piece
-				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.myBoard.getPieceAtLocation(testDestination) == null && this.owningPlayer.myBoard.getPieceAtLocation() != null && this.owningPlayer.myBoard.getPieceAtLocation().owningPlayer != this.owningPlayer) {
+				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
 					//adds waypoint set
 					result.add(new byte[][] {pieceLocation,testDestination});
 					//finds all potential multi-jumps
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
 						//adds multi-jump scenarios
-						result.add(ArrayUtils.addAll(pieceLocaton, potentialMove));
+						result.add(ArrayUtils.addAll(pieceLocation, potentialMove));
 					}
 				}
 			}
 		}
 	//returns the result
-	return result;
+	return result.toArray(new byte[result.size()][][]);
 	}
 }
