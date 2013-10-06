@@ -8,8 +8,8 @@ public class SimPlayer extends Player {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
-	public void takeTurn() {
-		this.performMove(super.caluclateBestMove());
+	public void takeTurn(Game g) {
+		this.performMove(super.calculateBestMove(g, 4));
 	}
 
 	public void performMove(Move myMove) {

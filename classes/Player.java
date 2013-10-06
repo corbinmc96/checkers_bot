@@ -170,5 +170,5 @@ public abstract class Player {
 		return result.toArray(new Move[result.size()]);
 	}
 
-	public abstract void takeTurn();
+	public abstract void takeTurn(Game g);
 }
