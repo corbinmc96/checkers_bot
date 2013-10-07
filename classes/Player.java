@@ -29,6 +29,10 @@ public abstract class Player {
 		return this.isOnZeroSide;
 	}
 
+	public Robot getRobot() {
+		return this.gameRobot;
+	}
+
 	public String getColor() {
 		return this.color;
 	}
@@ -171,4 +175,5 @@ public abstract class Player {
 	}
 
 	public abstract void takeTurn(Game g);
+	public abstract String getXO();
 }
