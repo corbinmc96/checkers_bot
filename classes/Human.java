@@ -25,16 +25,16 @@ public class Human extends Player {
 		return this.xo;
 	}
 
-	public void takeTurn() {
-		super.performMove(this.inputMove());
+	public void takeTurn(Game g) {
+		super.performMove(this.inputMove(g));
 	}
 
-	public Move inputMove() {
-		if (this.startGameRobot!=null) {
+	public Move inputMove(Game g) {
+		if (this.getRobot()!=null) {
 			//creates dictionary to hold scanned values
 			Hashtable<String, String> scannedLocations = new Hashtable<String, String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.rankBestMoves(this.myBoard, 1);
+			Move[] possibleMoves = this.rankBestMoves(g, 1);
 			
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
@@ -50,7 +50,7 @@ public class Human extends Player {
 					if (scannedLocations.containsKey(new String(waypoint))) {
 						pointColor = scannedLocations.get(new String(waypoint));
 					} else {
-						pointColor = this.gameRobot.examineLocation(waypoint);
+						pointColor = this.getRobot().examineLocation(waypoint);
 						scannedLocations.put(new String(waypoint), pointColor);
 					}
 					//checks if the square is not empty
@@ -64,15 +64,17 @@ public class Human extends Player {
 					continue;
 				}
 				
+				//sets last waypoint
+				byte[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
 				if (scannedLocations.containsKey(new String(waypoint))) {
 					pointColor = scannedLocations.get(new String(waypoint));
 				} else {
-					pointColor = this.gameRobot.examineLocation(waypoints[waypoints.length-1]);
+					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
 					scannedLocations.put(new String(waypoint), pointColor);
 				}
 				//checks if the correct piece is not on the square
-				if (pointColor!=this.color) {
+				if (pointColor!=this.getColor()) {
 					continue;
 				} else {
 					//this must be the right move, so return it
@@ -85,9 +87,9 @@ public class Human extends Player {
 		
 		} else {
 			for (byte y : new byte[] {0,1,2,3,4,5,6,7}) {
-				Piece[] theLine = new Piece[8];
+				String[] theLine = new String[8];
 				for (byte x : new byte[] {0,1,2,3,4,5,6,7}) {
-					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getXO();
+					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getPlayer().getXO();
 				}
 				System.out.println(Arrays.toString(theLine));
 			}
