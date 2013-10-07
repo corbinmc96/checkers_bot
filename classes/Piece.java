@@ -76,7 +76,7 @@ public class Piece {
 					result.add(new byte[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
-						result.add(ArrayUtils.addAll(new byte[][] {pieceLocation, testDestination},potentialMove));
+						result.add(this.addTwoArrays(new byte[][] {pieceLocation, testDestination},potentialMove));
 					}
 				}
 			}
@@ -133,12 +133,25 @@ public class Piece {
 					//finds all potential multi-jumps
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
 						//adds multi-jump scenarios
-						result.add(ArrayUtils.addAll(pieceLocation, potentialMove));
+						result.add(this.addTwoArrays(pieceLocation, potentialMove));
 					}
 				}
 			}
 		}
 	//returns the result
 	return result.toArray(new byte[result.size()][][]);
+	}
+
+	public static Object[] addTwoArrays(Object[] a1, Object[] a2) {
+		Object[] result = new Object[a1.length+a2.length];
+		for (int i =0; i<a1.length+a2.length; i++) {
+			if (i < a1.length) {
+				result[i] = a1[i];
+			}
+			else {
+				result[i] = a2[i-a1.length];
+			}
+		}
+		return result;
 	}
 }

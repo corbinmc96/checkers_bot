@@ -62,4 +62,12 @@ public class Move {
 			return result.toArray(new Piece[result.size()]);
 		}
 	}
+
+	public boolean calculateIsValid () {
+		for (int i=0; i<startWaypoints-1;i++) {
+			byte[] start = startWaypoints[i];
+			byte[] end = startWaypoints[i+1];
+			byte[] displacement = new byte[] {}
+		}
+	}
 }
