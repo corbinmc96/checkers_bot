@@ -20,8 +20,8 @@ public class Game {
 
 	public Player play() {
 		while (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
-			this.player1.takeTurn();
-			this.player2.takeTurn();
+			this.player1.takeTurn(this);
+			this.player2.takeTurn(this);
 		}
 		if (this.gameBoard.totalPiecesLeft(player1)>0) {
 			return this.player1;
