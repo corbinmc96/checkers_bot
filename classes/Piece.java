@@ -133,7 +133,7 @@ public class Piece {
 					//finds all potential multi-jumps
 					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
 						//adds multi-jump scenarios
-						result.add(this.addTwoArrays(pieceLocation, potentialMove));
+						result.add(this.addTwoArrays(new byte[][] {pieceLocation}, potentialMove));
 					}
 				}
 			}
@@ -142,8 +142,8 @@ public class Piece {
 	return result.toArray(new byte[result.size()][][]);
 	}
 
-	public static Object[] addTwoArrays(Object[] a1, Object[] a2) {
-		Object[] result = new Object[a1.length+a2.length];
+	public static byte[][] addTwoArrays(byte[][] a1, byte[][] a2) {
+		byte[][] result = new byte[a1.length+a2.length][];
 		for (int i =0; i<a1.length+a2.length; i++) {
 			if (i < a1.length) {
 				result[i] = a1[i];
