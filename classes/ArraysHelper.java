@@ -10,6 +10,19 @@ public class ArraysHelper {
 
 		return result;
 	}
+	
+	public static ArrayList<Byte[]> asArrayList(byte[][] array) {
+		ArrayList<Byte[]> result = new ArrayList<Byte[]>();
+
+		for (byte[] item : array) {
+			result.add(new Byte[item.length]);
+			for (int i = 0; i<item.length; i++) {
+				result.get(result.size()-1)[i] = item[i];
+			}
+		}
+
+		return result;
+	}
 
 	public static ArrayList<Piece> asArrayList(Piece[] array) {
 		ArrayList<Piece> result = new ArrayList<Piece>();

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Move {
 
@@ -64,20 +65,20 @@ public class Move {
 	}
 
 	public boolean calculateIsValid () {
-		Player thePlayer = this.movePiece.getOwningPlayer();
+		Player thePlayer = this.movePiece.getPlayer();
 		Board theBoard = thePlayer.getBoard();
 		outerloop:
 		for (int i=0; i<startWaypoints-1;i++) {
 			byte[] start = startWaypoints[i];
 			byte[] end = startWaypoints[i+1];
-			byte[] midpoint = new byte[]{(end[0]+start[0])/2,(end[1]+start[1])/2}
+			byte[] midpoint = new byte[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
 			byte[] displacement = new byte[] {end[0]-start[0],end[1]-start[1]};
 			if (!this.movePiece.getIsKing()) {
-				if (this.movePiece.getOwningPlayer().getIsOnZeroSide()) {
-					if (Arrays.asList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+				if (this.movePiece.getPlayer().getIsOnZeroSide()) {
+					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (Arrays.asList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -85,10 +86,10 @@ public class Move {
 					}
 				}
 				else {
-					if (Arrays.asList(new byte[][]{new byte[]{1,-1}, new byte[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,-1}, new byte[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (Arrays.asList(new byte[][]{new byte[]{2,-2}, new byte[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,-2}, new byte[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -97,10 +98,10 @@ public class Move {
 				}
 			}
 			else {
-					if (Arrays.asList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}, new byte[] {1,-1}, new byte[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}, new byte[] {1,-1}, new byte[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (Arrays.asList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2},new byte[] {2,-2}, new byte[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2},new byte[] {2,-2}, new byte[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {

@@ -105,7 +105,7 @@ public class Human extends Player {
 				System.out.println("Enter Move:");
 				this.inputLine = this.in.nextLine();
 				int numberOfWaypoints = (this.inputLine.length+1)/3;
-				byte[][] allWaypoints = new byte[][numberOfWaypoints];
+				byte[][] allWaypoints = new byte[numberOfWaypoints][];
 				for (int i=0; i<numberOfWaypoints; i++) {
 					allWaypoints[i] = new byte[] {Byte.valueOf(inputLine[3*i]),Byte.valueOf(inputLine[3*i+1])};
 				}
