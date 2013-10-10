@@ -66,6 +66,7 @@ public class Move {
 	public boolean calculateIsValid () {
 		Player thePlayer = this.movePiece.getOwningPlayer();
 		Board theBoard = thePlayer.getBoard();
+		outerloop:
 		for (int i=0; i<startWaypoints-1;i++) {
 			byte[] start = startWaypoints[i];
 			byte[] end = startWaypoints[i+1];
@@ -74,10 +75,10 @@ public class Move {
 			if (!this.movePiece.getIsKing()) {
 				if (this.movePiece.getOwningPlayer().getIsOnZeroSide()) {
 					if (Arrays.asList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else if (Arrays.asList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else {
 						return false;
@@ -85,10 +86,10 @@ public class Move {
 				}
 				else {
 					if (Arrays.asList(new byte[][]{new byte[]{1,-1}, new byte[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else if (Arrays.asList(new byte[][]{new byte[]{2,-2}, new byte[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else {
 						return false;
@@ -97,15 +98,16 @@ public class Move {
 			}
 			else {
 					if (Arrays.asList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}, new byte[] {1,-1}, new byte[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else if (Arrays.asList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2},new byte[] {2,-2}, new byte[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getOwningPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						return true;
+						//intentionally empty
 					}
 					else {
 						return false;
 				}
 			}
 		}
+		return true;
 	}
 }

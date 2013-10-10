@@ -1,9 +1,12 @@
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Human extends Player {
 	
 	private String xo;
+	private String inputLine;
+	private Scanner in;
 
 	public Human(String startColor, boolean startsOnZeroSide) {
 		super(startColor, startsOnZeroSide);
@@ -16,6 +19,7 @@ public class Human extends Player {
 	public Human (String startXO, boolean startOnZeroSide) {
 		super(startOnZeroSide);
 		this.xo = startXO;
+		this.in = Scanner(System.in);
 	}
 
 	public String getXO() {
@@ -96,6 +100,21 @@ public class Human extends Player {
 				}
 				System.out.println(Arrays.toString(theLine));
 			}
+			boolean moveEntered = false;
+			while (!moveEntered) {
+				System.out.println("Enter Move:");
+				this.inputLine = this.in.nextLine();
+				int numberOfWaypoints = (this.inputLine.length+1)/3;
+				byte[][] allWaypoints = new byte[][numberOfWaypoints];
+				for (int i=0; i<numberOfWaypoints; i++) {
+					allWaypoints[i] = new byte[] {Byte.valueOf(inputLine[3*i]),Byte.valueOf(inputLine[3*i+1])};
+				}
+				inputMove = Move(myBoard.getPieceAtLocation(allWaypoints[0]),allWaypoints);
+				if (inputMove.calculateIfValid()) {
+					moveEntered = true;
+				}
+			}
+			super.perform(inputMove);
 		}
 	}
 }
