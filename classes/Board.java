@@ -18,7 +18,7 @@ public class Board {
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = new ArrayList<Piece>(Arrays.asList(previousBoard.getPiecesOnBoard()));
+		this.piecesOnBoard = ArraysHelper.asArrayList(previousBoard.getPiecesOnBoard());
 		Player.performMove(newMove, this);
 	}
 
@@ -71,7 +71,7 @@ public class Board {
 
 	public static boolean locationIsInBounds (byte[] testLocation) {
 		byte[] boardValues = new byte[] {0,1,2,3,4,5,6,7};
-		if (Arrays.asList(boardValues).contains(testLocation[0]) && Arrays.asList(boardValues).contains(testLocation[1])) {
+		if (ArraysHelper.asArrayList(boardValues).contains(testLocation[0]) && ArraysHelper.asArrayList(boardValues).contains(testLocation[1])) {
 			return true;
 		}
 		else {

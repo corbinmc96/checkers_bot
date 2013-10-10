@@ -1,5 +1,5 @@
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.ArrayList;
 
 public class Human extends Player {
 	
@@ -26,13 +26,14 @@ public class Human extends Player {
 	}
 
 	public void takeTurn(Game g) {
-		super.performMove(this.inputMove(g));
+		super.performMove(this.inputMove(g), g.getGameBoard());
 	}
 
 	public Move inputMove(Game g) {
 		if (this.getRobot()!=null) {
 			//creates dictionary to hold scanned values
-			Hashtable<String, String> scannedLocations = new Hashtable<String, String>();
+			ArrayList<byte[]> scannedLocations = new ArrayList<byte[]>();
+			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
 			Move[] possibleMoves = this.rankBestMoves(g, 1);
 			
@@ -46,13 +47,14 @@ public class Human extends Player {
 				//declares variable to determine if the loop needs to continue
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
-				for (byte[] waypoint : Arrays.copyOfRange(waypoints, 0, waypoints.length-1)) {
-					if (scannedLocations.containsKey(new String(waypoint))) {
-						pointColor = scannedLocations.get(new String(waypoint));
+				for (byte[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
+					if (scannedLocations.contains(waypoint)) {
+						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 					} else {
 						pointColor = this.getRobot().examineLocation(waypoint);
-						scannedLocations.put(new String(waypoint), pointColor);
-					}
+						scannedLocations.add(waypoint);
+						locationValues.add(pointColor);
+					}	
 					//checks if the square is not empty
 					if (pointColor!=Board.color) {
 						shouldContinue = true;
@@ -67,11 +69,12 @@ public class Human extends Player {
 				//sets last waypoint
 				byte[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
-				if (scannedLocations.containsKey(new String(waypoint))) {
-					pointColor = scannedLocations.get(new String(waypoint));
+				if (scannedLocations.contains(waypoint)) {
+					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 				} else {
 					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
-					scannedLocations.put(new String(waypoint), pointColor);
+					scannedLocations.add(waypoint);
+					locationValues.add(pointColor);
 				}
 				//checks if the correct piece is not on the square
 				if (pointColor!=this.getColor()) {

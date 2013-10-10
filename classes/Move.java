@@ -67,7 +67,7 @@ public class Move {
 		for (int i=0; i<startWaypoints-1;i++) {
 			byte[] start = startWaypoints[i];
 			byte[] end = startWaypoints[i+1];
-			byte[] displacement = new byte[] {}
+			byte[] displacement = new byte[0/*this number needs to be changed, CORBIN!!!*/];
 		}
 	}
 }
