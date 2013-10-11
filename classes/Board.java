@@ -28,7 +28,7 @@ public class Board {
 
 	public Piece getPieceAtLocation(int[] location) {
 		for (Piece piece : this.piecesOnBoard) {
-			if (piece.getLocation() == location) {
+			if (piece.getLocation()[0] == location[0] && piece.getLocation()[1] == location[1]) {
 				return piece;
 			}
 		}
