@@ -5,14 +5,14 @@ public class Move {
 
 	private Piece movePiece;
 	//waypoints are in order and include the starting point and the destination
-	private byte[][] waypoints;
+	private int[][] waypoints;
 	//number of jumps contained
 	private int jumpsContained;
 	//is the move valid
 	private boolean isValid;
 
 
-	public Move (Piece startPiece, byte[][] startWaypoints) {
+	public Move (Piece startPiece, int[][] startWaypoints) {
 		//instantiate all the variables
 		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
@@ -22,17 +22,17 @@ public class Move {
 	}
 	
 	//get the souce location: the position the moving Piece is originating from
-	public byte[] getSource () {
+	public int[] getSource () {
 		return this.waypoints[0];
 	}
 
 	//get the final destination of the moving piece
-	public byte[] getDestination () {
+	public int[] getDestination () {
 		return this.waypoints[this.waypoints.length-1];
 	}
 
 	//get an array of every waypoint the moving piece will stop at
-	public byte[][] getWaypoints () {
+	public int[][] getWaypoints () {
 		return this.waypoints;
 	}
 
@@ -57,7 +57,7 @@ public class Move {
 			//cycle through all the movements the piece makes
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
-				byte[] midpoint = {((byte) (this.waypoints[i][0]+this.waypoints[i-1][0])/2), ((byte) (this.waypoints[i][1]+this.waypoints[i-1][1])/2)};
+				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
 				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new Piece[result.size()]);
@@ -68,17 +68,17 @@ public class Move {
 		Player thePlayer = this.movePiece.getPlayer();
 		Board theBoard = thePlayer.getBoard();
 		outerloop:
-		for (int i=0; i<this.waypoints.length-1;i++) {
-			byte[] start = this.waypoints[i];
-			byte[] end = this.waypoints[i+1];
-			byte[] midpoint = new byte[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
-			byte[] displacement = new byte[] {end[0]-start[0],end[1]-start[1]};
+		for (int i=0; i<startWaypoints-1;i++) {
+			int[] start = startWaypoints[i];
+			int[] end = startWaypoints[i+1];
+			int[] midpoint = new int[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
+			int[] displacement = new int[] {end[0]-start[0],end[1]-start[1]};
 			if (!this.movePiece.getIsKing()) {
 				if (this.movePiece.getPlayer().getIsOnZeroSide()) {
-					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,1}, new int[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,2}, new int[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -86,10 +86,10 @@ public class Move {
 					}
 				}
 				else {
-					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,-1}, new byte[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,-1}, new int[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,-2}, new byte[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,-2}, new int[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -98,10 +98,10 @@ public class Move {
 				}
 			}
 			else {
-					if (ArraysHelper.asArrayList(new byte[][]{new byte[]{1,1}, new byte[]{-1,1}, new byte[] {1,-1}, new byte[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,1}, new int[]{-1,1}, new int[] {1,-1}, new int[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (ArraysHelper.asArrayList(new byte[][]{new byte[]{2,2}, new byte[]{-2,2},new byte[] {2,-2}, new byte[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,2}, new int[]{-2,2},new int[] {2,-2}, new int[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {

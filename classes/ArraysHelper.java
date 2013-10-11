@@ -1,21 +1,21 @@
 import java.util.ArrayList;
 
 public class ArraysHelper {
-	public static ArrayList<Byte> asArrayList(byte[] array) {
-		ArrayList<Byte> result = new ArrayList<Byte>();
+	public static ArrayList<Integer> asArrayList(Integer[] array) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
 
-		for (byte item : array) {
+		for (Integer item : array) {
 			result.add(item);
 		}
 
 		return result;
 	}
 	
-	public static ArrayList<Byte[]> asArrayList(byte[][] array) {
-		ArrayList<Byte[]> result = new ArrayList<Byte[]>();
+	public static ArrayList<Integer[]> asArrayList(Integer[][] array) {
+		ArrayList<Integer[]> result = new ArrayList<Integer[]>();
 
-		for (byte[] item : array) {
-			result.add(new Byte[item.length]);
+		for (Integer[] item : array) {
+			result.add(new Integer[item.length]);
 			for (int i = 0; i<item.length; i++) {
 				result.get(result.size()-1)[i] = item[i];
 			}
@@ -34,8 +34,8 @@ public class ArraysHelper {
 		return result;
 	}
 
-	public static byte[][] copyOfRange(byte[][] original, int startIndex, int endIndex) {
-		byte[][] result = new byte[endIndex-startIndex][];
+	public static Integer[][] copyOfRange(Integer[][] original, int startIndex, int endIndex) {
+		Integer[][] result = new Integer[endIndex-startIndex][];
 
 		for (int i = 0; i<endIndex-startIndex; i++) {
 			result[i] = original[startIndex+i];

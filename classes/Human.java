@@ -36,7 +36,7 @@ public class Human extends Player {
 	public Move inputMove(Game g) {
 		if (this.getRobot()!=null) {
 			//creates dictionary to hold scanned values
-			ArrayList<byte[]> scannedLocations = new ArrayList<byte[]>();
+			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
 			Move[] possibleMoves = this.rankBestMoves(g, 1);
@@ -44,14 +44,14 @@ public class Human extends Player {
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
 				//gets all waypoints of the move
-				byte[][] waypoints = m.getWaypoints();
+				int[][] waypoints = m.getWaypoints();
 				//declares pointColor variable
 				String pointColor;
 				
 				//declares variable to determine if the loop needs to continue
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
-				for (byte[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
+				for (int[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
 					if (scannedLocations.contains(waypoint)) {
 						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 					} else {
@@ -71,7 +71,7 @@ public class Human extends Player {
 				}
 				
 				//sets last waypoint
-				byte[] waypoint = waypoints[waypoints.length-1];
+				int[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
 				if (scannedLocations.contains(waypoint)) {
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
@@ -93,10 +93,10 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			for (byte y : new byte[] {0,1,2,3,4,5,6,7}) {
+			for (int y : new int[] {0,1,2,3,4,5,6,7}) {
 				String[] theLine = new String[8];
-				for (byte x : new byte[] {0,1,2,3,4,5,6,7}) {
-					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getPlayer().getXO();
+				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+					theLine[x] = super.getBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
 				}
 				System.out.println(Arrays.toString(theLine));
 			}
@@ -105,16 +105,16 @@ public class Human extends Player {
 				System.out.println("Enter Move:");
 				this.inputLine = this.in.nextLine();
 				int numberOfWaypoints = (this.inputLine.length+1)/3;
-				byte[][] allWaypoints = new byte[numberOfWaypoints][];
+				int[][] allWaypoints = new int[numberOfWaypoints][];
 				for (int i=0; i<numberOfWaypoints; i++) {
-					allWaypoints[i] = new byte[] {Byte.valueOf(inputLine[3*i]),Byte.valueOf(inputLine[3*i+1])};
+					allWaypoints[i] = new int[] {Integer.valueOf(inputLine[3*i]),Integer.valueOf(inputLine[3*i+1])};
 				}
-				inputMove = Move(myBoard.getPieceAtLocation(allWaypoints[0]),allWaypoints);
-				if (inputMove.calculateIfValid()) {
+				Move inputtedMove = Move(myBoard.getPieceAtLocation(allWaypoints[0]),allWaypoints);
+				if (inputtedMove.calculateIsValid()) {
 					moveEntered = true;
 				}
 			}
-			super.perform(inputMove);
+			super.perform(inputtedMove);
 		}
 	}
 }
