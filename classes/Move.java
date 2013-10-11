@@ -9,8 +9,6 @@ public class Move {
 	//number of jumps contained
 	private int jumpsContained;
 	//is the move valid
-	private boolean isValid;
-
 
 	public Move (Piece startPiece, int[][] startWaypoints) {
 		//instantiate all the variables

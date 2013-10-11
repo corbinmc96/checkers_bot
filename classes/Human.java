@@ -115,6 +115,9 @@ public class Human extends Player {
 					allWaypoints[i] = new int[] {Integer.valueOf(inputLine.charAt(3*i)),Integer.valueOf(inputLine.charAt(3*i+1))};
 				}
 				System.out.println(this.getBoard().getPieceAtLocation(allWaypoints[0]));
+				if (this.getBoard().getPieceAtLocation(allWaypoints[0]) == null) {
+					System.out.println("This is the problem.");
+				}
 				inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
 				if (inputtedMove.calculateIsValid()) {
 					moveEntered = true;
