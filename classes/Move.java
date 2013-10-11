@@ -68,9 +68,9 @@ public class Move {
 		Player thePlayer = this.movePiece.getPlayer();
 		Board theBoard = thePlayer.getBoard();
 		outerloop:
-		for (int i=0; i<startWaypoints-1;i++) {
-			int[] start = startWaypoints[i];
-			int[] end = startWaypoints[i+1];
+		for (int i=0; i<this.waypoints.length-1;i++) {
+			int[] start = this.waypoints[i];
+			int[] end = this.waypoints[i+1];
 			int[] midpoint = new int[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
 			int[] displacement = new int[] {end[0]-start[0],end[1]-start[1]};
 			if (!this.movePiece.getIsKing()) {

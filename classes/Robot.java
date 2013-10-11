@@ -4,11 +4,11 @@ public class Robot {
 	private boolean isHoldingPiece;
 
 	public int[] getArmLocation() {
-		//implementation
+		return null;
 	}
 	
 	public boolean getIsHoldingPiece() {
-		//implementation
+		return false;
 	}
 
 	public void moveToXY(int[] newXY) {
@@ -28,7 +28,7 @@ public class Robot {
 	}
 	
 	public String examineLocation(int[] location) {
-		//implementation
+		return null;
 	}
 
 	public void pickUpPiece() {

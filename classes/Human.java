@@ -8,9 +8,9 @@ public class Human extends Player {
 	private String inputLine;
 	private Scanner in;
 
-	public Human(String startColor, boolean startsOnZeroSide) {
-		super(startColor, startsOnZeroSide);
-	}
+	//public Human(String startColor, boolean startsOnZeroSide) {
+		//super(startColor, startsOnZeroSide);
+	//}
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
@@ -19,7 +19,7 @@ public class Human extends Player {
 	public Human (String startXO, boolean startOnZeroSide) {
 		super(startOnZeroSide);
 		this.xo = startXO;
-		this.in = Scanner(System.in);
+		this.in = new Scanner(System.in);
 	}
 
 	public String getXO() {
@@ -104,7 +104,7 @@ public class Human extends Player {
 			while (!moveEntered) {
 				System.out.println("Enter Move:");
 				this.inputLine = this.in.nextLine();
-				int numberOfWaypoints = (this.inputLine.length+1)/3;
+				int numberOfWaypoints = (this.inputLine.length()+1)/3;
 				int[][] allWaypoints = new int[numberOfWaypoints][];
 				for (int i=0; i<numberOfWaypoints; i++) {
 					allWaypoints[i] = new int[] {Integer.valueOf(inputLine[3*i]),Integer.valueOf(inputLine[3*i+1])};
