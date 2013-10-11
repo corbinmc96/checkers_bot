@@ -57,7 +57,7 @@ public class Move {
 			//cycle through all the movements the piece makes
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
-				int[] midpoint = {((int) (this.waypoints[i][0]+this.waypoints[i-1][0])/2), ((int) (this.waypoints[i][1]+this.waypoints[i-1][1])/2)};
+				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
 				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new Piece[result.size()]);
