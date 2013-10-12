@@ -43,5 +43,22 @@ public class ArraysHelper {
 		return result;
 	}
 
+	public static int find(double[] a, double n) {
+		for (int i = 0; i<a.length; i++) {
+			if (a[i]==n) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static Piece[] deepCopy(Piece[] pieces) {
+		Piece[] result = new Piece[pieces.length];
+		for (int i = 0; i<pieces.length; i++) {
+			result[i] = pieces[i].copy();
+		}
+		return result;
+	}
+
 	
 }

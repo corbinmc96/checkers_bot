@@ -15,7 +15,11 @@ public class Move {
 		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
 		//calculate the number of pieces to be jumped
-		this.jumpsContained = startWaypoints.length - 2;
+		if (Math.abs(startWaypoints[1][0]-startWaypoints[0][0])==2 && Math.abs(startWaypoints[1][1]-startWaypoints[0][1])==2) {
+			this.jumpsContained = startWaypoints.length - 1;
+		} else {
+			this.jumpsContained = 0;
+		}
 		//implementation here to check if move is valid.
 	}
 	
@@ -66,17 +70,17 @@ public class Move {
 		Player thePlayer = this.movePiece.getPlayer();
 		Board theBoard = thePlayer.getBoard();
 		outerloop:
-		for (int i=0; i<this.waypoints.length-1;i++) {
+		for (int i=0; i<this.waypoints.length-1; i++) {
 			int[] start = this.waypoints[i];
 			int[] end = this.waypoints[i+1];
 			int[] midpoint = new int[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
 			int[] displacement = new int[] {end[0]-start[0],end[1]-start[1]};
 			if (!this.movePiece.getIsKing()) {
-				if (this.movePiece.getPlayer().getIsOnZeroSide()) {
-					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,1}, new int[]{-1,1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+				if (thePlayer.getIsOnZeroSide()) {
+					if ((displacement[0]==1||displacement[0]==-1) && displacement[1]==1 && theBoard.getPieceAtLocation(end)==null && Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,2}, new int[]{-2,2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if ((displacement[0]==2||displacement[0]==-2)&&displacement[1]==2&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -84,10 +88,10 @@ public class Move {
 					}
 				}
 				else {
-					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,-1}, new int[]{-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					if ((displacement[0]==1||displacement[0]==-1)&&displacement[1]==-1&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
-					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,-2}, new int[]{-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					else if ((displacement[0]==2||displacement[0]==-2)&&displacement[1]==-2&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
 						//intentionally empty
 					}
 					else {
@@ -96,14 +100,14 @@ public class Move {
 				}
 			}
 			else {
-					if (ArraysHelper.asArrayList(new int[][]{new int[]{1,1}, new int[]{-1,1}, new int[] {1,-1}, new int[] {-1,-1}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else if (ArraysHelper.asArrayList(new int[][]{new int[]{2,2}, new int[]{-2,2},new int[] {2,-2}, new int[] {-2,-2}}).contains(displacement)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else {
-						return false;
+				if ((displacement[0]==1||displacement[0]==-1)&&(displacement[1]==1||displacement[1]==-1)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
+					//intentionally empty
+				}
+				else if ((displacement[0]==2||displacement[0]==-2)&&(displacement[1]==2||displacement[1]==-2)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
+					//intentionally empty
+				}
+				else {
+					return false;
 				}
 			}
 		}

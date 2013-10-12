@@ -154,4 +154,10 @@ public class Piece {
 		}
 		return result;
 	}
+
+	public Piece copy() {
+		Piece result = new Piece(new int[]{this.location[0], this.location[1]}, this.owningPlayer);
+		result.setIsKing(this.isKing);
+		return result;
+	}
 }

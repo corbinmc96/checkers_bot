@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Human extends Player {
 	
-	private String xo;
 	private String inputLine;
 	private Scanner in;
 
@@ -17,16 +16,8 @@ public class Human extends Player {
 	}
 
 	public Human (String startXO, boolean startOnZeroSide) {
-		super(startOnZeroSide);
-		this.xo = startXO;
+		super(startXO, startOnZeroSide);
 		this.in = new Scanner(System.in);
-	}
-
-	public String getXO() {
-		if (this.xo ==null) {
-			return " ";
-		}
-		return this.xo;
 	}
 
 	public void takeTurn(Game g) {
@@ -112,14 +103,10 @@ public class Human extends Player {
 				int numberOfWaypoints = (this.inputLine.length()+1)/3;
 				int[][] allWaypoints = new int[numberOfWaypoints][];
 				for (int i=0; i<numberOfWaypoints; i++) {
-					allWaypoints[i] = new int[] {Integer.valueOf(inputLine.charAt(3*i)),Integer.valueOf(inputLine.charAt(3*i+1))};
-				}
-				System.out.println(this.getBoard().getPieceAtLocation(allWaypoints[0]));
-				if (this.getBoard().getPieceAtLocation(allWaypoints[0]) == null) {
-					System.out.println("This is the problem.");
+					allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
 				}
 				inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
-				if (inputtedMove.calculateIsValid()) {
+				if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid()) {
 					moveEntered = true;
 				}
 			}

@@ -1,24 +1,23 @@
 public class SimPlayer extends Player {
 
-	public SimPlayer(String startColor, boolean startsOnZeroSide) {
-		super(startColor, startsOnZeroSide);
-	}
+	// public SimPlayer(String startColor, boolean startsOnZeroSide) {
+	// 	super(startColor, startsOnZeroSide);
+	// }
 
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
+	public SimPlayer (String startXO, boolean startOnZeroSide) {
+		super(startXO, startOnZeroSide);
+	}
+
 	public void takeTurn(Game g) {
-		this.performMove(super.calculateBestMove(g, 4));
+		this.performMove(this.calculateBestMove(g, 1));
 	}
-	
-	//temporary method to allow for testing
-	public String getXO() {
-		return null;
-	}
-	
+		
 	public void performMove(Move myMove) {
-		Player.performMove(myMove,super.getBoard());
+		Player.performMove(myMove,this.getBoard());
 		//tests if game is using the robot
 		if (this.getRobot()!=null) {
 			//move arm over moving piece

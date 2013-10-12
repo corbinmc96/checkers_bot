@@ -12,13 +12,13 @@ public class Board {
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<4; j++) {
 				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0]));
-				piecesOnBoard.add(new Piece(new int[] {7 - 2*j+(i%2), 7-i}, players[1]));
+				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1]));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = ArraysHelper.asArrayList(previousBoard.getPiecesOnBoard());
+		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
 		Player.performMove(newMove, this);
 	}
 
