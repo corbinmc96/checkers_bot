@@ -40,7 +40,7 @@ public class Piece {
 		//iterates through each ser
 		for (int[][] theWaypoints : allWaypoints) {
 			//creates move and adds to return string
-			result.add(new Move(this, theWaypoints));
+			result.add(new Move(theWaypoints));
 		}
 		//returns final result
 		return result.toArray(new Move[result.size()]);

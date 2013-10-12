@@ -159,17 +159,18 @@ public abstract class Player {
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
-		myMove.getMovePiece().setLocation(myMove.getDestination());
-		if (myMove.getMovePiece().getPlayer().getIsOnZeroSide()) {
-			if (myMove.getMovePiece().getLocation()[1]==7) {
-				myMove.getMovePiece().setIsKing(true);
+		Piece movePiece = myMove.getMovePiece(theBoard);
+		movePiece.setLocation(myMove.getDestination());
+		if (movePiece.getPlayer().getIsOnZeroSide()) {
+			if (movePiece.getLocation()[1]==7) {
+				movePiece.setIsKing(true);
 			}
 		} else {
-			if (myMove.getMovePiece().getLocation()[1]==0) {
-				myMove.getMovePiece().setIsKing(true);
+			if (movePiece.getLocation()[1]==0) {
+				movePiece.setIsKing(true);
 			}
 		}
-		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
+		for (Piece deadPiece : myMove.calculatePiecesToJump(theBoard)) {
 			theBoard.removePiece(deadPiece);
 		}
 	}

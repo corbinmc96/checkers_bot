@@ -105,8 +105,8 @@ public class Human extends Player {
 				for (int i=0; i<numberOfWaypoints; i++) {
 					allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
 				}
-				inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
-				if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid()) {
+				inputtedMove = new Move(allWaypoints);
+				if (inputtedMove.getMovePiece(this.getBoard())!=null && inputtedMove.getMovePiece(this.getBoard()).getPlayer()==this && inputtedMove.calculateIsValid(this.getBoard())) {
 					moveEntered = true;
 				}
 			}
