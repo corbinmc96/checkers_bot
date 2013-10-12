@@ -94,7 +94,7 @@ public class Piece {
 				//is not on zero side (human side)
 				else {
 					//sets different displacement values
-					regularDisplacements = new int[][] {new int[] {1,-1}, new int[] {1,-1}};
+					regularDisplacements = new int[][] {new int[] {1,-1}, new int[] {-1,-1}};
 				}
 				//iterates through all displacements
 				for (int[] displacement : regularDisplacements) {
