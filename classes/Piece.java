@@ -118,7 +118,7 @@ public class Piece {
 			//called if player is on the non-zero side
 			else {
 				//sets different displacement values for jumps
-				jumpDisplacements = new int[][] {new int[] {2,-2}, new int[] {2,-2}};
+				jumpDisplacements = new int[][] {new int[] {2,-2}, new int[] {-2,-2}};
 			}
 			//iterates over all displacements
 			for (int[] displacement : jumpDisplacements) {
@@ -127,7 +127,7 @@ public class Piece {
 				//calculates location being jumped over
 				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests if destination is in bounds, unoccupied, and that midpoint is occupied by opponent's piece
-				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
+				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(midpoint) != null && this.owningPlayer.getBoard().getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
 					//adds waypoint set
 					result.add(new int[][] {pieceLocation,testDestination});
 					//finds all potential multi-jumps

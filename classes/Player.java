@@ -113,6 +113,10 @@ public abstract class Player {
 			sortedMoves[moves.length-index-1] = moves[index];
 		}
 
+		for (Move m : sortedMoves) {
+			System.out.println(Arrays.deepToString(m.getWaypoints()));
+		}
+
 		return sortedMoves;
 	}
 
