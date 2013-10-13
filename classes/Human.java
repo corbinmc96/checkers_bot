@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Human extends Player {
 	
-	private String inputLine;
 	private Scanner in;
 
 	//public Human(String startColor, boolean startsOnZeroSide) {
@@ -85,7 +84,7 @@ public class Human extends Player {
 		
 		} else {
 			System.out.println();
-			for (int y : new int[] {0,1,2,3,4,5,6,7}) {
+			for (int y : new int[] {7,6,5,4,3,2,1,0}) {
 				String[] theLine = new String[8];
 				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
 					if (super.getBoard().getPieceAtLocation(new int[] {x,y}) != null) {
@@ -105,15 +104,37 @@ public class Human extends Player {
 			Move inputtedMove = null;
 			while (!moveEntered) {
 				System.out.println("Enter Move:");
-				this.inputLine = this.in.nextLine();
-				int numberOfWaypoints = (this.inputLine.length()+1)/3;
-				int[][] allWaypoints = new int[numberOfWaypoints][];
-				for (int i=0; i<numberOfWaypoints; i++) {
-					allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
+				String inputLine = this.in.nextLine();
+				if ((inputLine.length()+1)%3==0) {
+					inputLine = inputLine + " ";
 				}
-				inputtedMove = new Move(allWaypoints);
-				if (inputtedMove.getMovePiece(this.getBoard())!=null && inputtedMove.getMovePiece(this.getBoard()).getPlayer()==this && inputtedMove.calculateIsValid(this.getBoard())) {
-					moveEntered = true;
+				if (inputLine.length()%3==0) {
+
+					int numberOfWaypoints = inputLine.length()/3;
+					String[] waypointStrings = new String[numberOfWaypoints];
+					int[][] allWaypoints = new int[numberOfWaypoints][];
+					for (int i=0; i<numberOfWaypoints; i++) {
+						waypointStrings[i] = inputLine.substring(3*i,3*(i+1));
+					}
+					boolean validMove = true;
+					//CORBIN IS WORKING HERE
+					//for (String waypointString : waypointStrings) {
+						////could also test if first two characters are numbers
+						//if (waypointString.substring(2) != " ") {
+							//System.out.println("test");
+							//validMove = false; 
+						//}
+					//}
+					if (validMove) {
+						System.out.println("gothere");
+						for (int i=0; i<numberOfWaypoints; i++) {
+							allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
+						}
+						inputtedMove = new Move(allWaypoints);
+						if (inputtedMove.getMovePiece(this.getBoard())!=null && inputtedMove.getMovePiece(this.getBoard()).getPlayer()==this && inputtedMove.calculateIsValid(this.getBoard())) {
+							moveEntered = true;
+						}
+					}
 				}
 			}
 			return inputtedMove;
