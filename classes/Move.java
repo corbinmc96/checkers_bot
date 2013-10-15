@@ -3,14 +3,16 @@ import java.util.Arrays;
 
 public class Move {
 
+	private Piece movePiece;
 	//waypoints are in order and include the starting point and the destination
 	private int[][] waypoints;
 	//number of jumps contained
 	private int jumpsContained;
 	//is the move valid
 
-	public Move (int[][] startWaypoints) {
+	public Move (Piece startPiece, int[][] startWaypoints) {
 		//instantiate all the variables
+		this.movePiece = startPiece;
 		this.waypoints=startWaypoints;
 		//calculate the number of pieces to be jumped
 		if (Math.abs(startWaypoints[1][0]-startWaypoints[0][0])==2 && Math.abs(startWaypoints[1][1]-startWaypoints[0][1])==2) {
@@ -37,8 +39,8 @@ public class Move {
 	}
 
 	//get the piece the that is moving
-	public Piece getMovePiece (Board b) {
-		return b.getPieceAtLocation(this.waypoints[0]);
+	public Piece getMovePiece () {
+		return this.movePiece;
 	}
 
 	//get the number of jumps that the piece will perform
@@ -47,7 +49,7 @@ public class Move {
 	}
 	
 	//calculate an array of all the Piece objects that will be jumped during the move
-	public Piece[] calculatePiecesToJump (Board b) {
+	public Piece[] calculatePiecesToJump () {
 		//if no jumps, return empty list
 		if (this.jumpsContained == 0) {
 			return new Piece[0];
@@ -58,21 +60,22 @@ public class Move {
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
 				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
-				result.add(b.getPieceAtLocation(midpoint));
+				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new Piece[result.size()]);
 		}
 	}
 
-	public boolean calculateIsValid (Board theBoard) {
-		Player thePlayer = this.getMovePiece(theBoard).getPlayer();
+	public boolean calculateIsValid () {
+		Player thePlayer = this.movePiece.getPlayer();
+		Board theBoard = thePlayer.getBoard();
 		outerloop:
 		for (int i=0; i<this.waypoints.length-1; i++) {
 			int[] start = this.waypoints[i];
 			int[] end = this.waypoints[i+1];
 			int[] midpoint = new int[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
 			int[] displacement = new int[] {end[0]-start[0],end[1]-start[1]};
-			if (!this.getMovePiece(theBoard).getIsKing()) {
+			if (!this.movePiece.getIsKing()) {
 				if (thePlayer.getIsOnZeroSide()) {
 					if ((displacement[0]==1||displacement[0]==-1) && displacement[1]==1 && theBoard.getPieceAtLocation(end)==null && Board.locationIsInBounds(end)) {
 						//intentionally empty
