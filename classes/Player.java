@@ -81,7 +81,7 @@ public abstract class Player {
 		double[] boardValues = new double[boards.length];
 
 		//if recursionDepth is one, calculate direct values of moves
-		if (recursionDepth==1) {			
+		if (recursionDepth==1) {
 			//iterates over all boards and calculates values to put in boardValues
 			for (int i = 0; i<boards.length; i++) {
 				boardValues[i] = boards[i].calculateValue(this);
@@ -91,7 +91,7 @@ public abstract class Player {
 		} else {
 			//iterates over all boards and calculates value based on best opponent move
 			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(g, recursionDepth-1);
+				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, boards[i]), recursionDepth-1);
 			}
 		}
 
@@ -145,7 +145,7 @@ public abstract class Player {
 		} else {
 			//iterates over all boards and calculates value based on best opponent move
 			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(g, recursionDepth-1);
+				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, boards[i]), recursionDepth-1);
 			}
 		}
 

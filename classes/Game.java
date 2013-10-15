@@ -17,6 +17,12 @@ public class Game {
 		this(p1,p2);
 		this.gameRobot = startGameRobot;
 	}
+	
+	public Game (Game oldG, Board b) {
+		this.player1 = oldG.getPlayers()[0];
+		this.player2 = oldG.getPlayers()[1];
+		this.gameBoard = b;
+	}
 
 	public Player play() {
 		while (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {

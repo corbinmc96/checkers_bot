@@ -19,7 +19,7 @@ public class Board {
 
 	public Board (Board previousBoard, Move newMove) {
 		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
-		Player.performMove(newMove, this);
+		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
 	}
 
 	public Piece[] getPiecesOnBoard () {
