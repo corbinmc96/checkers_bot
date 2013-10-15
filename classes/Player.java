@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class Player {
 
@@ -85,7 +86,7 @@ public abstract class Player {
 			//iterates over all boards and calculates values to put in boardValues
 			for (int i = 0; i<boards.length; i++) {
 				boardValues[i] = boards[i].calculateValue(this);
-			}
+			} 
 
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
@@ -96,8 +97,17 @@ public abstract class Player {
 		}
 
 		//creates array to hold sorted values from lowest to highest
-		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
-		Arrays.sort(boardValuesSorted);
+		//double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
+		//Arrays.sort(boardValuesSorted);
+
+		//creates array to hold sorted values from lowest to highest
+		Double[] boardValuesSorted = new Double[boardValues.length];
+		//fills new array with old values
+		for (int i=0; i<boardValues.length; i++) {
+			boardValuesSorted[i] = boardValues[i];
+		} 
+		//sorts the values
+		Arrays.sort(boardValuesSorted, Collections.reverseOrder());
 
 		//creates array to hold final list of moves
 		Move[] sortedMoves = new Move[moves.length];
@@ -109,8 +119,12 @@ public abstract class Player {
 			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
 			//sets the value at index to -1 so that the same move is not used again, even if multiple moves have equal values
 			boardValues[index] = -1;
+
 			//puts the correct move in the correct position in the final array
-			sortedMoves[moves.length-index-1] = moves[index];
+			//sortedMoves[moves.length-index-1] = moves[index];
+
+			//alternate line
+			sortedMoves[i] = moves[index];
 		}
 
 		for (Move m : sortedMoves) {
@@ -150,8 +164,19 @@ public abstract class Player {
 		}
 
 		//creates array to hold sorted values from lowest to highest
-		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
-		Arrays.sort(boardValuesSorted);
+		//double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
+		//Arrays.sort(boardValuesSorted);
+
+		//creates array to hold sorted values from lowest to highest
+		Double[] boardValuesSorted = new Double[boardValues.length];
+		//fills new array with old values
+		for (int i=0; i<boardValues.length; i++) {
+			boardValuesSorted[i] = boardValues[i];
+		} 
+		//sorts the values
+		Arrays.sort(boardValuesSorted, Collections.reverseOrder());
+		//logs the values for debugging
+
 
 		//creates variable to hold result value
 		double result = Math.pow(boardValuesSorted[0], 7);
