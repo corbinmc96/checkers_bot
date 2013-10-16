@@ -1,58 +1,55 @@
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Human extends Player {
 	
-	private String xo;
+	private String inputLine;
+	private Scanner in;
 
-	public Human(String startColor, boolean startsOnZeroSide) {
-		super(startColor, startsOnZeroSide);
-	}
+	//public Human(String startColor, boolean startsOnZeroSide) {
+		//super(startColor, startsOnZeroSide);
+	//}
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
 	public Human (String startXO, boolean startOnZeroSide) {
-		super(startOnZeroSide);
-		this.xo = startXO;
-	}
-
-	public String getXO() {
-		if (this.xo ==null) {
-			return " ";
-		}
-		return this.xo;
+		super(startXO, startOnZeroSide);
+		this.in = new Scanner(System.in);
 	}
 
 	public void takeTurn(Game g) {
-		super.performMove(this.inputMove(g));
+		super.performMove(this.inputMove(g), g.getGameBoard());
 	}
 
 	public Move inputMove(Game g) {
 		if (this.getRobot()!=null) {
 			//creates dictionary to hold scanned values
-			Hashtable<String, String> scannedLocations = new Hashtable<String, String>();
+			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
+			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
 			Move[] possibleMoves = this.rankBestMoves(g, 1);
 			
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
 				//gets all waypoints of the move
-				byte[][] waypoints = m.getWaypoints();
+				int[][] waypoints = m.getWaypoints();
 				//declares pointColor variable
 				String pointColor;
 				
 				//declares variable to determine if the loop needs to continue
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
-				for (byte[] waypoint : Arrays.copyOfRange(waypoints, 0, waypoints.length-1)) {
-					if (scannedLocations.containsKey(new String(waypoint))) {
-						pointColor = scannedLocations.get(new String(waypoint));
+				for (int[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
+					if (scannedLocations.contains(waypoint)) {
+						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 					} else {
 						pointColor = this.getRobot().examineLocation(waypoint);
-						scannedLocations.put(new String(waypoint), pointColor);
-					}
+						scannedLocations.add(waypoint);
+						locationValues.add(pointColor);
+					}	
 					//checks if the square is not empty
 					if (pointColor!=Board.color) {
 						shouldContinue = true;
@@ -65,13 +62,14 @@ public class Human extends Player {
 				}
 				
 				//sets last waypoint
-				byte[] waypoint = waypoints[waypoints.length-1];
+				int[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
-				if (scannedLocations.containsKey(new String(waypoint))) {
-					pointColor = scannedLocations.get(new String(waypoint));
+				if (scannedLocations.contains(waypoint)) {
+					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 				} else {
 					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
-					scannedLocations.put(new String(waypoint), pointColor);
+					scannedLocations.add(waypoint);
+					locationValues.add(pointColor);
 				}
 				//checks if the correct piece is not on the square
 				if (pointColor!=this.getColor()) {
@@ -86,13 +84,33 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			for (byte y : new byte[] {0,1,2,3,4,5,6,7}) {
+			for (int y : new int[] {0,1,2,3,4,5,6,7}) {
 				String[] theLine = new String[8];
-				for (byte x : new byte[] {0,1,2,3,4,5,6,7}) {
-					theLine[x] = super.getBoard().getPieceAtLocation(new byte[] {x,y}).getPlayer().getXO();
+				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+					if (super.getBoard().getPieceAtLocation(new int[] {x,y}) != null) {
+						theLine[x] = super.getBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+					} else {
+						theLine[x] = "-";
+					}
 				}
 				System.out.println(Arrays.toString(theLine));
 			}
+			boolean moveEntered = false;
+			Move inputtedMove = null;
+			while (!moveEntered) {
+				System.out.println("Enter Move:");
+				this.inputLine = this.in.nextLine();
+				int numberOfWaypoints = (this.inputLine.length()+1)/3;
+				int[][] allWaypoints = new int[numberOfWaypoints][];
+				for (int i=0; i<numberOfWaypoints; i++) {
+					allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
+				}
+				inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
+				if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid()) {
+					moveEntered = true;
+				}
+			}
+			return inputtedMove;
 		}
 	}
 }

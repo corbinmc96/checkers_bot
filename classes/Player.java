@@ -10,15 +10,22 @@ public abstract class Player {
 	//contains the piece color
 	private String color;
 
-	public Player (String startColor, boolean startsOnZeroSide) {
-		this.color = startColor;
-		this.isOnZeroSide = startsOnZeroSide;
-	}
+	private String xo;
+
+	// public Player (String startColor, boolean startsOnZeroSide) {
+	// 	this.color = startColor;
+	// 	this.isOnZeroSide = startsOnZeroSide;
+	// }
 
 	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		this.color = startColor;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.gameRobot = startGameRobot;
+	}
+
+	public Player(String startXO, boolean startsOnZeroSide) {
+		this.xo = startXO;
+		this.isOnZeroSide = startsOnZeroSide;
 	}
 
 	public Player (boolean startsOnZeroSide) {
@@ -46,6 +53,13 @@ public abstract class Player {
 			}
 		}
 		return result;
+	}
+
+	public String getXO() {
+		if (this.xo ==null) {
+			return " ";
+		}
+		return this.xo;
 	}
 
 	public Move calculateBestMove (Game g, int recursionDepth) {
@@ -92,7 +106,7 @@ public abstract class Player {
 		//iterates over all values of boardValuesSorted
 		for (int i = 0; i<boardValuesSorted.length; i++) {
 			//finds the index of the current values in the original move list
-			index = Arrays.binarySearch(boardValues, boardValuesSorted[i]);
+			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
 			//sets the value at index to -1 so that the same move is not used again, even if multiple moves have equal values
 			boardValues[index] = -1;
 			//puts the correct move in the correct position in the final array
@@ -146,6 +160,15 @@ public abstract class Player {
 
 	public static void performMove(Move myMove, Board theBoard) {
 		myMove.getMovePiece().setLocation(myMove.getDestination());
+		if (myMove.getMovePiece().getPlayer().getIsOnZeroSide()) {
+			if (myMove.getMovePiece().getLocation()[1]==7) {
+				myMove.getMovePiece().setIsKing(true);
+			}
+		} else {
+			if (myMove.getMovePiece().getLocation()[1]==0) {
+				myMove.getMovePiece().setIsKing(true);
+			}
+		}
 		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
 			theBoard.removePiece(deadPiece);
 		}
@@ -175,5 +198,4 @@ public abstract class Player {
 	}
 
 	public abstract void takeTurn(Game g);
-	public abstract String getXO();
 }

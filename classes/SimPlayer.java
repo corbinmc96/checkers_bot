@@ -1,42 +1,46 @@
 public class SimPlayer extends Player {
 
-	public SimPlayer(String startColor, boolean startsOnZeroSide) {
-		super(startColor, startsOnZeroSide);
-	}
+	// public SimPlayer(String startColor, boolean startsOnZeroSide) {
+	// 	super(startColor, startsOnZeroSide);
+	// }
 
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
-	public void takeTurn(Game g) {
-		this.performMove(super.calculateBestMove(g, 4));
+	public SimPlayer (String startXO, boolean startOnZeroSide) {
+		super(startXO, startOnZeroSide);
 	}
 
+	public void takeTurn(Game g) {
+		this.performMove(this.calculateBestMove(g, 1));
+	}
+		
 	public void performMove(Move myMove) {
-		Player.performMove(myMove,super.getBoard());
+		Player.performMove(myMove,this.getBoard());
 		//tests if game is using the robot
-		if (this.gameRobot!=null) {
+		if (this.getRobot()!=null) {
 			//move arm over moving piece
-			this.gameRobot.moveToXY(myMove.getSource());
+			this.getRobot().moveToXY(myMove.getSource());
 			//pcks up the piece
-			this.gameRobot.pickUpPiece();
+			this.getRobot().pickUpPiece();
 			//moves piece to the destination
-			this.gameRobot.moveToXY(myMove.getDestination());
+			this.getRobot().moveToXY(myMove.getDestination());
 			//drops the piece
-			this.gameRobot.dropPiece();
+			this.getRobot().dropPiece();
 			//iterates over all jumped pieces
 			for (Piece deadPiece : myMove.calculatePiecesToJump()) {
 				//move arm over the piece that was jumped
-				this.gameRobot.moveToXY(deadPiece.getLocation());
+				this.getRobot().moveToXY(deadPiece.getLocation());
 				//picks up jumped piece
-				this.gameRobot.pickUpPiece();
+				this.getRobot().pickUpPiece();
 				//moves arm over drop point for dead pieces
-				this.gameRobot.moveToXY();
+				this.getRobot().moveToXY(myMove.getDestination());
 				//drops the piece
-				this.gameRobot.dropPiece();
+				this.getRobot().dropPiece();
 			}
 			//resets arm after all pieces have been moved.
-			this.gameRobot.resetPosition();
+			this.getRobot().resetPosition();
 		}
 	} 
 }

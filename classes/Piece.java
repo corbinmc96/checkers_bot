@@ -3,10 +3,10 @@ import java.util.ArrayList;
 public class Piece {
 
 	private boolean isKing;
-	private byte[] location;
+	private int[] location;
 	private Player owningPlayer; 
 
-	public Piece (byte[] startLocation, Player startPlayer) {
+	public Piece (int[] startLocation, Player startPlayer) {
 		this.isKing = false;
 		this.location=startLocation;
 		this.owningPlayer=startPlayer;
@@ -20,11 +20,11 @@ public class Piece {
 		this.isKing=changeIsKing;
 	}
 
-	public byte[] getLocation () {
+	public int[] getLocation () {
 		return this.location;
 	}
 
-	public void setLocation (byte[] changeLocation) {
+	public void setLocation (int[] changeLocation) {
 		this.location = changeLocation;
 	}
 
@@ -36,9 +36,9 @@ public class Piece {
 		//creates return ArrayList
 		ArrayList<Move> result = new ArrayList<Move>();
 		//gets array of all sets of waypoints
-		byte[][][] allWaypoints = this.getMovesFromLocation(this.location, false);
+		int[][][] allWaypoints = this.getMovesFromLocation(this.location, false);
 		//iterates through each ser
-		for (byte[][] theWaypoints : allWaypoints) {
+		for (int[][] theWaypoints : allWaypoints) {
 			//creates move and adds to return string
 			result.add(new Move(this, theWaypoints));
 		}
@@ -46,37 +46,37 @@ public class Piece {
 		return result.toArray(new Move[result.size()]);
 	}
 
-	public byte[][][] getMovesFromLocation (byte[] pieceLocation, boolean mustBeJump) {
+	public int[][][] getMovesFromLocation (int[] pieceLocation, boolean mustBeJump) {
 		//creates return array
-		ArrayList<byte[][]> result = new ArrayList<byte[][]>();
+		ArrayList<int[][]> result = new ArrayList<int[][]>();
 		//tests if this piece is king
 		if (this.isKing) {
 			//tests if this move does not need to be a jump
 			if (!mustBeJump) {
 				//loops through all displacements
-				for (byte[] displacement : new byte[][] {new byte[] {1,1}, new byte[] {1,-1}, new byte[] {-1,1}, new byte[] {-1,-1}}) {
+				for (int[] displacement : new int[][] {new int[] {1,1}, new int[] {1,-1}, new int[] {-1,1}, new int[] {-1,-1}}) {
 					//finds potential destination
-					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+					int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//if destination empty and inbounds
 					if (this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 						//add waypoint set to return array
-						result.add(new byte[][] {pieceLocation,testDestination});
+						result.add(new int[][] {pieceLocation,testDestination});
 					}
 				}
 			}
 			//loops through jump displacements
-			for (byte[] displacement : new byte[][] {new byte[] {2,2}, new byte[] {2,-2}, new byte[] {-2,2}, new byte[] {-2,-2}}) {
+			for (int[] displacement : new int[][] {new int[] {2,2}, new int[] {2,-2}, new int[] {-2,2}, new int[] {-2,-2}}) {
 				//finds potential destinations
-				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+				int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 				//finds location being jumped over
-				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
+				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests that destination is in bounds, destination is unoccupied, and opponent piece is being jumped over
 				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
 					//adds move to return array
-					result.add(new byte[][] {pieceLocation,testDestination});
+					result.add(new int[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
-					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
-						result.add(this.addTwoArrays(new byte[][] {pieceLocation, testDestination},potentialMove));
+					for (int[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
+						result.add(this.addTwoArrays(new int[][] {pieceLocation, testDestination},potentialMove));
 					}
 				}
 			}
@@ -85,65 +85,65 @@ public class Piece {
 			//confirms that move doesnt need to be a jump
 			if (!mustBeJump) {
 				//declares regularDisplacements
-				byte[][] regularDisplacements;
+				int[][] regularDisplacements;
 				//is on zero side of the board (robot side)
 				if (this.owningPlayer.getIsOnZeroSide() == true) {
 					//sets displacement values
-					regularDisplacements = new byte[][] {new byte[] {1,1}, new byte[] {-1,1}};
+					regularDisplacements = new int[][] {new int[] {1,1}, new int[] {-1,1}};
 				}
 				//is not on zero side (human side)
 				else {
 					//sets different displacement values
-					regularDisplacements = new byte[][] {new byte[] {1,-1}, new byte[] {1,-1}};
+					regularDisplacements = new int[][] {new int[] {1,-1}, new int[] {1,-1}};
 				}
 				//iterates through all displacements
-				for (byte[] displacement : regularDisplacements) {
+				for (int[] displacement : regularDisplacements) {
 					//calculates potential destination
-					byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+					int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//tests that location is in bounds and unoccupied
 					if (this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 						//adds waypoint set to the return array
-						result.add(new byte[][] {pieceLocation,testDestination});
+						result.add(new int[][] {pieceLocation,testDestination});
 					}
 				}
 			}
 			
 			// declares jumpDisplacements
-			byte[][] jumpDisplacements;
+			int[][] jumpDisplacements;
 			//tests if player is on the zero side
 			if (this.owningPlayer.getIsOnZeroSide() == true) {
 				//sets displacements for jumps
-				jumpDisplacements = new byte[][] {new byte[] {2,2}, new byte[] {-2,2}};
+				jumpDisplacements = new int[][] {new int[] {2,2}, new int[] {-2,2}};
 			}
 			//called if player is on the non-zero side
 			else {
 				//sets different displacement values for jumps
-				jumpDisplacements = new byte[][] {new byte[] {2,-2}, new byte[] {2,-2}};
+				jumpDisplacements = new int[][] {new int[] {2,-2}, new int[] {2,-2}};
 			}
 			//iterates over all displacements
-			for (byte[] displacement : jumpDisplacements) {
+			for (int[] displacement : jumpDisplacements) {
 				//calculates potential endpoint
-				byte[] testDestination = new byte[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
+				int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 				//calculates location being jumped over
-				byte[] midpoint = new byte[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
+				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests if destination is in bounds, unoccupied, and that midpoint is occupied by opponent's piece
 				if (Board.locationIsInBounds(testDestination) && this.owningPlayer.getBoard().getPieceAtLocation(testDestination) == null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation) != null && this.owningPlayer.getBoard().getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
 					//adds waypoint set
-					result.add(new byte[][] {pieceLocation,testDestination});
+					result.add(new int[][] {pieceLocation,testDestination});
 					//finds all potential multi-jumps
-					for (byte[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
+					for (int[][] potentialMove : this.getMovesFromLocation(testDestination,true)) {
 						//adds multi-jump scenarios
-						result.add(this.addTwoArrays(pieceLocation, potentialMove));
+						result.add(this.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
 					}
 				}
 			}
 		}
 	//returns the result
-	return result.toArray(new byte[result.size()][][]);
+	return result.toArray(new int[result.size()][][]);
 	}
 
-	public static Object[] addTwoArrays(Object[] a1, Object[] a2) {
-		Object[] result = new Object[a1.length+a2.length];
+	public static int[][] addTwoArrays(int[][] a1, int[][] a2) {
+		int[][] result = new int[a1.length+a2.length][];
 		for (int i =0; i<a1.length+a2.length; i++) {
 			if (i < a1.length) {
 				result[i] = a1[i];
@@ -152,6 +152,12 @@ public class Piece {
 				result[i] = a2[i-a1.length];
 			}
 		}
+		return result;
+	}
+
+	public Piece copy() {
+		Piece result = new Piece(new int[]{this.location[0], this.location[1]}, this.owningPlayer);
+		result.setIsKing(this.isKing);
 		return result;
 	}
 }

@@ -9,16 +9,16 @@ public class Board {
 
 	public Board (Player[] players) {
 		piecesOnBoard = new ArrayList<Piece>();
-		for (byte i=0; i<3; i++) {
-			for (byte j=0; j<4; j++) {
-				piecesOnBoard.add(new Piece(new byte[] {(2*j+(i%2)), i}, players[0]));
-				piecesOnBoard.add(new Piece(new byte[] {((byte) 7) - 2*j+(i%2), ((byte) 7)-i}, players[1]));
+		for (int i=0; i<3; i++) {
+			for (int j=0; j<4; j++) {
+				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0]));
+				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1]));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = new ArrayList<Piece>(Arrays.asList(previousBoard.getPiecesOnBoard()));
+		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
 		Player.performMove(newMove, this);
 	}
 
@@ -26,9 +26,9 @@ public class Board {
 		return this.piecesOnBoard.toArray(new Piece[this.piecesOnBoard.size()]);
 	}
 
-	public Piece getPieceAtLocation(byte[] location) {
+	public Piece getPieceAtLocation(int[] location) {
 		for (Piece piece : this.piecesOnBoard) {
-			if (piece.getLocation() == location) {
+			if (piece.getLocation()[0] == location[0] && piece.getLocation()[1] == location[1]) {
 				return piece;
 			}
 		}
@@ -69,9 +69,9 @@ public class Board {
 		return count;
 	}
 
-	public static boolean locationIsInBounds (byte[] testLocation) {
-		byte[] boardValues = new byte[] {0,1,2,3,4,5,6,7};
-		if (Arrays.asList(boardValues).contains(testLocation[0]) && Arrays.asList(boardValues).contains(testLocation[1])) {
+	public static boolean locationIsInBounds (int[] testLocation) {
+		int[] boardValues = new int[] {0,1,2,3,4,5,6,7};
+		if (ArraysHelper.asArrayList(boardValues).contains(testLocation[0]) && ArraysHelper.asArrayList(boardValues).contains(testLocation[1])) {
 			return true;
 		}
 		else {

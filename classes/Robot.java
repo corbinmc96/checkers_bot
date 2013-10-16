@@ -1,17 +1,17 @@
 public class Robot {
 	
-	private byte[] armLocation;
+	private int[] armLocation;
 	private boolean isHoldingPiece;
 
-	public byte[] getArmLocation() {
-		//implementation
+	public int[] getArmLocation() {
+		return null;
 	}
 	
 	public boolean getIsHoldingPiece() {
-		//implementation
+		return false;
 	}
 
-	public void moveToXY(byte[] newXY) {
+	public void moveToXY(int[] newXY) {
 		//implementation
 	}
 	
@@ -27,8 +27,8 @@ public class Robot {
 		//implementation
 	}
 	
-	public String examineLocation(byte[] location) {
-		//implementation
+	public String examineLocation(int[] location) {
+		return null;
 	}
 
 	public void pickUpPiece() {
