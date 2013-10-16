@@ -45,10 +45,10 @@ public abstract class Player {
 		return this.color;
 	}
 
-	public Piece[] getPlayerPieces () {
-		Piece[] result = new Piece[this.myBoard.totalPiecesLeft(this)];
+	public Piece[] getPlayerPieces (Board b) {
+		Piece[] result = new Piece[b.totalPiecesLeft(this)];
 		int i = 0;
-		for (Piece p : this.myBoard.getPiecesOnBoard()) {
+		for (Piece p : b.getPiecesOnBoard()) {
 			if (p.getPlayer() == this) {
 				result[i++] = p;
 			}
@@ -69,7 +69,7 @@ public abstract class Player {
 
 	public Move[] rankBestMoves (Game g, int recursionDepth) {
 		//creates array to hold all possible moves
-		Move[] moves = this.getAllMoves();
+		Move[] moves = this.getAllMoves(g.getGameBoard());
 
 		//creates empty array to hold boards created from moves
 		Board[] boards = new Board[moves.length];
@@ -136,7 +136,7 @@ public abstract class Player {
 
 	public double valueOfBestMove(Game g, int recursionDepth) {
 		//creates array to hold all possible moves
-		Move[] moves = this.getAllMoves();
+		Move[] moves = this.getAllMoves(g.getGameBoard());
 
 		//creates empty array to hold boards created from moves
 		Board[] boards = new Board[moves.length];
@@ -211,11 +211,11 @@ public abstract class Player {
 		return this.myBoard;
 	}
 
-	public Move[] getAllMoves () {
+	public Move[] getAllMoves (Board b) {
 		//creates an ArrayList to return later
 		ArrayList<Move> result = new ArrayList<Move>();
 		//iterates over each of the player's pieces
-		for (Piece playerPiece : this.getPlayerPieces()) {
+		for (Piece playerPiece : this.getPlayerPieces(b)) {
 			//iterates over all of that piece's moves
 			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
 				//adds each move to the return ArrayList
