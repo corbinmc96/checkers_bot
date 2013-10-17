@@ -177,15 +177,17 @@ public abstract class Player {
 		//sorts the values
 		Arrays.sort(boardValuesSorted, Collections.reverseOrder());
 		//logs the values for debugging
+		System.outp.print();
+		System.out.println(Arrays.toString(boardValuesSorted));
 
-
-		//creates variable to hold result value
-		double result = Math.pow(boardValuesSorted[0], 7);
-		//iterates over all values except the first
-		for (int i = 1; i<boardValuesSorted.length; i++) {
-			result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
-		}
-		return Math.pow(result, 0.1);
+		return boardValuesSorted[0];
+		// //creates variable to hold result value
+		// double result = Math.pow(boardValuesSorted[0], 7);
+		// //iterates over all values except the first
+		// for (int i = 1; i<boardValuesSorted.length; i++) {
+		// 	result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
+		// }
+		// return Math.pow(result, 0.1);
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
