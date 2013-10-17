@@ -112,11 +112,11 @@ public class Board {
 					//determines which side of the board the player is on
 					if (piece.getPlayer().getIsOnZeroSide()) {
 						//adds value based on distance down the board
-						value -= 1 - 0.125*piece.getLocation()[1];
+						value -= (1 + 0.125*piece.getLocation()[1]);
 					//the player is on the side of the board with index 7
 					} else {
 						//adds value based on distance down the board
-						value -= 1 - 0.125*(7 - piece.getLocation()[1]);
+						value -= (1 + 0.125*(7 - piece.getLocation()[1]));
 					}
 				}
 			}
