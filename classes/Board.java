@@ -11,15 +11,29 @@ public class Board {
 		piecesOnBoard = new ArrayList<Piece>();
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<4; j++) {
-				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0]));
-				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1]));
+				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0], this));
+				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1], this));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
+		this.piecesOnBoard = new ArrayList<Piece>();
+		Piece[] previousPieces = previousBoard.getPiecesOnBoard();
+		for (Piece p : previousPieces) {
+			this.piecesOnBoard.add(p.copyToBoard(this));
+		}
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
+	}
+
+	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations) {
+		this.piecesOnBoard = new ArrayList<Piece>();
+		for (int[] location : p1Locations) {
+			this.piecesOnBoard.add(new Piece(location, players[0], this));
+		}
+		for (int[] location : p2Locations) {
+			this.piecesOnBoard.add(new Piece(location, players[1], this));
+		}
 	}
 
 	public Piece[] getPiecesOnBoard () {
@@ -124,6 +138,9 @@ public class Board {
 			}
 		}
 
+		System.out.println(p1Value);
+		System.out.println(p2Value);
+		System.out.println();
 		return p1Value/p2Value;
 	}
 }

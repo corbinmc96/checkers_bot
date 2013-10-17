@@ -4,12 +4,14 @@ public class Piece {
 
 	private boolean isKing;
 	private int[] location;
-	private Player owningPlayer; 
+	private Player owningPlayer;
+	private Board parentBoard;
 
-	public Piece (int[] startLocation, Player startPlayer) {
+	public Piece (int[] startLocation, Player startPlayer, Board startBoard) {
 		this.isKing = false;
 		this.location=startLocation;
 		this.owningPlayer=startPlayer;
+		this.parentBoard = startBoard;
 	}
 
 	public boolean getIsKing () {
@@ -30,6 +32,10 @@ public class Piece {
 
 	public Player getPlayer () {
 		return this.owningPlayer;
+	}
+
+	public Board getParentBoard() {
+		return this.parentBoard;
 	}
 
 	public Move[] getMovesOfPiece () {
@@ -155,8 +161,8 @@ public class Piece {
 		return result;
 	}
 
-	public Piece copy() {
-		Piece result = new Piece(new int[]{this.location[0], this.location[1]}, this.owningPlayer);
+	public Piece copyToBoard(Board b) {
+		Piece result = new Piece(new int[]{this.location[0], this.location[1]}, this.owningPlayer, b);
 		result.setIsKing(this.isKing);
 		return result;
 	}

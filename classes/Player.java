@@ -130,6 +130,7 @@ public abstract class Player {
 		for (Move m : sortedMoves) {
 			System.out.println(Arrays.deepToString(m.getWaypoints()));
 		}
+		System.out.println(Arrays.toString(boardValuesSorted));
 
 		return sortedMoves;
 	}
