@@ -14,8 +14,8 @@ public class Human extends Player {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
-	public Human (String startXO, boolean startOnZeroSide) {
-		super(startXO, startOnZeroSide);
+	public Human (String startXO, boolean startOnZeroSide, int startValueFactor) {
+		super(startXO, startOnZeroSide, startValueFactor);
 		this.in = new Scanner(System.in);
 	}
 
@@ -29,7 +29,7 @@ public class Human extends Player {
 			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.rankBestMoves(g, 1);
+			Move[] possibleMoves = this.rankBestMoves(1);
 			
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {

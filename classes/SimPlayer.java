@@ -8,12 +8,12 @@ public class SimPlayer extends Player {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
 
-	public SimPlayer (String startXO, boolean startOnZeroSide) {
-		super(startXO, startOnZeroSide);
+	public SimPlayer (String startXO, boolean startOnZeroSide, int startValueFactor) {
+		super(startXO, startOnZeroSide, startValueFactor);
 	}
 
 	public void takeTurn(Game g) {
-		this.performMove(this.calculateBestMove(g, 4));
+		this.performMove(this.calculateBestMove(2));
 	}
 		
 	public void performMove(Move myMove) {
