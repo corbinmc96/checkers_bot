@@ -1,0 +1,3 @@
+Added a parentBoard instance variable with a getter to Piece, removed deepCopy(Piece[]) from ArraysHelper
+changed Piece.copy() to Piece.copyToBoard()
+changed Board constructor to take an array of locations instead of an array of pieces
