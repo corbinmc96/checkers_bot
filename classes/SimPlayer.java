@@ -13,7 +13,7 @@ public class SimPlayer extends Player {
 	}
 
 	public void takeTurn(Game g) {
-		this.performMove(this.calculateBestMove(g, 1));
+		this.performMove(this.calculateBestMove(g, 5));
 	}
 		
 	public void performMove(Move myMove) {
