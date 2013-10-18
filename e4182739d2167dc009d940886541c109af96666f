@@ -1,0 +1,2 @@
+removed test for null piece at starting location in getMovesFromLocation, because it was prohibiting the computer from recognizing double jumps
+fixed problem in which getMovesFromLocation was requiring the starting piece, not the midpoint piece, to belong to the other player
