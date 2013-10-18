@@ -108,7 +108,7 @@ public class Human extends Player {
 				if ((inputLine.length()+1)%3==0) {
 					inputLine = inputLine + " ";
 				}
-				if (inputLine.length()%3==0) {
+				if (inputLine.length()%3==0 && inputLine.length()>=5) {
 
 					int numberOfWaypoints = inputLine.length()/3;
 					String[] waypointStrings = new String[numberOfWaypoints];
