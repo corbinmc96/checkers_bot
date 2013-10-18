@@ -138,9 +138,6 @@ public class Board {
 			}
 		}
 
-		System.out.println(p1Value);
-		System.out.println(p2Value);
-		System.out.println();
 		return p1Value/p2Value;
 	}
 }
