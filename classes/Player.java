@@ -83,36 +83,28 @@ public abstract class Player {
 			va[i] = this.minimax(this.getBoard(),recursionDepth-1,this.valueFactor);
 		}
 		Double[] sortedva = new Double[ma.length];
-		System.out.println("Unsorted Move Values: ");
 		for (int i=0;i<ma.length;i++) {
 			sortedva[i] = va[i];
 			//logs unsorted move values
-			System.out.println(va[i]);
 		}
 		Move[] result = new Move[ma.length];
 		if (this.valueFactor == 1) {
 			Arrays.sort(sortedva, Collections.reverseOrder());
-			for (int i=0;i<ma.length;i++) {
-				int index = Arrays.asList(va).indexOf(sortedva[i]);
-				result[i] = ma[index];					
-			}
 		}
 		else {
 			Arrays.sort(sortedva);
-			for (int i=0;i<ma.length;i++) {
-				//logs sorted move values
-				System.out.println(sortedva[i]);
-				int index = Arrays.asList(va).indexOf(sortedva[i]);
-				result[i] = ma[index];				
-			}			
 		}
+		for (int i=0;i<ma.length;i++) {
+			//logs sorted move values
+			int index = ArraysHelper.find(va,sortedva[i]);
+			result[i] = ma[index];				
+		}			
+		
 		return result;
 	}
 
 	public double minimax(Board b, int recursionDepth, int minOrMax) {
 		if (recursionDepth == 0) {
-
-			System.out.println("Board value: "+b.calculateValue());
 			return b.calculateValue();
 		}
 		else {

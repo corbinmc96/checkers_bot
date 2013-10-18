@@ -20,7 +20,6 @@ public class Board {
 	public Board (Board previousBoard, Move newMove) {
 		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
-		this.printBoard();
 	}
 
 	public Piece[] getPiecesOnBoard () {
@@ -83,7 +82,7 @@ public class Board {
 	public double calculateValue() {
 		double value = 0;
 		//some debugging info to print every piece;
-		//this.printBoard();
+		this.printBoard();
 		//iterates over every piece on the board
 		for (Piece piece : this.piecesOnBoard) {
 			//determines if the piece is owned by player 1
@@ -124,7 +123,7 @@ public class Board {
 				}
 			}
 		}
-
+		System.out.println(value);
 		return value;
 	}
 
