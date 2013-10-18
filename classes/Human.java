@@ -89,6 +89,9 @@ public class Human extends Player {
 				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
 					if (super.getBoard().getPieceAtLocation(new int[] {x,y}) != null) {
 						theLine[x] = super.getBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+						if (super.getBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
+							theLine[x] = theLine[x].toUpperCase();
+						}
 					} else {
 						theLine[x] = "-";
 					}
