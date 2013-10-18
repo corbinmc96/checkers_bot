@@ -1,0 +1,3 @@
+fixed error in game causing exception if the game ended after p1's turn
+caught another possible input error in Human.inputMove()
+changed several lines in Piece to use Piece.parentBoard instead of Piece.owningPlayer.getBoard()
