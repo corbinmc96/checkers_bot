@@ -83,25 +83,7 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			System.out.println();
-			for (int y : new int[] {7,6,5,4,3,2,1,0}) {
-				String[] theLine = new String[8];
-				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
-					if (super.getBoard().getPieceAtLocation(new int[] {x,y}) != null) {
-						theLine[x] = super.getBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
-						if (super.getBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
-							theLine[x] = theLine[x].toUpperCase();
-						}
-					} else {
-						theLine[x] = "-";
-					}
-				}
-				for (String s : theLine) {
-					System.out.print(s+" ");
-				}
-				System.out.println();
-			}
-			System.out.println();
+			super.getBoard().printBoard();
 			
 			boolean moveEntered = false;
 			Move inputtedMove = null;

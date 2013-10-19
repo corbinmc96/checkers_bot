@@ -25,10 +25,12 @@ public class Game {
 	}
 
 	public Player play() {
-		while (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
+		while (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
 			this.player1.takeTurn(this);
-			if (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
+			this.gameBoard.printBoard();
+			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
 				this.player2.takeTurn(this);
+				this.gameBoard.printBoard();
 			}
 		}
 		if (this.gameBoard.totalPiecesLeft(player1)>0) {
