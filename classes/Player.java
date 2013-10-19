@@ -68,6 +68,31 @@ public abstract class Player {
 	}
 
 	public Move[] rankBestMoves (Game g, int recursionDepth) {
+
+
+		System.out.println();
+		for (int y : new int[] {7,6,5,4,3,2,1,0}) {
+			String[] theLine = new String[8];
+			for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+				if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
+					theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+					if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
+						theLine[x] = theLine[x].toUpperCase();
+					}
+				} else {
+					theLine[x] = "-";
+				}
+			}
+			for (String s : theLine) {
+				System.out.print(s+" ");
+			}
+			System.out.println();
+		}
+
+
+
+
+
 		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves(g.getGameBoard());
 
@@ -128,6 +153,38 @@ public abstract class Player {
 		}
 
 		//logs values for debugging
+		// System.out.println();
+		// for (int y : new int[] {7,6,5,4,3,2,1,0}) {
+		// 	String[] theLine = new String[8];
+		// 	for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+		// 		if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
+		// 			theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+		// 			if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
+		// 				theLine[x] = theLine[x].toUpperCase();
+		// 			}
+		// 		} else {
+		// 			theLine[x] = "-";
+		// 		}
+		// 	}
+		// 	for (String s : theLine) {
+		// 		System.out.print(s+" ");
+		// 	}
+		// 	System.out.println();
+		// }
+		// for (Move m : moves) {
+		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		// }
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
+
+		return sortedMoves;
+	}
+
+	public double valueOfBestMove(Game g, int recursionDepth) {
+
+
+
+
 		System.out.println();
 		for (int y : new int[] {7,6,5,4,3,2,1,0}) {
 			String[] theLine = new String[8];
@@ -146,16 +203,15 @@ public abstract class Player {
 			}
 			System.out.println();
 		}
-		for (Move m : moves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
 
-		return sortedMoves;
-	}
 
-	public double valueOfBestMove(Game g, int recursionDepth) {
+
+
+
+
+
+
+		
 		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves(g.getGameBoard());
 
@@ -201,30 +257,30 @@ public abstract class Player {
 		//sorts the values
 		Arrays.sort(boardValuesSorted, Collections.reverseOrder());
 		//logs the values for debugging
-		System.out.println();
-		for (int y : new int[] {7,6,5,4,3,2,1,0}) {
-			String[] theLine = new String[8];
-			for (int x : new int[] {0,1,2,3,4,5,6,7}) {
-				if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
-					theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
-					if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
-						theLine[x] = theLine[x].toUpperCase();
-					}
-				} else {
-					theLine[x] = "-";
-				}
-			}
-			for (String s : theLine) {
-				System.out.print(s+" ");
-			}
-			System.out.println();
-		}
+		// System.out.println();
+		// for (int y : new int[] {7,6,5,4,3,2,1,0}) {
+		// 	String[] theLine = new String[8];
+		// 	for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+		// 		if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
+		// 			theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+		// 			if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getIsKing()) {
+		// 				theLine[x] = theLine[x].toUpperCase();
+		// 			}
+		// 		} else {
+		// 			theLine[x] = "-";
+		// 		}
+		// 	}
+		// 	for (String s : theLine) {
+		// 		System.out.print(s+" ");
+		// 	}
+		// 	System.out.println();
+		// }
 
-		for (Move m : moves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
+		// for (Move m : moves) {
+		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		// }
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
 
 		return boardValuesSorted[0];
 		// //creates variable to hold result value
