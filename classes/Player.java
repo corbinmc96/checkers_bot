@@ -85,7 +85,8 @@ public abstract class Player {
 		double[] va = new double[ma.length];
 		for (int i=0;i<ma.length;i++) {
 			ba[i] = new Board(this.getBoard());
-			va[i] = this.minimax(ba[i],recursionDepth,this.valueFactor);
+			va[i] = this.minimax(ba[i],recursionDepth);
+			//System.out.println(va[i]);
 		}
 		Double[] sortedva = new Double[ma.length];
 		for (int i=0;i<ma.length;i++) {
@@ -108,7 +109,7 @@ public abstract class Player {
 		return result;
 	}
 
-	public double minimax(Board b, int recursionDepth, int minOrMax) {
+	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
 			return b.calculateValue();
 		}
@@ -118,11 +119,12 @@ public abstract class Player {
 			double[] va = new double[ma.length];
 			for (int i=0;i<ma.length;i++) {
 				ba[i] = new Board(b,ma[i]);
-				va[i] = this.opponent.minimax(ba[i],recursionDepth-1,minOrMax*-1);
+				va[i] = this.opponent.minimax(ba[i],recursionDepth-1);
+				//System.out.println(va[i]);
 			}
-			double value = 0;
+			double value = valueFactor * -1000;
 			for (double v : va) {
-				if (minOrMax == 1) {
+				if (this.valueFactor >= 1) {
 					if (v>=value) {
 						value = v;
 					}
@@ -133,6 +135,7 @@ public abstract class Player {
 					}
 				}
 			}
+			System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
 			return value;
 		}
 	}
