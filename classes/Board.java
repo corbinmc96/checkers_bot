@@ -22,6 +22,10 @@ public class Board {
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
 	}
 
+	public Board (Board previousBoard) {
+		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
+	}
+
 	public Piece[] getPiecesOnBoard () {
 		return this.piecesOnBoard.toArray(new Piece[this.piecesOnBoard.size()]);
 	}
