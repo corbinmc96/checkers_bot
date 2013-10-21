@@ -14,6 +14,7 @@ public abstract class Player {
 	private String xo;
 
 	private int valueFactor;
+	private Player opponent;
 
 	// public Player (String startColor, boolean startsOnZeroSide) {
 	// 	this.color = startColor;
@@ -70,6 +71,10 @@ public abstract class Player {
 		return this.xo;
 	}
 
+	public void setOpponent(Player p) {
+		this.opponent = p;
+	}
+
 	public Move calculateBestMove (int recursionDepth) {
 		return this.rankBestMoves(recursionDepth)[0];
 	}
@@ -79,9 +84,8 @@ public abstract class Player {
 		Board[] ba = new Board[ma.length];
 		double[] va = new double[ma.length];
 		for (int i=0;i<ma.length;i++) {
-			System.out.println(i);
-			ba[i] = new Board(this.getBoard(),ma[i]);
-			va[i] = this.minimax(ba[i],recursionDepth-1,this.valueFactor);
+			ba[i] = new Board(this.getBoard());
+			va[i] = this.minimax(ba[i],recursionDepth,this.valueFactor);
 		}
 		Double[] sortedva = new Double[ma.length];
 		for (int i=0;i<ma.length;i++) {
@@ -114,7 +118,7 @@ public abstract class Player {
 			double[] va = new double[ma.length];
 			for (int i=0;i<ma.length;i++) {
 				ba[i] = new Board(b,ma[i]);
-				va[i] = this.minimax(ba[i],recursionDepth-1,minOrMax*-1);
+				va[i] = this.opponent.minimax(ba[i],recursionDepth-1,minOrMax*-1);
 			}
 			double value = 0;
 			for (double v : va) {
@@ -144,7 +148,7 @@ public abstract class Player {
 				myMove.getMovePiece().setIsKing(true);
 			}
 		}
-		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
+		for (Piece deadPiece : myMove.calculatePiecesToJump(theBoard)) {
 			theBoard.removePiece(deadPiece);
 		}
 	}
@@ -163,7 +167,7 @@ public abstract class Player {
 		//iterates over each of the player's pieces
 		for (Piece playerPiece : this.getPlayerPieces(b)) {
 			//iterates over all of that piece's moves
-			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
+			for (Move pieceMove : playerPiece.getMovesOfPiece(b)) {
 				//adds each move to the return ArrayList
 				result.add(pieceMove);
 			}

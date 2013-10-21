@@ -11,6 +11,8 @@ public class Game {
 		this.player2 = p2;
 		this.player1.setBoard(gameBoard);
 		this.player2.setBoard(gameBoard);
+		this.player1.setOpponent(player2);
+		this.player2.setOpponent(player1);
 	}
 	
 	public Game (Player p1, Player p2, Robot startGameRobot) {

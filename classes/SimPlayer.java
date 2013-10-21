@@ -13,34 +13,34 @@ public class SimPlayer extends Player {
 	}
 
 	public void takeTurn(Game g) {
-		this.performMove(this.calculateBestMove(2));
+		this.performMove(this.calculateBestMove(2), super.getBoard());
 	}
 		
-	public void performMove(Move myMove) {
+	public void performMove(Move myMove, Board myBoard, Robot myRobot) {
 		Player.performMove(myMove,this.getBoard());
 		//tests if game is using the robot
-		if (this.getRobot()!=null) {
+		if (myRobot!=null) {
 			//move arm over moving piece
-			this.getRobot().moveToXY(myMove.getSource());
+			myRobot.moveToXY(myMove.getSource());
 			//pcks up the piece
-			this.getRobot().pickUpPiece();
+			myRobot.pickUpPiece();
 			//moves piece to the destination
-			this.getRobot().moveToXY(myMove.getDestination());
+			myRobot.moveToXY(myMove.getDestination());
 			//drops the piece
-			this.getRobot().dropPiece();
+			myRobot.dropPiece();
 			//iterates over all jumped pieces
-			for (Piece deadPiece : myMove.calculatePiecesToJump()) {
+			for (Piece deadPiece : myMove.calculatePiecesToJump(myBoard)) {
 				//move arm over the piece that was jumped
-				this.getRobot().moveToXY(deadPiece.getLocation());
+				myRobot.moveToXY(deadPiece.getLocation());
 				//picks up jumped piece
-				this.getRobot().pickUpPiece();
+				myRobot.pickUpPiece();
 				//moves arm over drop point for dead pieces
-				this.getRobot().moveToXY(myMove.getDestination());
+				myRobot.moveToXY(myMove.getDestination());
 				//drops the piece
-				this.getRobot().dropPiece();
+				myRobot.dropPiece();
 			}
 			//resets arm after all pieces have been moved.
-			this.getRobot().resetPosition();
+			myRobot.resetPosition();
 		}
 	}
 }
