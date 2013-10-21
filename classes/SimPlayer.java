@@ -12,8 +12,10 @@ public class SimPlayer extends Player {
 		super(startXO, startOnZeroSide);
 	}
 
-	public void takeTurn(Game g) {
-		this.performMove(this.calculateBestMove(g, 8));
+	public Move takeTurn(Game g) {
+		Move m = this.calculateBestMove(g, 5);
+		this.performMove(m);
+		return m;
 	}
 		
 	public void performMove(Move myMove) {

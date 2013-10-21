@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,8 +18,10 @@ public class Human extends Player {
 		this.in = new Scanner(System.in);
 	}
 
-	public void takeTurn(Game g) {
-		super.performMove(this.inputMove(g), g.getGameBoard());
+	public Move takeTurn(Game g) {
+		Move m = this.inputMove(g);
+		super.performMove(m, g.getGameBoard());
+		return m;
 	}
 
 	public Move inputMove(Game g) {
