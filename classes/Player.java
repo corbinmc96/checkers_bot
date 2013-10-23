@@ -76,15 +76,9 @@ public abstract class Player {
 
 		//if recursionDepth is one, calculate direct values of moves
 		if (recursionDepth==1) {
-			//creates empty array to hold boards created from moves
-			Board[] boards = new Board[moves.length];
-			//iterates over all moves, applying them to fill boards
+			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
-				boards[i] = new Board(g.getGameBoard(), moves[i]);
-			}
-			//iterates over all boards and calculates values to put in boardValues
-			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = boards[i].calculateValue(this);
+				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this);
 			}
 
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
@@ -156,20 +150,14 @@ public abstract class Player {
 
 		//if recursionDepth is one, calculate direct values of moves
 		if (recursionDepth==1) {
-			//creates empty array to hold boards created from moves
-			Board[] boards = new Board[moves.length];
-			//iterates over all moves, applying them to fill boards
+			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
-				boards[i] = new Board(g.getGameBoard(), moves[i]);
-			}
-			//iterates over all boards and calculates values to put in boardValues
-			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = boards[i].calculateValue(this);
+				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this);
 			}
 		
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
-			//iterates over all boards and calculates value based on best opponent move
+			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, moves[i]), recursionDepth-1);
 			}
