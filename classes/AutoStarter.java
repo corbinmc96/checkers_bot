@@ -8,8 +8,10 @@ public class AutoStarter {
 		Player winner = g.play();
 		if (winner==p1) {
 			System.out.println("Player 1 wins");
-		} else {
+		} else  if (winner==p2) {
 			System.out.println("Player 2 wins");
+		} else {
+			System.out.println("Draw");
 		}
 	}
 }
