@@ -124,7 +124,7 @@ public abstract class Player {
 			}
 			double value = valueFactor * -1000;
 			for (double v : va) {
-				if (this.valueFactor >= 1) {
+				if (this.valueFactor == 1) {
 					if (v>=value) {
 						value = v;
 					}
