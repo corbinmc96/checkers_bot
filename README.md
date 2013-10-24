@@ -1,5 +1,4 @@
 CheckersBot Project.
-Contact the most awesome developer at mcneill.corbin@wcsstudents.com.
 
 ============
 

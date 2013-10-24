@@ -4,6 +4,7 @@ public class Game {
 	private Robot gameRobot;
 	private Player player1;
 	private Player player2;
+	private Move[] lastFewMoves;
 
 	public Game (Player p1, Player p2) {
 		this.gameBoard = new Board(new Player[]{p1, p2});
@@ -17,11 +18,26 @@ public class Game {
 		this(p1,p2);
 		this.gameRobot = startGameRobot;
 	}
+	
+	public Game (Game oldG, Board b) {
+		this.player1 = oldG.getPlayers()[0];
+		this.player2 = oldG.getPlayers()[1];
+		this.gameBoard = b;
+	}
 
 	public Player play() {
-		while (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
+		while (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
 			this.player1.takeTurn(this);
-			this.player2.takeTurn(this);
+<<<<<<< HEAD
+			if (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
+				this.player2.takeTurn(this);
+=======
+			// this.gameBoard.printBoard();
+			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
+				this.player2.takeTurn(this);
+				// this.gameBoard.printBoard();
+>>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+			}
 		}
 		if (this.gameBoard.totalPiecesLeft(player1)>0) {
 			return this.player1;

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
 
@@ -11,15 +10,29 @@ public class Board {
 		piecesOnBoard = new ArrayList<Piece>();
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<4; j++) {
-				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0]));
-				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1]));
+				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0], this));
+				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1], this));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
-		this.piecesOnBoard = ArraysHelper.asArrayList(ArraysHelper.deepCopy(previousBoard.getPiecesOnBoard()));
-		Player.performMove(newMove, this);
+		this.piecesOnBoard = new ArrayList<Piece>();
+		Piece[] previousPieces = previousBoard.getPiecesOnBoard();
+		for (Piece p : previousPieces) {
+			this.piecesOnBoard.add(p.copyToBoard(this));
+		}
+		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
+	}
+
+	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations) {
+		this.piecesOnBoard = new ArrayList<Piece>();
+		for (int[] location : p1Locations) {
+			this.piecesOnBoard.add(new Piece(location, players[0], this));
+		}
+		for (int[] location : p2Locations) {
+			this.piecesOnBoard.add(new Piece(location, players[1], this));
+		}
 	}
 
 	public Piece[] getPiecesOnBoard () {
@@ -125,5 +138,27 @@ public class Board {
 		}
 
 		return p1Value/p2Value;
+	}
+
+	public void printBoard() {
+		System.out.println();
+		for (int y : new int[] {7,6,5,4,3,2,1,0}) {
+			String[] theLine = new String[8];
+			for (int x : new int[] {0,1,2,3,4,5,6,7}) {
+				if (this.getPieceAtLocation(new int[] {x,y}) != null) {
+					theLine[x] = this.getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
+					if (this.getPieceAtLocation(new int[] {x,y}).getIsKing()) {
+						theLine[x] = theLine[x].toUpperCase();
+					}
+				} else {
+					theLine[x] = "-";
+				}
+			}
+			for (String s : theLine) {
+				System.out.print(s+" ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 }

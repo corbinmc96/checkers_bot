@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Move {
 
@@ -60,7 +59,7 @@ public class Move {
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
 				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
-				result.add(this.movePiece.getPlayer().getBoard().getPieceAtLocation(midpoint));
+				result.add(this.movePiece.getParentBoard().getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new Piece[result.size()]);
 		}
@@ -68,7 +67,7 @@ public class Move {
 
 	public boolean calculateIsValid () {
 		Player thePlayer = this.movePiece.getPlayer();
-		Board theBoard = thePlayer.getBoard();
+		Board theBoard = this.movePiece.getParentBoard();
 		outerloop:
 		for (int i=0; i<this.waypoints.length-1; i++) {
 			int[] start = this.waypoints[i];

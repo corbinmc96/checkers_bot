@@ -50,15 +50,5 @@ public class ArraysHelper {
 			}
 		}
 		return -1;
-	}
-
-	public static Piece[] deepCopy(Piece[] pieces) {
-		Piece[] result = new Piece[pieces.length];
-		for (int i = 0; i<pieces.length; i++) {
-			result[i] = pieces[i].copy();
-		}
-		return result;
-	}
-
-	
+	}	
 }

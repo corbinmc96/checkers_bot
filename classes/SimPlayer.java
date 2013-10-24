@@ -12,8 +12,15 @@ public class SimPlayer extends Player {
 		super(startXO, startOnZeroSide);
 	}
 
+<<<<<<< HEAD
 	public void takeTurn(Game g) {
-		this.performMove(this.calculateBestMove(g, 1));
+		this.performMove(this.calculateBestMove(g, 3));
+=======
+	public Move takeTurn(Game g) {
+		Move m = this.calculateBestMove(g, 5);
+		this.performMove(m);
+		return m;
+>>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
 	}
 		
 	public void performMove(Move myMove) {
@@ -42,5 +49,5 @@ public class SimPlayer extends Player {
 			//resets arm after all pieces have been moved.
 			this.getRobot().resetPosition();
 		}
-	} 
+	}
 }
