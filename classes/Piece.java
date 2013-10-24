@@ -65,10 +65,14 @@ public class Piece {
 					int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//if destination empty and inbounds
 <<<<<<< HEAD
+<<<<<<< HEAD
 					if (this.parentBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 =======
 					if (b.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 >>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+=======
+					if (b.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+>>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 						//add waypoint set to return array
 						result.add(new int[][] {pieceLocation,testDestination});
 					}
@@ -82,10 +86,14 @@ public class Piece {
 				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests that destination is in bounds, destination is unoccupied, and opponent piece is being jumped over
 <<<<<<< HEAD
+<<<<<<< HEAD
 				if (Board.locationIsInBounds(testDestination) && this.parentBoard.getPieceAtLocation(testDestination) == null && this.parentBoard.getPieceAtLocation(pieceLocation) != null && this.parentBoard.getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
 =======
 				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(pieceLocation) != null && b.getPieceAtLocation(midpoint) != null && b.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
 >>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+=======
+				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(pieceLocation) != null && b.getPieceAtLocation(midpoint) != null && b.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
+>>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 					//adds move to return array
 					result.add(new int[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
@@ -116,10 +124,14 @@ public class Piece {
 					int[] testDestination = new int[] {pieceLocation[0]+displacement[0], pieceLocation[1]+displacement[1]};
 					//tests that location is in bounds and unoccupied
 <<<<<<< HEAD
+<<<<<<< HEAD
 					if (this.parentBoard.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 =======
 					if (b.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
 >>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+=======
+					if (b.getPieceAtLocation(testDestination) == null && Board.locationIsInBounds(testDestination)) {
+>>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 						//adds waypoint set to the return array
 						result.add(new int[][] {pieceLocation,testDestination});
 					}
@@ -146,10 +158,14 @@ public class Piece {
 				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests if destination is in bounds, unoccupied, and that midpoint is occupied by opponent's piece
 <<<<<<< HEAD
+<<<<<<< HEAD
 				if (Board.locationIsInBounds(testDestination) && this.parentBoard.getPieceAtLocation(testDestination) == null && this.parentBoard.getPieceAtLocation(pieceLocation) != null && this.parentBoard.getPieceAtLocation(midpoint) != null && this.parentBoard.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
 =======
 				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(pieceLocation) != null && b.getPieceAtLocation(midpoint) != null && b.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
 >>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+=======
+				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(pieceLocation) != null && b.getPieceAtLocation(midpoint) != null && b.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
+>>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 					//adds waypoint set
 					result.add(new int[][] {pieceLocation,testDestination});
 					//finds all potential multi-jumps

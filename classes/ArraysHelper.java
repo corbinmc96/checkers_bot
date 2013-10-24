@@ -34,6 +34,17 @@ public class ArraysHelper {
 		return result;
 	}
 
+	public static ArrayList<int[][]> asArrayList(int[][][] array) {
+		ArrayList<int[][]> result = new ArrayList<int[][]>();
+
+		for (int[][] item : array) {
+			result.add(item);
+		}
+
+		return result;
+	}
+
+
 	public static int[][] copyOfRange(int[][] original, int startIndex, int endIndex) {
 		int[][] result = new int[endIndex-startIndex][];
 

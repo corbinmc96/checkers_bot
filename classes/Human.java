@@ -85,6 +85,7 @@ public class Human extends Player {
 		
 		} else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			System.out.println();
 			for (int y : new int[] {7,6,5,4,3,2,1,0}) {
 				String[] theLine = new String[8];
@@ -104,6 +105,9 @@ public class Human extends Player {
 =======
 			super.getBoard().printBoard();
 >>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
+=======
+			super.getBoard().printBoard();
+>>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 			
 			boolean moveEntered = false;
 			Move inputtedMove = null;
