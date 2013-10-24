@@ -6,11 +6,7 @@ public class Game {
 	private Robot gameRobot;
 	private Player player1;
 	private Player player2;
-<<<<<<< HEAD
-	private Move[] lastFewMoves;
-=======
 	private ArrayList<int[][]> lastFewMoves;
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 
 	public Game (Player p1, Player p2) {
 		this.gameBoard = new Board(new Player[]{p1, p2});
@@ -25,28 +21,7 @@ public class Game {
 		this(p1,p2);
 		this.gameRobot = startGameRobot;
 	}
-	
-	public Game (Game oldG, Board b) {
-		this.player1 = oldG.getPlayers()[0];
-		this.player2 = oldG.getPlayers()[1];
-		this.gameBoard = b;
-	}
 
-<<<<<<< HEAD
-	public Player play() {
-		while (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
-			this.player1.takeTurn(this);
-<<<<<<< HEAD
-			if (this.gameBoard.totalPiecesLeft(this.player1)>0 && this.gameBoard.totalPiecesLeft(this.player2)>0) {
-				this.player2.takeTurn(this);
-=======
-			// this.gameBoard.printBoard();
-			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0) {
-				this.player2.takeTurn(this);
-				// this.gameBoard.printBoard();
->>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
-			}
-=======
 	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations) {
 		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations);
 		this.player1 = p1;
@@ -63,7 +38,6 @@ public class Game {
 		this.lastFewMoves.add(m.getWaypoints());
 		if (this.lastFewMoves.size()>12) {
 			this.lastFewMoves.remove(0);
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 		}
 		this.gameBoard = new Board(oldG.getGameBoard(), m);
 	}

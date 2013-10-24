@@ -70,34 +70,12 @@ public abstract class Player {
 	public Move[] rankBestMoves (Game g, int recursionDepth) {
 		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves(g.getGameBoard());
-<<<<<<< HEAD
-
-		//creates empty array to hold boards created from moves
-		Board[] boards = new Board[moves.length];
-		//iterates over all moves, applying them to fill boards
-		for (int i = 0; i<moves.length; i++) {
-			boards[i] = new Board(g.getGameBoard(), moves[i]);
-		}
-=======
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
 
 		//if recursionDepth is one, calculate direct values of moves
 		if (recursionDepth==1) {
-<<<<<<< HEAD
-			//iterates over all boards and calculates values to put in boardValues
-			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = boards[i].calculateValue(this);
-			} 
-
-		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
-		} else {
-			//iterates over all boards and calculates value based on best opponent move
-			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, boards[i]), recursionDepth-1);
-=======
 			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this);
@@ -108,7 +86,6 @@ public abstract class Player {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, moves[i]), recursionDepth-1);
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 			}
 		}
 
@@ -144,39 +121,12 @@ public abstract class Player {
 		}
 
 		//logs values for debugging
-<<<<<<< HEAD
-<<<<<<< HEAD
-		// System.out.println();
-		// for (int y : new int[] {7,6,5,4,3,2,1,0}) {
-		// 	String[] theLine = new String[8];
-		// 	for (int x : new int[] {0,1,2,3,4,5,6,7}) {
-		// 		if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
-		// 			theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
-		// 		} else {
-		// 			theLine[x] = "-";
-		// 		}
-		// 	}
-		// 	for (String s : theLine) {
-		// 		System.out.print(s+" ");
-		// 	}
-		// 	System.out.println();
-		// }
-=======
-		// g.getGameBoard().printBoard();
->>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
-		// for (Move m : moves) {
-		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
-		// }
-		// System.out.print("" + recursionDepth + " ");
-		// System.out.println(Arrays.toString(boardValuesSorted));
-=======
 		g.getGameBoard().printBoard();
 		for (Move m : moves) {
 			System.out.println(Arrays.deepToString(m.getWaypoints()));
 		}
 		System.out.print("" + recursionDepth + " ");
 		System.out.println(Arrays.toString(boardValuesSorted));
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 
 		return sortedMoves;
 	}
@@ -190,13 +140,6 @@ public abstract class Player {
 
 		//creates array to hold all possible moves
 		Move[] moves = this.getAllMoves(g.getGameBoard());
-<<<<<<< HEAD
-
-		if (moves.length==0) {
-			return 0;
-		}
-=======
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 
 		if (moves.length==0) {
 			return 1/Math.pow(Board.maxBoardValue, 2);
@@ -214,15 +157,9 @@ public abstract class Player {
 		
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
-<<<<<<< HEAD
-			//iterates over all boards and calculates value based on best opponent move
-			for (int i = 0; i<boards.length; i++) {
-				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, boards[i]), recursionDepth-1);
-=======
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = 1/g.getOtherPlayer(this).valueOfBestMove(new Game(g, moves[i]), recursionDepth-1);
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 			}
 		}
 
@@ -239,42 +176,6 @@ public abstract class Player {
 		//sorts the values
 		Arrays.sort(boardValuesSorted, Collections.reverseOrder());
 		//logs the values for debugging
-<<<<<<< HEAD
-<<<<<<< HEAD
-		// System.out.println();
-		// for (int y : new int[] {7,6,5,4,3,2,1,0}) {
-		// 	String[] theLine = new String[8];
-		// 	for (int x : new int[] {0,1,2,3,4,5,6,7}) {
-		// 		if (g.getGameBoard().getPieceAtLocation(new int[] {x,y}) != null) {
-		// 			theLine[x] = g.getGameBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
-		// 		} else {
-		// 			theLine[x] = "-";
-		// 		}
-		// 	}
-		// 	for (String s : theLine) {
-		// 		System.out.print(s+" ");
-		// 	}
-		// 	System.out.println();
-		// }
-
-=======
-		// g.getGameBoard().printBoard();
->>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
-		// for (Move m : moves) {
-		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
-		// }
-		// System.out.print("" + recursionDepth + " ");
-		// System.out.println(Arrays.toString(boardValuesSorted));
-
-		return boardValuesSorted[0];
-		// //creates variable to hold result value
-		// double result = Math.pow(boardValuesSorted[0], 7);
-		// //iterates over all values except the first
-		// for (int i = 1; i<boardValuesSorted.length; i++) {
-		// 	result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
-		// }
-		// return Math.pow(result, 0.1);
-=======
 		g.getGameBoard().printBoard();
 		for (Move m : moves) {
 			System.out.println(Arrays.deepToString(m.getWaypoints()));
@@ -289,7 +190,6 @@ public abstract class Player {
 			result *= Math.pow(boardValuesSorted[i], 3/(boardValuesSorted.length-1));
 		}
 		return Math.pow(result, 0.1);
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {

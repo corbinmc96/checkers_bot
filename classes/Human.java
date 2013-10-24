@@ -84,30 +84,7 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			System.out.println();
-			for (int y : new int[] {7,6,5,4,3,2,1,0}) {
-				String[] theLine = new String[8];
-				for (int x : new int[] {0,1,2,3,4,5,6,7}) {
-					if (super.getBoard().getPieceAtLocation(new int[] {x,y}) != null) {
-						theLine[x] = super.getBoard().getPieceAtLocation(new int[] {x,y}).getPlayer().getXO();
-					} else {
-						theLine[x] = "-";
-					}
-				}
-				for (String s : theLine) {
-					System.out.print(s+" ");
-				}
-				System.out.println();
-			}
-			System.out.println();
-=======
 			super.getBoard().printBoard();
->>>>>>> 3a58739ec598fffc6ffe52e3d999343b30c073e0
-=======
-			super.getBoard().printBoard();
->>>>>>> 84ff295458fbbc48f42f7fba1ba9efbb3481e3e4
 			
 			boolean moveEntered = false;
 			Move inputtedMove = null;
