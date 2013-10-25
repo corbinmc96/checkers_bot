@@ -5,7 +5,7 @@ public class Board {
 	private ArrayList<Piece> piecesOnBoard;
 
 	public static final String color = "black";
-	public static final double maxBoardValue = 36/1;
+	public static final double maxBoardValue = 36;
 
 	public Board (Player[] players) {
 		piecesOnBoard = new ArrayList<Piece>();
@@ -138,7 +138,7 @@ public class Board {
 			}
 		}
 
-		return p1Value/p2Value;
+		return p1Value-p2Value;
 	}
 
 	public void printBoard() {
