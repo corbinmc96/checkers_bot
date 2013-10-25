@@ -111,10 +111,10 @@ public abstract class Player {
 			//finds the index of the current values in the original move list
 			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
 			//sets the value at index to -1 so that the same move is not used again, even if multiple moves have equal values
-			boardValues[index] = -1;
+			boardValues[index] = Board.maxBoardValue*1000;
 
 			//puts the correct move in the correct position in the final array
-			sortedMoves[moves.length-index-1] = moves[index];
+			sortedMoves[moves.length-i-1] = moves[index];
 
 			//alternate line
 			// sortedMoves[i] = moves[index];
@@ -185,16 +185,16 @@ public abstract class Player {
 
 		//logs the values for debugging
 		g.getGameBoard().printBoard();
-		Move[] sortedMoves = new Move[moves.length];
-		int index = 0;
-		for (int i = 0; i<boardValuesSorted.length; i++) {
-			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
-			boardValues[index] = -1;
-			sortedMoves[i] = moves[index];
-		}
-		for (Move m : sortedMoves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
+		//Move[] sortedMoves = new Move[moves.length];
+		//int index = 0;
+		//for (int i = 0; i<boardValuesSorted.length; i++) {
+		//	index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
+		//	boardValues[index] = Board.maxBoardValue*1000;
+		//	sortedMoves[moves.length-i-1] = moves[index];
+		//}
+		//for (Move m : sortedMoves) {
+		//	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		//}
 		System.out.print("" + recursionDepth + " ");
 		System.out.println(Arrays.toString(boardValuesSorted));
 		System.out.println(result / 10);
