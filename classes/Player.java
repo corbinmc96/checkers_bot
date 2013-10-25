@@ -111,7 +111,9 @@ public abstract class Player {
 
 	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
-			return b.calculateValue();
+			double value = b.calculateValue();
+			System.out.println(value);
+			return value;
 		}
 		else {
 			Move[] ma = this.getAllMoves(b);
@@ -122,15 +124,15 @@ public abstract class Player {
 				va[i] = this.opponent.minimax(ba[i],recursionDepth-1);
 				//System.out.println(va[i]);
 			}
-			double value = valueFactor * -1000;
+			double value = valueFactor * 1000;
 			for (double v : va) {
 				if (this.valueFactor == 1) {
-					if (v>=value) {
+					if (v<=value) {
 						value = v;
 					}
 				}
 				else {
-					if (v<=value) {
+					if (v>=value) {
 						value = v;
 					}
 				}
