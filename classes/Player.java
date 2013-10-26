@@ -1,6 +1,5 @@
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public abstract class Player {
 
@@ -93,15 +92,6 @@ public abstract class Player {
 		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
 		Arrays.sort(boardValuesSorted);
 
-		//creates array to hold sorted values from lowest to highest
-		// Double[] boardValuesSorted = new Double[boardValues.length];
-		// //fills new array with old values
-		// for (int i=0; i<boardValues.length; i++) {
-		// 	boardValuesSorted[i] = boardValues[i];
-		// } 
-		// //sorts the values
-		// Arrays.sort(boardValuesSorted, Collections.reverseOrder());
-
 		//creates array to hold final list of moves
 		Move[] sortedMoves = new Move[moves.length];
 		//creates variable to hold index of move in original list
@@ -110,32 +100,29 @@ public abstract class Player {
 		for (int i = 0; i<boardValuesSorted.length; i++) {
 			//finds the index of the current values in the original move list
 			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
-			//sets the value at index to -1 so that the same move is not used again, even if multiple moves have equal values
+			//sets the value at index to very large so that the same move is not used again, even if multiple moves have equal values
 			boardValues[index] = Board.maxBoardValue*1000;
 
 			//puts the correct move in the correct position in the final array
 			sortedMoves[moves.length-i-1] = moves[index];
-
-			//alternate line
-			// sortedMoves[i] = moves[index];
 		}
 
 		//logs values for debugging
-		g.getGameBoard().printBoard();
-		for (Move m : sortedMoves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
+		// g.getGameBoard().printBoard();
+		// for (Move m : sortedMoves) {
+		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		// }
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
 
 		return sortedMoves;
 	}
 
 	public double valueOfBestMove(Game g, int recursionDepth) {
 		if (g.isDraw()) {
-			System.out.println(Arrays.deepToString(g.getLastFewMoves()));
-			System.out.println("Detected possible draw");
-			return 1;
+			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
+			// System.out.println("Detected possible draw");
+			return 0;
 		}
 
 		//creates array to hold all possible moves
@@ -167,15 +154,6 @@ public abstract class Player {
 		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
 		Arrays.sort(boardValuesSorted);
 
-		//creates array to hold sorted values from lowest to highest
-		// Double[] boardValuesSorted = new Double[boardValues.length];
-		// //fills new array with old values
-		// for (int i=0; i<boardValues.length; i++) {
-		// 	boardValuesSorted[i] = boardValues[i];
-		// } 
-		// //sorts the values
-		// Arrays.sort(boardValuesSorted, Collections.reverseOrder());
-
 		//creates variable to hold result value
 		double result = boardValuesSorted[boardValuesSorted.length-1] * 7;
 		//iterates over all values except the last
@@ -184,7 +162,7 @@ public abstract class Player {
 		}
 
 		//logs the values for debugging
-		g.getGameBoard().printBoard();
+		// g.getGameBoard().printBoard();
 		//Move[] sortedMoves = new Move[moves.length];
 		//int index = 0;
 		//for (int i = 0; i<boardValuesSorted.length; i++) {
@@ -195,9 +173,9 @@ public abstract class Player {
 		//for (Move m : sortedMoves) {
 		//	System.out.println(Arrays.deepToString(m.getWaypoints()));
 		//}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
-		System.out.println(result / 10);
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
+		// System.out.println(result / 10);
 
 		return result / 10;
 	}

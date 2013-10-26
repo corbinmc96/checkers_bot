@@ -1,17 +1,41 @@
 public class AutoStarter {
 	public static void main(String[] args) {
-		Player p1 = new SimPlayer("x", true);
-		Player p2 = new SimPlayer("o", false);
+		Player orig = new SimPlayer("x", true);
+		Player test = new TestPlayer("o", false);
 
-		Game g = new Game(p1, p2);
+		int origWins = 0;
+		int testWins = 0;
+		int draws = 0;
 
+		Game g = new Game(orig, test);
 		Player winner = g.play();
-		if (winner==p1) {
+		if (winner==orig) {
+			origWins++;
 			System.out.println("Player 1 wins");
-		} else  if (winner==p2) {
+		} else  if (winner==test) {
+			testWins++;
 			System.out.println("Player 2 wins");
 		} else {
+			draws++;
 			System.out.println("Draw");
 		}
+
+		orig = new SimPlayer("o", false);
+		test = new TestPlayer("x", true);
+
+		g = new Game(test, orig);
+		winner = g.play();
+		if (winner==orig) {
+			origWins++;
+			System.out.println("Player 1 wins");
+		} else  if (winner==test) {
+			testWins++;
+			System.out.println("Player 2 wins");
+		} else {
+			draws++;
+			System.out.println("Draw");
+		}
+
+		System.out.println("" + origWins + ", " + testWins + ", " + draws);
 	}
 }
