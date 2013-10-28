@@ -141,6 +141,54 @@ public class Board {
 		return p1Value-p2Value;
 	}
 
+	public double calculateValue2(Player p) {
+		double p1Value = 0;
+		double p2Value = 0;
+
+		//iterates over every piece on the board
+		for (Piece piece : this.piecesOnBoard) {
+			//determines if the piece is owned by player 1
+			if (piece.getPlayer()==p) {
+				//determines if the piece is a king
+				if (piece.getIsKing()) {
+					//adds 3 to the player's total value for the board
+					p1Value += 3;
+				//the piece is not a king
+				} else {
+					//determines which side of the board the player is on
+					if (p.getIsOnZeroSide()) {
+						//adds value based on distance down the board
+						p1Value += 1 + 0.125*piece.getLocation()[1];
+					//the player is on the side of the board with index 7
+					} else {
+						//adds value based on distance down the board
+						p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					}
+				}
+			//the piece is owned by player 2
+			} else {
+				//determines if the piece is a king
+				if (piece.getIsKing()) {
+					//adds 3 to the player's total value for the board
+					p2Value += 3;
+				//the piece is not a king
+				} else {
+					//determines which side of the board the player is on
+					if (piece.getPlayer().getIsOnZeroSide()) {
+						//adds value based on distance down the board
+						p2Value += 1 + 0.125*piece.getLocation()[1];
+					//the player is on the side of the board with index 7
+					} else {
+						//adds value based on distance down the board
+						p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					}
+				}
+			}
+		}
+
+		return p1Value-p2Value;
+	}
+
 	public void printBoard() {
 		System.out.println();
 		for (int y : new int[] {7,6,5,4,3,2,1,0}) {
