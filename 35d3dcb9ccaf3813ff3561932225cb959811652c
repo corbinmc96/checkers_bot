@@ -1,0 +1,2 @@
+the TestPlayer performed better with the valueOfMoves returning the direct value of the best move instead of an average
+this needs to be tested further
