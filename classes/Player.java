@@ -112,7 +112,7 @@ public abstract class Player {
 	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
 			double value = b.calculateValue();
-			System.out.println(value);
+			//System.out.println(value);
 			return value;
 		}
 		else {
