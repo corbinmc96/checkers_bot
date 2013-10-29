@@ -131,7 +131,7 @@ public class Piece {
 					//adds waypoint set
 					result.add(new int[][] {pieceLocation,testDestination});
 					//finds all potential multi-jumps
-					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, b, true)) {
+					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, new Board(b, new Move(this, new int[][]{pieceLocation, testDestination})), true)) {
 						//adds multi-jump scenarios
 						result.add(this.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
 					}

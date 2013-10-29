@@ -104,11 +104,10 @@ public abstract class Player {
 			//logs sorted move values
 			int index = ArraysHelper.find(va,sortedva[i]);
 			va[index] = 10000000;
-			result[i] = ma[index];				
+			result[i] = ma[index];
+			System.out.println(Arrays.deepToString(ma[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),ma[index]).calculateValue()));				
 		}			
-		for (Move m : result) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
+		System.out.println();
 		return result;
 	}
 
