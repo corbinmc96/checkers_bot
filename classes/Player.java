@@ -114,7 +114,7 @@ public abstract class Player {
 	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
 			double value = b.calculateValue();
-			//System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));			
+			System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));			
 			return value;
 		}
 		else {
@@ -141,10 +141,10 @@ public abstract class Player {
 			}
 			//if (recursionDepth == 0) {
 			//	System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));
-			//} if (recursionDepth == 1) {
-			//	System.out.println("    "+Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//if (recursionDepth == 1) {
+				//System.out.println("    "+Integer.toString(recursionDepth)+": " +Double.toString(value));
 			//} if (recursionDepth == 2) {
-			//	System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
+				//System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
 			//}
 			return value;
 		}
