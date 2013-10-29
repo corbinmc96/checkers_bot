@@ -94,7 +94,7 @@ public class Board {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					//adds 3 to the player's total value for the board
-					value += 2;
+					value += 3;
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on

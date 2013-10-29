@@ -103,9 +103,12 @@ public abstract class Player {
 		for (int i=0;i<ma.length;i++) {
 			//logs sorted move values
 			int index = ArraysHelper.find(va,sortedva[i]);
+			va[index] = 10000000;
 			result[i] = ma[index];				
 		}			
-		
+		for (Move m : result) {
+			System.out.println(Arrays.deepToString(m.getWaypoints()));
+		}
 		return result;
 	}
 
