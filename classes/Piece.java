@@ -138,8 +138,7 @@ public class Piece {
 				}
 			}
 		}
-	//returns the result
-	return result.toArray(new int[result.size()][][]);
+		return result.toArray(new int[result.size()][][]);
 	}
 
 	public static int[][] addTwoArrays(int[][] a1, int[][] a2) {

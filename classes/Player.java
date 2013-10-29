@@ -112,7 +112,7 @@ public abstract class Player {
 	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
 			double value = b.calculateValue();
-			//System.out.println(value);
+			//System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));			
 			return value;
 		}
 		else {
@@ -137,7 +137,13 @@ public abstract class Player {
 					}
 				}
 			}
-			//System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//if (recursionDepth == 0) {
+			//	System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//} if (recursionDepth == 1) {
+			//	System.out.println("    "+Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//} if (recursionDepth == 2) {
+			//	System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//}
 			return value;
 		}
 	}
@@ -178,7 +184,8 @@ public abstract class Player {
 			}
 		}
 		//returns the final result
-		return result.toArray(new Move[result.size()]);
+		Move[] finalArray = result.toArray(new Move[result.size()]);
+		return finalArray;
 	}
 
 	public abstract void takeTurn(Game g);
