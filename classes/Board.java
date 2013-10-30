@@ -127,7 +127,7 @@ public class Board {
 				}
 			}
 		}
-		//System.out.println(value);
+		//this.printBoard();
 		return value;
 	}
 
@@ -147,6 +147,5 @@ public class Board {
 			}
 			System.out.println();
 		}
-		System.out.println(this.calculateValue());
 	}
 }

@@ -85,13 +85,14 @@ public abstract class Player {
 		double[] va = new double[ma.length];
 		for (int i=0;i<ma.length;i++) {
 			ba[i] = new Board(this.getBoard(),ma[i]);
-			va[i] = this.minimax(ba[i],recursionDepth-1);
-			//System.out.println(va[i]);
+			va[i] = this.opponent.minimax(ba[i],recursionDepth);
+			//System.out.println(Arrays.deepToString(ma[i].getWaypoints()));
 		}
 		Double[] sortedva = new Double[ma.length];
 		for (int i=0;i<ma.length;i++) {
 			sortedva[i] = va[i];
 			//logs unsorted move values
+			//Sytem.out.println("               2:" + Dobule.toString(va[i]));
 		}
 		Move[] result = new Move[ma.length];
 		if (this.valueFactor == 1) {
@@ -100,12 +101,15 @@ public abstract class Player {
 		else {
 			Arrays.sort(sortedva);
 		}
+
 		for (int i=0;i<ma.length;i++) {
 			//logs sorted move values
+
 			int index = ArraysHelper.find(va,sortedva[i]);
 			va[index] = 10000000;
 			result[i] = ma[index];
-			System.out.println(Arrays.deepToString(ma[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),ma[index]).calculateValue()));				
+			//System.out.println(Double.toString(sortedva[i])+" "+Arrays.deepToString(ma[index].getWaypoints()));
+			//System.out.println(Arrays.deepToString(ma[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),ma[index]).calculateValue()));				
 		}			
 		System.out.println();
 		return result;
@@ -114,7 +118,7 @@ public abstract class Player {
 	public double minimax(Board b, int recursionDepth) {
 		if (recursionDepth == 0) {
 			double value = b.calculateValue();
-			System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));			
+			//System.out.println("                0:" + Double.toString(value));
 			return value;
 		}
 		else {
@@ -124,27 +128,26 @@ public abstract class Player {
 			for (int i=0;i<ma.length;i++) {
 				ba[i] = new Board(b,ma[i]);
 				va[i] = this.opponent.minimax(ba[i],recursionDepth-1);
-				//System.out.println(va[i]);
+				//System.out.println(Arrays.deepToString(ma[i].getWaypoints()));
+
 			}
-			double value = valueFactor * 1000;
+			double value = valueFactor * -1000;
 			for (double v : va) {
 				if (this.valueFactor == 1) {
-					if (v<=value) {
-						value = v;
-					}
-				}
-				else {
 					if (v>=value) {
 						value = v;
 					}
 				}
+				else {
+					if (v<=value) {
+						value = v;
+					}
+				}
 			}
-			//if (recursionDepth == 0) {
-			//	System.out.println("        "+Integer.toString(recursionDepth)+": " +Double.toString(value));
-			//if (recursionDepth == 1) {
-				//System.out.println("    "+Integer.toString(recursionDepth)+": " +Double.toString(value));
-			//} if (recursionDepth == 2) {
-				//System.out.println(Integer.toString(recursionDepth)+": " +Double.toString(value));
+			//if (recursionDepth==2) {
+			//	System.out.println("                               2: "+Double.toString(value));
+			//} if (recursionDepth==1) {
+			//	System.out.println("                     1: "+Double.toString(value));
 			//}
 			return value;
 		}
