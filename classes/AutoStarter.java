@@ -8,7 +8,7 @@ public class AutoStarter {
 		int testWins = 0;
 		int draws = 0;
 
-		for (int i = 0; i<100; i++) {
+		for (int i = 0; i<500; i++) {
 			Game g = new Game(orig, rand);
 			Player winner = g.play();
 			if (winner==orig) {
@@ -40,7 +40,7 @@ public class AutoStarter {
 		test = new TestPlayer("o", false);
 		rand = new RandomPlayer("x", true);
 
-		for (int i = 0; i<100; i++) {
+		for (int i = 0; i<500; i++) {
 			Game g = new Game(rand, orig);
 			Player winner = g.play();
 			if (winner==orig) {
@@ -65,7 +65,7 @@ public class AutoStarter {
 				draws++;
 			}
 
-			System.out.println(i);
+			System.out.println(i+500);
 		}
 
 		System.out.println("" + origWins + ", " + testWins);
