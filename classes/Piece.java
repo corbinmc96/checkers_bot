@@ -71,12 +71,13 @@ public class Piece {
 				//finds location being jumped over
 				int[] midpoint = new int[] {pieceLocation[0]+displacement[0]/2, pieceLocation[1]+displacement[1]/2};
 				//tests that destination is in bounds, destination is unoccupied, and opponent piece is being jumped over
-				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(pieceLocation) != null && b.getPieceAtLocation(pieceLocation).owningPlayer != this.owningPlayer) {
+				if (Board.locationIsInBounds(testDestination) && b.getPieceAtLocation(testDestination) == null && b.getPieceAtLocation(midpoint) != null && b.getPieceAtLocation(midpoint).owningPlayer != this.owningPlayer) {
 					//adds move to return array
 					result.add(new int[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
-					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, b, true)) {
-						result.add(this.addTwoArrays(new int[][] {pieceLocation, testDestination},potentialMove));
+					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, new Board(b, new Move(this, new int[][]{pieceLocation, testDestination})), true)) {
+						//adds multi-jump scenarios
+						result.add(this.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
 					}
 				}
 			}
