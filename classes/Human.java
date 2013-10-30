@@ -83,9 +83,9 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			for (Move m : this.getAllMoves(this.getBoard())) {
-				System.out.println(Arrays.deepToString(m.getWaypoints()));
-			}
+			//for (Move m : this.getAllMoves(this.getBoard())) {
+			//	System.out.println(Arrays.deepToString(m.getWaypoints()));
+			//}
 
 			g.getGameBoard().printBoard();
 			
