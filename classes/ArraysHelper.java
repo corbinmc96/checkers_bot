@@ -44,6 +44,18 @@ public class ArraysHelper {
 		return result;
 	}
 
+	public static int[][] addTwoArrays(int[][] a1, int[][] a2) {
+		int[][] result = new int[a1.length+a2.length][];
+		for (int i =0; i<a1.length+a2.length; i++) {
+			if (i < a1.length) {
+				result[i] = a1[i];
+			}
+			else {
+				result[i] = a2[i-a1.length];
+			}
+		}
+		return result;
+	}
 
 	public static int[][] copyOfRange(int[][] original, int startIndex, int endIndex) {
 		int[][] result = new int[endIndex-startIndex][];

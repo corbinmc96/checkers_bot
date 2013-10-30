@@ -139,26 +139,13 @@ public class Piece {
 					//finds all potential multi-jumps
 					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, new Board(b, new Move(this, new int[][]{pieceLocation, testDestination})), true)) {
 						//adds multi-jump scenarios
-						result.add(this.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
+						result.add(ArraysHelper.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
 					}
 				}
 			}
 		}
-	//returns the result
-	return result.toArray(new int[result.size()][][]);
-	}
-
-	public static int[][] addTwoArrays(int[][] a1, int[][] a2) {
-		int[][] result = new int[a1.length+a2.length][];
-		for (int i =0; i<a1.length+a2.length; i++) {
-			if (i < a1.length) {
-				result[i] = a1[i];
-			}
-			else {
-				result[i] = a2[i-a1.length];
-			}
-		}
-		return result;
+		//returns the result
+		return result.toArray(new int[result.size()][][]);
 	}
 
 	public Piece copyToBoard(Board b) {
