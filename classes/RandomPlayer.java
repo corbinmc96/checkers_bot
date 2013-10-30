@@ -9,7 +9,7 @@ public class RandomPlayer extends SimPlayer {
 	}
 
 	public Move takeTurn(Game g) {
-		Move[] moves = this.rankBestMoves(g, 5);
+		Move[] moves = this.rankBestMoves(g, 6);
 		Move m = moves[this.random.nextInt(Math.min(2, moves.length))];
 		this.performMove(m);
 		return m;

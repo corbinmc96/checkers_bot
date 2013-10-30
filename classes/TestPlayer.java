@@ -105,11 +105,7 @@ public class TestPlayer extends SimPlayer {
 		//creates variable to hold result value
 		double result;
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0] * 0.7;
-			//iterates over all values except the last
-			for (int i = 1; i<boardValuesSorted.length; i++) {
-				result += boardValuesSorted[i] * 0.3/(boardValuesSorted.length-1);
-			}
+			result = boardValuesSorted[0];
 		} else {
 			result = boardValuesSorted[boardValuesSorted.length-1];
 		}
