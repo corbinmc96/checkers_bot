@@ -12,11 +12,6 @@ public abstract class Player {
 
 	private String xo;
 
-	// public Player (String startColor, boolean startsOnZeroSide) {
-	// 	this.color = startColor;
-	// 	this.isOnZeroSide = startsOnZeroSide;
-	// }
-
 	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		this.color = startColor;
 		this.isOnZeroSide = startsOnZeroSide;
@@ -108,12 +103,12 @@ public abstract class Player {
 		}
 
 		//logs values for debugging
-		g.getGameBoard().printBoard();
-		for (Move m : sortedMoves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
+		// g.getGameBoard().printBoard();
+		// for (Move m : sortedMoves) {
+		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		// }
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
 
 		return sortedMoves;
 	}
@@ -172,9 +167,9 @@ public abstract class Player {
 			start = 1;
 			end = boardValuesSorted.length;
 		} else {
-			result = boardValuesSorted[boardValuesSorted.length-1] * 10;
+			result = boardValuesSorted[boardValuesSorted.length-1] * 7;
 			start = 0;
-			end = 0/*boardValuesSorted.length-1*/;
+			end = boardValuesSorted.length-1;
 		}
 		//iterates over all values except the last
 		for (int i = start; i<end; i++) {
@@ -182,20 +177,20 @@ public abstract class Player {
 		}
 
 		//logs the values for debugging
-		g.getGameBoard().printBoard();
-		Move[] sortedMoves = new Move[moves.length];
-		int index = 0;
-		for (int i = 0; i<boardValuesSorted.length; i++) {
-			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
-			boardValues[index] = Board.maxBoardValue*1000;
-			sortedMoves[moves.length-i-1] = moves[index];
-		}
-		for (Move m : sortedMoves) {
-			System.out.println(Arrays.deepToString(m.getWaypoints()));
-		}
-		System.out.print("" + recursionDepth + " ");
-		System.out.println(Arrays.toString(boardValuesSorted));
-		System.out.println(result / 10);
+		// g.getGameBoard().printBoard();
+		// Move[] sortedMoves = new Move[moves.length];
+		// int index = 0;
+		// for (int i = 0; i<boardValuesSorted.length; i++) {
+		// 	index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
+		// 	boardValues[index] = Board.maxBoardValue*1000;
+		// 	sortedMoves[moves.length-i-1] = moves[index];
+		// }
+		// for (Move m : sortedMoves) {
+		// 	System.out.println(Arrays.deepToString(m.getWaypoints()));
+		// }
+		// System.out.print("" + recursionDepth + " ");
+		// System.out.println(Arrays.toString(boardValuesSorted));
+		// System.out.println(result / 10);
 
 		return result / 10;
 	}

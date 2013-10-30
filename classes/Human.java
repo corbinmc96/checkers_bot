@@ -4,10 +4,6 @@ import java.util.Scanner;
 public class Human extends Player {
 	
 	private Scanner in;
-
-	//public Human(String startColor, boolean startsOnZeroSide) {
-		//super(startColor, startsOnZeroSide);
-	//}
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);

@@ -1,9 +1,5 @@
 public class SimPlayer extends Player {
 
-	// public SimPlayer(String startColor, boolean startsOnZeroSide) {
-	// 	super(startColor, startsOnZeroSide);
-	// }
-
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
 		super(startColor, startsOnZeroSide, startGameRobot);
 	}
