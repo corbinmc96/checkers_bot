@@ -8,19 +8,18 @@ public class Board {
 	public static final double maxBoardValue = 36;
 
 	public Board (Player[] players) {
-		piecesOnBoard = new ArrayList<Piece>();
+		this.piecesOnBoard = new ArrayList<Piece>();
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<4; j++) {
-				piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0], this));
-				piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1], this));
+				this.piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0], this));
+				this.piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1], this));
 			}
 		}
 	}
 
 	public Board (Board previousBoard, Move newMove) {
 		this.piecesOnBoard = new ArrayList<Piece>();
-		Piece[] previousPieces = previousBoard.getPiecesOnBoard();
-		for (Piece p : previousPieces) {
+		for (Piece p : previousBoard.getPiecesOnBoard()) {
 			this.piecesOnBoard.add(p.copyToBoard(this));
 		}
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
@@ -50,12 +49,12 @@ public class Board {
 	}
 
 	public void removePiece (Piece pieceToRemove) {
-		piecesOnBoard.remove(pieceToRemove);
+		this.piecesOnBoard.remove(pieceToRemove);
 	}
 
 	public int totalPiecesLeft(Player p) {
 		int count = 0;
-		for (Piece piece : piecesOnBoard) {
+		for (Piece piece : this.piecesOnBoard) {
 			if (piece.getPlayer()==p) {
 				count++;
 			}
@@ -65,7 +64,7 @@ public class Board {
 
 	public int normalPiecesLeft(Player p) {
 		int count = 0;
-		for (Piece piece : piecesOnBoard) {
+		for (Piece piece : this.piecesOnBoard) {
 			if (piece.getPlayer()==p && !piece.getIsKing()) {
 				count++;
 			}
@@ -75,7 +74,7 @@ public class Board {
 
 	public int kingsLeft(Player p) {
 		int count = 0;
-		for (Piece piece : piecesOnBoard) {
+		for (Piece piece : this.piecesOnBoard) {
 			if (piece.getPlayer()==p && piece.getIsKing()) {
 				count++;
 			}

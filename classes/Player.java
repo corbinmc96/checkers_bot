@@ -160,20 +160,14 @@ public abstract class Player {
 
 		//creates variable to hold result value
 		double result;
-		int start;
-		int end;
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0] * 7;
-			start = 1;
-			end = boardValuesSorted.length;
+			result = boardValuesSorted[0] * 0.7;
+			//iterates over all values except the last
+			for (int i = 1; i<boardValuesSorted.length; i++) {
+				result += boardValuesSorted[i] * 0.3/(boardValuesSorted.length-1);
+			}
 		} else {
-			result = boardValuesSorted[boardValuesSorted.length-1] * 7;
-			start = 0;
-			end = boardValuesSorted.length-1;
-		}
-		//iterates over all values except the last
-		for (int i = start; i<end; i++) {
-			result += boardValuesSorted[i] * 3/(boardValuesSorted.length-1);
+			result = boardValuesSorted[boardValuesSorted.length-1];
 		}
 
 		//logs the values for debugging
@@ -192,7 +186,7 @@ public abstract class Player {
 		// System.out.println(Arrays.toString(boardValuesSorted));
 		// System.out.println(result / 10);
 
-		return result / 10;
+		return result;
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {

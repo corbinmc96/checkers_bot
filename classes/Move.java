@@ -12,7 +12,7 @@ public class Move {
 	public Move (Piece startPiece, int[][] startWaypoints) {
 		//instantiate all the variables
 		this.movePiece = startPiece;
-		this.waypoints=startWaypoints;
+		this.waypoints = startWaypoints;
 		//calculate the number of pieces to be jumped
 		if (Math.abs(startWaypoints[1][0]-startWaypoints[0][0])==2 && Math.abs(startWaypoints[1][1]-startWaypoints[0][1])==2) {
 			this.jumpsContained = startWaypoints.length - 1;
