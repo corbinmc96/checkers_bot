@@ -1,11 +1,11 @@
 public class SimPlayer extends Player {
 
-	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
-		super(startColor, startsOnZeroSide, startGameRobot);
+	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
 	}
 
-	public SimPlayer (String startXO, boolean startOnZeroSide) {
-		super(startXO, startOnZeroSide);
+	public SimPlayer (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+		super(startXO, startOnZeroSide, startBrain);
 	}
 
 	public Move takeTurn(Game g) {
