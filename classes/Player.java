@@ -1,5 +1,9 @@
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
 public abstract class Player {
 
@@ -77,10 +81,27 @@ public abstract class Player {
 
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
+			ExecutorService service = Executors.newFixedThreadPool(8);
+			
+			@SuppressWarnings({"unchecked"})
+			Future<Double>[] valueFutures = new Future[moves.length];
+			
+			for (int i = 0; i<moves.length; i++) {
+				valueFutures[i] = service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, this));
+			}
+			
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, true);
+				try {
+					boardValues[i] = valueFutures[i].get();
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				} catch (ExecutionException ex) {
+					ex.printStackTrace();
+				}
 			}
+			
+			service.shutdownNow();
 		}
 
 		//creates array to hold sorted values from lowest to highest
