@@ -85,7 +85,7 @@ public abstract class Player {
 		double[] va = new double[ma.length];
 		for (int i=0;i<ma.length;i++) {
 			ba[i] = new Board(this.getBoard(),ma[i]);
-			va[i] = this.opponent.minimax(ba[i],recursionDepth);
+			va[i] = this.minimax(ba[i],recursionDepth,true);
 			//System.out.println(Arrays.deepToString(ma[i].getWaypoints()));
 		}
 		Double[] sortedva = new Double[ma.length];
@@ -108,39 +108,62 @@ public abstract class Player {
 			int index = ArraysHelper.find(va,sortedva[i]);
 			va[index] = 10000000;
 			result[i] = ma[index];
-			//System.out.println(Double.toString(sortedva[i])+" "+Arrays.deepToString(ma[index].getWaypoints()));
+			System.out.println(Arrays.deepToString(ma[index].getWaypoints()));
 			//System.out.println(Arrays.deepToString(ma[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),ma[index]).calculateValue()));				
 		}			
 		System.out.println();
 		return result;
 	}
 
-	public double minimax(Board b, int recursionDepth) {
+	public double minimax(Board b, int recursionDepth, boolean isOpponentNode) {
 		if (recursionDepth == 0) {
 			double value = b.calculateValue();
 			//System.out.println("                0:" + Double.toString(value));
 			return value;
 		}
 		else {
-			Move[] ma = this.getAllMoves(b);
+			Move[] ma;
+			if (isOpponentNode) {
+				ma = this.opponent.getAllMoves(b);
+			} else {
+				ma = this.getAllMoves(b);
+			}
 			Board[] ba = new Board[ma.length];
 			double[] va = new double[ma.length];
 			for (int i=0;i<ma.length;i++) {
 				ba[i] = new Board(b,ma[i]);
-				va[i] = this.opponent.minimax(ba[i],recursionDepth-1);
+				va[i] = this.minimax(ba[i],recursionDepth-1,!isOpponentNode);
 				//System.out.println(Arrays.deepToString(ma[i].getWaypoints()));
 
 			}
-			double value = valueFactor * -1000;
+			double value;
+			if (isOpponentNode) { 
+				value = this.valueFactor * 1000;
+			} else {
+				value = this.valueFactor * -1000;
+			}
 			for (double v : va) {
-				if (this.valueFactor == 1) {
-					if (v>=value) {
-						value = v;
+				if (valueFactor == -1) {
+					if (!isOpponentNode) {
+						if (v<=value) {
+							value = v;
+						}
 					}
-				}
-				else {
-					if (v<=value) {
-						value = v;
+					else {
+						if (v>=value) {
+							value = v;
+						}
+					}
+				} else {
+					if (!isOpponentNode) {
+						if (v>=value) {
+							value = v;
+						}
+					}
+					else {
+						if (v<=value) {
+							value = v;
+						}
 					}
 				}
 			}
