@@ -5,12 +5,12 @@ public class Human extends Player {
 	
 	private Scanner in;
 	
-	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot) {
-		super(startColor, startsOnZeroSide, startGameRobot);
+	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
 	}
 
-	public Human (String startXO, boolean startOnZeroSide) {
-		super(startXO, startOnZeroSide);
+	public Human (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+		super(startXO, startOnZeroSide, startBrain);
 		this.in = new Scanner(System.in);
 	}
 
