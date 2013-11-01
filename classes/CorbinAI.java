@@ -31,7 +31,7 @@ public class CorbinAI extends AIEngine {
 			//System.out.println(Arrays.deepToString(unsortedMoves[index].getWaypoints()));
 			//System.out.println(Arrays.deepToString(unsortedMoves[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),unsortedMoves[index]).calculateValue()));				
 		}			
-		System.out.println();
+		//System.out.println();
 		return result;
 	}
 
