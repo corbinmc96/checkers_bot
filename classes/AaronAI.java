@@ -1,9 +1,9 @@
-public class TestAI extends AIEngine {
+import java.util.Arrays;
+
+public class AaronAI extends AIEngine {
 
 	public Move[] rankBestMove(Move[] unrankedMoves, Game g, Player p, int recursionDepth) {
-		//creates array to hold all possible moves
-		Move[] unrankedMoves = this.getAllMoves(g.getGameBoard());
-
+		
 		//creates array to hold values of boards
 		double[] boardValues = new double[unrankedMoves.length];
 
@@ -64,7 +64,7 @@ public class TestAI extends AIEngine {
 		if (testOpponentMoves) {
 			moves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
 		} else {
-			moves = this.getAllMoves(g.getGameBoard());
+			moves = p.getAllMoves(g.getGameBoard());
 		}
 
 		if (moves.length==0) {
@@ -89,7 +89,7 @@ public class TestAI extends AIEngine {
 		} else {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = p.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves, p);
 			}
 		}
 

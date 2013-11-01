@@ -9,8 +9,9 @@ public abstract class Player {
 	private boolean isOnZeroSide;
 	//contains the piece color
 	private String color;
+
 	private String xo;
-	private AIEninge brain;
+	private AIEngine brain;
 
 	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		this.color = startColor;
@@ -59,9 +60,13 @@ public abstract class Player {
 		}
 		return this.xo;
 	}
+	
+	public AIEngine getBrain() {
+		return this.brain;
+	}
 
 	public Move calculateBestMove (Game g, int recursionDepth) {
-		return this.rankBestMoves(g, recursionDepth)[0];
+		return this.brain.rankBestMove(this.getAllMoves(myBoard), g, this, recursionDepth)[0];
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {

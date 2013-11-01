@@ -26,7 +26,7 @@ public class Human extends Player {
 			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.rankBestMoves(g, 1);
+			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(this.getBoard()), g, this, 1);
 			
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
