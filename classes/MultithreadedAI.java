@@ -1,7 +1,11 @@
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Callable;
 
-public class AaronAI extends AIEngine {
-
+public class MultithreadedAI extends AIEngine {
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
@@ -15,10 +19,27 @@ public class AaronAI extends AIEngine {
 
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
+			ExecutorService service = Executors.newFixedThreadPool(8);
+			
+			@SuppressWarnings({"unchecked"})
+			Future<Double>[] valueFutures = new Future[moves.length];
+			
+			for (int i = 0; i<moves.length; i++) {
+				valueFutures[i] = service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, p));
+			}
+			
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true);
+				try {
+					boardValues[i] = valueFutures[i].get();
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				} catch (ExecutionException ex) {
+					ex.printStackTrace();
+				}
 			}
+			
+			service.shutdownNow();
 		}
 
 		//creates array to hold sorted values from lowest to highest
@@ -50,8 +71,26 @@ public class AaronAI extends AIEngine {
 
 		return sortedMoves;
 	}
+}
 
-	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves) {
+private class ValueCalculator implements Callable<Double> {
+	private Game origGame;
+	private int startRecursionDepth;
+	private boolean startTestOpponentMoves;
+	private Player player;
+	
+	public ValueCalculator (Game g, int recursionDepth, boolean testOpponentMoves, Player p) {
+		this.origGame = g;
+		this.startRecursionDepth = recursionDepth;
+		this.startTestOpponentMoves = testOpponentMoves;
+		this.player = p;
+	}
+	
+	public Double call() {
+		return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves);
+	}
+	
+	private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
@@ -61,9 +100,9 @@ public class AaronAI extends AIEngine {
 		//creates array to hold all possible moves
 		Move[] moves;
 		if (testOpponentMoves) {
-			moves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
+			moves = g.getOtherPlayer(this.player).getAllMoves(g.getGameBoard());
 		} else {
-			moves = p.getAllMoves(g.getGameBoard());
+			moves = this.player.getAllMoves(g.getGameBoard());
 		}
 
 		if (moves.length==0) {
@@ -81,14 +120,14 @@ public class AaronAI extends AIEngine {
 		if (recursionDepth==1) {
 			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
+				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this.player);
 			}
 		
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves);
 			}
 		}
 
