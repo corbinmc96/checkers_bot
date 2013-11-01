@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class SimPlayer extends Player {
 
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
@@ -11,6 +13,7 @@ public class SimPlayer extends Player {
 	public Move takeTurn(Game g) {
 		Move m = this.calculateBestMove(g, 5);
 		this.performMove(m);
+		System.out.println(Arrays.deepToString(m.getWaypoints()));
 		return m;
 	}
 		
