@@ -53,8 +53,8 @@ public class AaronAI extends AIEngine {
 
 	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves) {
 		if (g.isDraw()) {
-			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
-			// System.out.println("Detected possible draw");
+			System.out.println(Arrays.deepToString(g.getLastFewMoves()));
+			System.out.println("Detected possible draw");
 			return 0;
 		}
 
@@ -71,6 +71,14 @@ public class AaronAI extends AIEngine {
 				return 2*Board.maxBoardValue;
 			} else {
 				return -2*Board.maxBoardValue;
+			}
+		}
+
+		if (moves.length==1) {
+			if (recursionDepth==1) {
+				return (new Board(g.getGameBoard(), moves[0])).calculateValue(p);
+			} else {
+				return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves);
 			}
 		}
 
@@ -99,11 +107,7 @@ public class AaronAI extends AIEngine {
 		//creates variable to hold result value
 		double result;
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0] * 0.7;
-			//iterates over all values except the last
-			for (int i = 1; i<boardValuesSorted.length; i++) {
-				result += boardValuesSorted[i] * 0.3/(boardValuesSorted.length-1);
-			}
+			result = boardValuesSorted[0] * 0.8 + boardValuesSorted[1] * 0.2;
 		} else {
 			result = boardValuesSorted[boardValuesSorted.length-1];
 		}
@@ -122,7 +126,7 @@ public class AaronAI extends AIEngine {
 		// }
 		// System.out.print("" + recursionDepth + " ");
 		// System.out.println(Arrays.toString(boardValuesSorted));
-		// System.out.println(result / 10);
+		// System.out.println(result);
 
 		return result;
 	}

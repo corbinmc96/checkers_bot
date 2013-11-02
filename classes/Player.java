@@ -66,7 +66,7 @@ public abstract class Player {
 	}
 
 	public Move calculateBestMove (Game g, int recursionDepth) {
-		return this.brain.rankBestMove(this.getAllMoves(myBoard), g, this, recursionDepth)[0];
+		return this.brain.rankBestMove(this.getAllMoves(this.myBoard), g, this, recursionDepth)[0];
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {

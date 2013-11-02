@@ -9,7 +9,7 @@ public class CorbinAI extends AIEngine {
 		double[] va = new double[unsortedMoves.length];
 		for (int i=0;i<unsortedMoves.length;i++) {
 			ga[i] = new Game(g,unsortedMoves[i]);
-			va[i] = this.minimax(ga[i],recursionDepth,true,p);
+			va[i] = this.minimax(ga[i],recursionDepth-1,true,p);
 			//System.out.println(Arrays.deepToString(unsortedMoves[i].getWaypoints()));
 		}
 		Double[] sortedva = new Double[unsortedMoves.length];

@@ -1,4 +1,4 @@
 #!/bin/bash
-rm *.class
+rm -f *.class
 javac Starter.java
 java Starter
