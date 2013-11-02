@@ -53,8 +53,8 @@ public class AaronAI extends AIEngine {
 
 	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves) {
 		if (g.isDraw()) {
-			System.out.println(Arrays.deepToString(g.getLastFewMoves()));
-			System.out.println("Detected possible draw");
+			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
+			// System.out.println("Detected possible draw");
 			return 0;
 		}
 

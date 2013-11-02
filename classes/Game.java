@@ -53,7 +53,6 @@ public class Game {
 	public Player play() {
 		while (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
-				gameBoard.printBoard();
 			if (this.lastFewMoves.size()>12) {
 				this.lastFewMoves.remove(0);
 			}
@@ -70,11 +69,10 @@ public class Game {
 				this.numberOfKings+=1;
 			}
 
-			// this.gameBoard.printBoard();
+			this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
-					gameBoard.printBoard();
 				if (this.lastFewMoves.size()>12) {
 					this.lastFewMoves.remove(0);
 				}
@@ -91,7 +89,7 @@ public class Game {
 					this.numberOfKings+=1;
 				}
 
-				// this.gameBoard.printBoard();
+				this.gameBoard.printBoard();
 			}
 		}
 		if (player1.getAllMoves(this.gameBoard).length==0) {
