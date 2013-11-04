@@ -107,9 +107,9 @@ class ValueCalculator implements Callable<Double> {
 
 		if (moves.length==0) {
 			if (testOpponentMoves) {
-				return 2*Board.maxBoardValue;
+				return (recursionDepth+1)*Board.maxBoardValue;
 			} else {
-				return -2*Board.maxBoardValue;
+				return -(recursionDepth+1)*Board.maxBoardValue;
 			}
 		}
 

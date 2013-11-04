@@ -1,7 +1,7 @@
 public class SimulationStarter {
 	public static void main(String[] args) {
 		Player orig = new SimPlayer("x", true, new MultithreadedAI());
-		Player test = new SimPlayer("x", true, new TestAI());
+		Player test = new SimPlayer("x", true, new CorbinAI());
 		Player rand = new SimPlayer("o", false, new RandomAI());
 
 		int origWins = 0;
@@ -37,7 +37,7 @@ public class SimulationStarter {
 		}
 
 		orig = new SimPlayer("o", false, new MultithreadedAI());
-		test = new SimPlayer("o", false, new TestAI());
+		test = new SimPlayer("o", false, new CorbinAI());
 		rand = new SimPlayer("x", true, new RandomAI());
 
 		for (int i = 0; i<500; i++) {
