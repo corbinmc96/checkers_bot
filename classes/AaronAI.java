@@ -107,7 +107,7 @@ public class AaronAI extends AIEngine {
 		//creates variable to hold result value
 		double result;
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0] * 0.8 + boardValuesSorted[1] * 0.2;
+			result = boardValuesSorted[0] * 0.8 + boardValuesSorted[1] * 0.2; 
 		} else {
 			result = boardValuesSorted[boardValuesSorted.length-1];
 		}

@@ -37,31 +37,28 @@ public class CorbinAI extends AIEngine {
 
 	private double minimax(Game g, int recursionDepth, boolean isOpponentNode, Player p) {
 	
-		if (g.isDraw()) {
-			return 0;
-		}
-		
-		if (p.getAllMoves(g.getGameBoard()).length == 0) {
-			return -1000000;
-		}
-		
-		if (g.getOtherPlayer(p).getAllMoves(g.getGameBoard()).length == 0) {
-			return 1000000;
-		}
-		
 		if (recursionDepth == 0) {
 			double value = g.getGameBoard().calculateValue(p);
 			//System.out.println("                0:" + Double.toString(value));
 			return value;
 		}
 		
+		Move[] unsortedMoves;
+		if (isOpponentNode) {
+			unsortedMoves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
+		} else {
+			unsortedMoves = p.getAllMoves(g.getGameBoard());
+		}
+
+		if (g.isDraw()) {
+			return 0;
+		}
+		
+		// if (unsortedMoves.length == 0) {
+		// 	return -36;
+		// }
+		
 		else {
-			Move[] unsortedMoves;
-			if (isOpponentNode) {
-				unsortedMoves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
-			} else {
-				unsortedMoves = p.getAllMoves(g.getGameBoard());
-			}
 			Game[] ga = new Game[unsortedMoves.length];
 			double[] va = new double[unsortedMoves.length];
 			for (int i=0;i<unsortedMoves.length;i++) {
