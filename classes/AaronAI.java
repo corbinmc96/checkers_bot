@@ -17,7 +17,7 @@ public class AaronAI extends AIEngine {
 		} else {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue, (recursionDepth+1)*Board.maxBoardValue);
 			}
 		}
 
@@ -51,7 +51,7 @@ public class AaronAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves) {
+	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double currentMax, double currentMin) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
@@ -78,7 +78,11 @@ public class AaronAI extends AIEngine {
 			if (recursionDepth==1) {
 				return (new Board(g.getGameBoard(), moves[0])).calculateValue(p);
 			} else {
-				return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves);
+				if (!testOpponentMoves) {
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves, -(recursionDepth+1)*Board.maxBoardValue, currentMin);
+				} else {
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves, currentMax, (recursionDepth+1*Board.maxBoardValue));
+				}
 			}
 		}
 
@@ -90,13 +94,30 @@ public class AaronAI extends AIEngine {
 			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
+				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+					return boardValues[i];
+				}
 			}
 		
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
+			if (!testOpponentMoves) {
+				currentMax = -(recursionDepth+1)*Board.maxBoardValue;
+			} else {
+				currentMin = (recursionDepth+1)*Board.maxBoardValue;
+			}
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, currentMax, currentMin);
+				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+					return boardValues[i];
+				}
+
+				if (!testOpponentMoves && boardValues[i]>currentMax) {
+					currentMax = boardValues[i];
+				} else if (testOpponentMoves && boardValues[i]>currentMin) {
+					currentMin = boardValues[i];
+				}
 			}
 		}
 
@@ -107,7 +128,7 @@ public class AaronAI extends AIEngine {
 		//creates variable to hold result value
 		double result;
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0] * 0.8 + boardValuesSorted[1] * 0.2; 
+			result = boardValuesSorted[0]/* * 0.8 + boardValuesSorted[1] * 0.2*/; 
 		} else {
 			result = boardValuesSorted[boardValuesSorted.length-1];
 		}
