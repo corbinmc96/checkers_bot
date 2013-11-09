@@ -55,6 +55,11 @@ public class AaronAI extends AIEngine {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
+			if (g.getGameBoard().calculateValue(p)<0) {
+				return 0.0000001;
+			} else if (g.getGameBoard().calculateValue(p)<0) {
+				return -0.0000001;
+			}
 			return 0;
 		}
 
@@ -94,7 +99,7 @@ public class AaronAI extends AIEngine {
 			//iterates over all moves and calculates values to put in boardValues
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
-				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
 					return boardValues[i];
 				}
 			}
@@ -109,7 +114,7 @@ public class AaronAI extends AIEngine {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, currentMax, currentMin);
-				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
 					return boardValues[i];
 				}
 

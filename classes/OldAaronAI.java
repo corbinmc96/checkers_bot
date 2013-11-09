@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class AaronAI extends AIEngine {
+public class OldAaronAI extends AIEngine {
 
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
