@@ -1,0 +1,1 @@
+also changed evaluation of draws to return a negative or positive number close to zero or to return zero based on the current value of the board
