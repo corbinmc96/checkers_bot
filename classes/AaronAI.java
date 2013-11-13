@@ -55,11 +55,6 @@ public class AaronAI extends AIEngine {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
-			if (g.getGameBoard().calculateValue(p)<0) {
-				return 0.0000001;
-			} else if (g.getGameBoard().calculateValue(p)<0) {
-				return -0.0000001;
-			}
 			return 0;
 		}
 
