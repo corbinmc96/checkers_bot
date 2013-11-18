@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CorbinAI extends AIEngine {
+public class CRandomAI extends AIEngine {
 
 	public Move[] rankBestMove (Move[] unsortedMoves, Game g, Player p, int recursionDepth) {
 		Game[] ga = new Game[unsortedMoves.length];
@@ -21,6 +21,19 @@ public class CorbinAI extends AIEngine {
 		Move[] result = new Move[unsortedMoves.length];
 		
 		Arrays.sort(sortedva, Collections.reverseOrder());
+		
+		int searchNumber=0;
+		boolean stillSearching = true;
+		while (stillSearching) {
+			if (searchnumber+1<sortedva.length) {
+				if (sortedva[searchNumber] == sortedva[searchNumber+1]) {
+						searchNumber+=1;
+				}
+				else {stillSearching =false;}
+			}
+			else {stillSearching=false;}
+		}
+		//working here
 		
 		for (int i=0;i<unsortedMoves.length;i++) {
 			//logs sorted move values
@@ -50,15 +63,14 @@ public class CorbinAI extends AIEngine {
 		} else {
 			unsortedMoves = p.getAllMoves(g.getGameBoard());
 		}
-		
-		if (unsortedMoves.length == 0) {
-			return -36;
-		}
 
 		if (g.isDraw()) {
 			return 0;
 		}
 		
+		if (unsortedMoves.length == 0) {
+			return -36;
+		}
 		
 		else {
 			Game[] ga = new Game[unsortedMoves.length];
