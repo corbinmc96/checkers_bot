@@ -11,7 +11,7 @@ public class SimPlayer extends Player {
 	}
 
 	public Move takeTurn(Game g) {
-		Move m = this.calculateBestMove(g, 5);
+		Move m = this.calculateBestMove(g, 7);
 		this.performMove(m);
 		// System.out.println(Arrays.deepToString(m.getWaypoints()));
 		return m;
