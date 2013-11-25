@@ -38,4 +38,8 @@ public class Robot {
 	public void dropPiece() {
 		//implementation
 	}
+
+	public void waitForSensorPress() {
+		//implementation
+	}
 }

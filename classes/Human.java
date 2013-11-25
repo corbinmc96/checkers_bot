@@ -2,32 +2,52 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Human extends Player {
-	
+	//stores the Scanner object for taking input
 	private Scanner in;
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+		//calls the Player constructor with the same arguments
 		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
 	}
 
 	public Human (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+		//calls the Player constructor with the same arguments
 		super(startXO, startOnZeroSide, startBrain);
+		//creates a Scanner object to take input from the command line
 		this.in = new Scanner(System.in);
 	}
 
 	public Move takeTurn(Game g) {
+		//gets the last move made by the human player
 		Move m = this.inputMove(g);
+		//performs the move on the game board
 		super.performMove(m, g.getGameBoard());
+		//returns the move that was made
 		return m;
 	}
 
 	public Move inputMove(Game g) {
 		if (this.getRobot()!=null) {
-			//creates dictionary to hold scanned values
+			//defines class to concurrently wait for the touch sensor to be pressed
+			class ButtonThread extends Thread {
+				public void run() {
+					this.getRobot().waitForSensorPress();
+				}
+			}
+
+			//starts concurrent thread waiting for button press
+			Thread t = new ButtonThread();
+			t.start();
+
+			//creates pair of lists to hold scanned values
 			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
 			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(this.getBoard()), g, this, 1);
 			
+			//waits for button thread to finish
+			t.join();
+
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
 				//gets all waypoints of the move
@@ -40,19 +60,22 @@ public class Human extends Player {
 				//iterates over all waypoints which should be empty
 				for (int[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
 					if (scannedLocations.contains(waypoint)) {
+						//sets pointColor to the previously stored value
 						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 					} else {
+						//scans the board to get pointColor
 						pointColor = this.getRobot().examineLocation(waypoint);
+						//stores the color in the pair of arrays holding the scanned locations and values
 						scannedLocations.add(waypoint);
 						locationValues.add(pointColor);
-					}	
-					//checks if the square is not empty
+					}
+					//breaks and continues to the next move if the square is not empty
 					if (pointColor!=Board.color) {
 						shouldContinue = true;
 						break;
 					}
 				}
-				//continue if the move failed
+				//continue to the next move if this move failed
 				if (shouldContinue) {
 					continue;
 				}
@@ -61,17 +84,17 @@ public class Human extends Player {
 				int[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
 				if (scannedLocations.contains(waypoint)) {
+					//sets pointColor to the previously stored value
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 				} else {
+					//scans the board to get pointColor
 					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
+					//stores the color in the pair of arrays holding the scanned locations and values
 					scannedLocations.add(waypoint);
 					locationValues.add(pointColor);
 				}
-				//checks if the correct piece is not on the square
-				if (pointColor!=this.getColor()) {
-					continue;
-				} else {
-					//this must be the right move, so return it
+				//returns the move if the final square matches the color of this player's pieces
+				if (pointColor==this.getColor()) {
 					return m;
 				}
 			}

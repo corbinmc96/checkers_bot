@@ -3,21 +3,26 @@ import java.util.Arrays;
 public class SimPlayer extends Player {
 
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+		//calls the Player constructor with the same arguments
 		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
 	}
 
 	public SimPlayer (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+		//calls the Player constructor with the same arguments
 		super(startXO, startOnZeroSide, startBrain);
 	}
 
 	public Move takeTurn(Game g) {
+		//calculates the best move to make the specified number of plies ahead
 		Move m = this.calculateBestMove(g, 7);
+		//performs the move on the stored (and the physical) board
 		this.performMove(m);
 		// System.out.println(Arrays.deepToString(m.getWaypoints()));
 		return m;
 	}
 		
 	public void performMove(Move myMove) {
+		//performs the move on the stored board
 		Player.performMove(myMove,this.getBoard());
 		//tests if game is using the robot
 		if (this.getRobot()!=null) {
