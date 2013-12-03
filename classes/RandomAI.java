@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class RandomAI extends OldMultithreadedAI {
+public class RandomAI extends MultithreadedAI {
 	private Random random;
 
 	public RandomAI () {

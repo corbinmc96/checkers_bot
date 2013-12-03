@@ -48,6 +48,15 @@ public class Game {
 		this.movesSinceEvent = oldG.getMovesSinceEvent();
 		this.numberOfKings = oldG.getNumberOfKings();
 		this.gameBoard = new Board(oldG.getGameBoard(), m);
+
+		this.movesSinceEvent++;
+		if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+			this.movesSinceEvent = 0;
+		}
+		if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
+			this.movesSinceEvent = 0;
+			this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
+		}
 	}
 
 	public Player play() {
@@ -60,16 +69,13 @@ public class Game {
 			this.movesSinceEvent++;
 			if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
 				this.movesSinceEvent = 0;
-				if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)<this.numberOfKings) {
-					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
-				}
 			}
-			if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)>this.numberOfKings) {
+			if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
 				this.movesSinceEvent = 0;
-				this.numberOfKings+=1;
+				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
 
-			this.gameBoard.printBoard();
+			// this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
@@ -80,16 +86,13 @@ public class Game {
 				this.movesSinceEvent++;
 				if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
 					this.movesSinceEvent = 0;
-					if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)<this.numberOfKings) {
-						this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
-					}
 				}
-				if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)>this.numberOfKings) {
+				if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
 					this.movesSinceEvent = 0;
-					this.numberOfKings+=1;
+					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
 
-				this.gameBoard.printBoard();
+				// this.gameBoard.printBoard();
 			}
 		}
 		if (player1.getAllMoves(this.gameBoard).length==0) {

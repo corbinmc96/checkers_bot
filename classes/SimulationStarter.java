@@ -8,7 +8,7 @@ public class SimulationStarter {
 		int testWins = 0;
 		int draws = 0;
 
-		for (int i = 0; i<10000; i++) {
+		for (int i = 0; i<500; i++) {
 			Game g = new Game(orig, rand);
 			Player winner = g.play();
 			if (winner==orig) {
@@ -33,7 +33,7 @@ public class SimulationStarter {
 				draws++;
 			}
 
-			// System.out.println(i);
+			System.out.println(i);
 			System.out.println("" + origWins + ", " + testWins);
 		}
 
@@ -41,7 +41,7 @@ public class SimulationStarter {
 		test = new SimPlayer("o", false, new OldMultithreadedAI());
 		rand = new SimPlayer("x", true, new RandomAI());
 
-		for (int i = 0; i<10000; i++) {
+		for (int i = 0; i<500; i++) {
 			Game g = new Game(rand, orig);
 			Player winner = g.play();
 			if (winner==orig) {
@@ -66,7 +66,7 @@ public class SimulationStarter {
 				draws++;
 			}
 
-			// System.out.println(i+500);
+			System.out.println(i+500);
 			System.out.println("" + origWins + ", " + testWins);
 		}
 
