@@ -143,6 +143,8 @@ public class Board {
 	public double calculateValue2(Player p) {
 		double p1Value = 0;
 		double p2Value = 0;
+		int p1Moves = p.getAllMoves(this).length;
+		int p2Moves = 0;
 
 		//iterates over every piece on the board
 		for (Piece piece : this.piecesOnBoard) {
@@ -166,6 +168,9 @@ public class Board {
 				}
 			//the piece is owned by player 2
 			} else {
+				if (p2Moves==0) {
+					p2Moves = piece.getPlayer().getAllMoves(this).length;
+				}
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					//adds 3 to the player's total value for the board
@@ -185,7 +190,7 @@ public class Board {
 			}
 		}
 
-		return p1Value-p2Value;
+		return p1Value - p2Value + 0.0001*p1Moves - 0.0001*p2Moves;
 	}
 
 	public void printBoard() {
