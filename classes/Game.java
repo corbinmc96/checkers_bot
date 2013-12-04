@@ -75,7 +75,7 @@ public class Game {
 				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
 
-			// this.gameBoard.printBoard();
+			this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
@@ -92,7 +92,7 @@ public class Game {
 					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
 
-				// this.gameBoard.printBoard();
+				this.gameBoard.printBoard();
 			}
 		}
 		if (player1.getAllMoves(this.gameBoard).length==0) {

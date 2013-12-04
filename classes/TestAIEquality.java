@@ -1,9 +1,9 @@
 public class TestAIEquality {
 	public static void main(String[] args) {
 		AIEngine AI1 = new OldMultithreadedAI();
-		AIEngine AI2 = new MultithreadedAI();
-		Player randPlayer1 = new SimPlayer("x", true, new RandomAI());
-		Player randPlayer2 = new SimPlayer("o", false, new RandomAI());
+		AIEngine AI2 = new AaronAI();
+		Player randPlayer1 = new SimPlayer("x", true, new RandomAI()/*the AI doesn't actually matter here*/);
+		Player randPlayer2 = new SimPlayer("o", false, new RandomAI()/*the AI doesn't actually matter here*/);
 
 		for (int i = 0; i<100; i++) {
 			Game g = new Game(randPlayer1, randPlayer2);

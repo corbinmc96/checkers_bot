@@ -103,7 +103,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
 					return boardValues[i];
 				}
 			}
@@ -120,7 +120,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, currentMax, currentMin);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
 					return boardValues[i];
 				}
 
@@ -132,16 +132,24 @@ public class AaronAI extends AIEngine {
 			}
 		}
 
-		//creates array to hold sorted values from lowest to highest
-		double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
-		Arrays.sort(boardValuesSorted);
-
 		//creates variable to hold result value
-		double result;
+		double result = 100000000;
+		if (!testOpponentMoves) {
+			result = -100000000;
+		}
+		//creates variable to count occurrences of best move
+		double count = 0;
+		for (double testValue : boardValues) {
+			if ((testOpponentMoves && testValue<result) || (!testOpponentMoves && testValue>result)) {
+				result = testValue;
+				count = 1;
+			} else if (testValue==result) {
+				count++;
+			}
+		}
+
 		if (testOpponentMoves) {
-			result = boardValuesSorted[0]; 
-		} else {
-			result = boardValuesSorted[boardValuesSorted.length-1];
+			result -= count*0.0001;
 		}
 
 		//logs the values for debugging
