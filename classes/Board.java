@@ -25,13 +25,21 @@ public class Board {
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
 	}
 
-	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations) {
+	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings) {
 		this.piecesOnBoard = new ArrayList<Piece>();
 		for (int[] location : p1Locations) {
 			this.piecesOnBoard.add(new Piece(location, players[0], this));
 		}
 		for (int[] location : p2Locations) {
 			this.piecesOnBoard.add(new Piece(location, players[1], this));
+		}
+		for (int[] location : p1kings) {
+			this.piecesOnBoard.add(new Piece(location, players[0], this));
+			this.piecesOnBoard.get(piecesOnBoard.size()-1).setIsKing(true);
+		}
+		for (int[] location : p2kings) {
+			this.piecesOnBoard.add(new Piece(location, players[1], this));
+			this.piecesOnBoard.get(piecesOnBoard.size()-1).setIsKing(true);
 		}
 	}
 
