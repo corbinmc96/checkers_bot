@@ -30,13 +30,17 @@ public class Human extends Player {
 		if (this.getRobot()!=null) {
 			//defines class to concurrently wait for the touch sensor to be pressed
 			class ButtonThread extends Thread {
+				private Robot r;
+				public ButtonThread(Robot r) {
+					this.r = r;
+				}
 				public void run() {
-					this.getRobot().waitForSensorPress();
+					r.waitForSensorPress();
 				}
 			}
 
 			//starts concurrent thread waiting for button press
-			Thread t = new ButtonThread();
+			Thread t = new ButtonThread(this.getRobot());
 			t.start();
 
 			//creates pair of lists to hold scanned values
@@ -46,7 +50,11 @@ public class Human extends Player {
 			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(this.getBoard()), g, this, 1);
 			
 			//waits for button thread to finish
-			t.join();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				
+			}
 
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
