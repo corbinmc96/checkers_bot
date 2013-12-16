@@ -26,8 +26,8 @@ public class Game {
 		this.gameRobot = startGameRobot;
 	}
 
-	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations) {
-		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations);
+	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings) {
+		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations, p1kings, p2kings);
 		this.player1 = p1;
 		this.player2 = p2;
 		this.player1.setBoard(this.gameBoard);

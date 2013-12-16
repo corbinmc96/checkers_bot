@@ -25,13 +25,21 @@ public class Board {
 		Player.performMove(new Move(this.getPieceAtLocation(newMove.getSource()), newMove.getWaypoints()), this);
 	}
 
-	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations) {
+	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings) {
 		this.piecesOnBoard = new ArrayList<Piece>();
 		for (int[] location : p1Locations) {
 			this.piecesOnBoard.add(new Piece(location, players[0], this));
 		}
 		for (int[] location : p2Locations) {
 			this.piecesOnBoard.add(new Piece(location, players[1], this));
+		}
+		for (int[] location : p1kings) {
+			this.piecesOnBoard.add(new Piece(location, players[0], this));
+			this.piecesOnBoard.get(piecesOnBoard.size()-1).setIsKing(true);
+		}
+		for (int[] location : p2kings) {
+			this.piecesOnBoard.add(new Piece(location, players[1], this));
+			this.piecesOnBoard.get(piecesOnBoard.size()-1).setIsKing(true);
 		}
 	}
 
@@ -102,8 +110,14 @@ public class Board {
 			if (piece.getPlayer()==p) {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
+					float distance = 16;
+					for (Piece closePiece : p.getPlayerPieces()) {
+						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
+							distance = getDistanceBetweenPieces(piece,closePiece);
+						}
+					}
 					//adds 3 to the player's total value for the board
-					p1Value += 3;
+					p1Value += (3-.01*distance);
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
@@ -120,8 +134,14 @@ public class Board {
 			} else {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
+					float distance = 16;
+					for (Piece closePiece : p.getGame().getOpponent().getPlayerPieces()) { //FIX THIS LINE
+						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
+							distance = getDistanceBetweenPieces(piece,closePiece);
+						}
+					}
 					//adds 3 to the player's total value for the board
-					p2Value += 3;
+					p2Value += (3-.01*distance);
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
@@ -138,59 +158,6 @@ public class Board {
 		}
 
 		return p1Value-p2Value;
-	}
-
-	public double calculateValue2(Player p) {
-		double p1Value = 0;
-		double p2Value = 0;
-		int p1Moves = p.getAllMoves(this).length;
-		int p2Moves = 0;
-
-		//iterates over every piece on the board
-		for (Piece piece : this.piecesOnBoard) {
-			//determines if the piece is owned by player 1
-			if (piece.getPlayer()==p) {
-				//determines if the piece is a king
-				if (piece.getIsKing()) {
-					//adds 3 to the player's total value for the board
-					p1Value += 3;
-				//the piece is not a king
-				} else {
-					//determines which side of the board the player is on
-					if (p.getIsOnZeroSide()) {
-						//adds value based on distance down the board
-						p1Value += 1 + 0.125*piece.getLocation()[1];
-					//the player is on the side of the board with index 7
-					} else {
-						//adds value based on distance down the board
-						p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
-					}
-				}
-			//the piece is owned by player 2
-			} else {
-				if (p2Moves==0) {
-					p2Moves = piece.getPlayer().getAllMoves(this).length;
-				}
-				//determines if the piece is a king
-				if (piece.getIsKing()) {
-					//adds 3 to the player's total value for the board
-					p2Value += 3;
-				//the piece is not a king
-				} else {
-					//determines which side of the board the player is on
-					if (piece.getPlayer().getIsOnZeroSide()) {
-						//adds value based on distance down the board
-						p2Value += 1 + 0.125*piece.getLocation()[1];
-					//the player is on the side of the board with index 7
-					} else {
-						//adds value based on distance down the board
-						p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
-					}
-				}
-			}
-		}
-
-		return p1Value - p2Value + 0.0001*p1Moves - 0.0001*p2Moves;
 	}
 
 	public void printBoard() {
@@ -214,4 +181,16 @@ public class Board {
 		}
 		System.out.println();
 	}
+
+	public float getDistanceBetweenPieces(Piece p1, Piece p2) {
+		float dif1 = p1.getLocation()[0] - p2.getLocation()[0];
+		float dif2 = p1.getLocation()[1] - p2.getLocation()[1];
+		if (dif1<0) {
+			dif1=dif1*-1;
+		} if (dif2<0) {
+			dif2=dif2*-1;
+		}
+		return Math.pow(Math.pow(dif1,2)+Math.pow(dif2,2),2);
+	}
+
 }
