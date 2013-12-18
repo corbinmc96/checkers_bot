@@ -111,7 +111,7 @@ public class Board {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					float distance = 16;
-					for (Piece closePiece : p.getPlayerPieces()) {
+					for (Piece closePiece : p.getPlayerPieces(this)) {
 						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
 							distance = getDistanceBetweenPieces(piece,closePiece);
 						}
@@ -135,7 +135,7 @@ public class Board {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					float distance = 16;
-					for (Piece closePiece : p.getGame().getOpponent().getPlayerPieces()) { //FIX THIS LINE
+					for (Piece closePiece : p.getGame().getOtherPlayer(p).getPlayerPieces()) {
 						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
 							distance = getDistanceBetweenPieces(piece,closePiece);
 						}
