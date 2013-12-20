@@ -118,7 +118,7 @@ public class Board {
 						}
 					}
 					//adds 3 to the player's total value for the board
-					p1Value += (3-.01*distance);
+					p1Value += (3-.1*distance);
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
@@ -143,7 +143,7 @@ public class Board {
 						}
 					}
 					//adds 3 to the player's total value for the board
-					p2Value += (3-.01*distance);
+					p2Value += (3-.1*distance);
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on

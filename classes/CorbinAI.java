@@ -52,7 +52,7 @@ public class CorbinAI extends AIEngine {
 		}
 		
 		if (unsortedMoves.length == 0) {
-			return -36;
+			return (recursionDepth+1)*-36;
 		}
 
 		if (g.isDraw()) {
