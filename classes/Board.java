@@ -103,6 +103,7 @@ public class Board {
 	public double calculateValue(Player p) {
 		double p1Value = 0;
 		double p2Value = 0;
+		Player opponent;
 
 		//iterates over every piece on the board
 		for (Piece piece : this.piecesOnBoard) {
@@ -110,7 +111,7 @@ public class Board {
 			if (piece.getPlayer()==p) {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
-					float distance = 16;
+					double distance = 16;
 					for (Piece closePiece : p.getPlayerPieces(this)) {
 						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
 							distance = getDistanceBetweenPieces(piece,closePiece);
@@ -132,10 +133,11 @@ public class Board {
 				}
 			//the piece is owned by player 2
 			} else {
+				opponent = piece.getPlayer();
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
-					float distance = 16;
-					for (Piece closePiece : p.getGame().getOtherPlayer(p).getPlayerPieces()) {
+					double distance = 16;
+					for (Piece closePiece : opponent.getPlayerPieces(this)) {
 						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
 							distance = getDistanceBetweenPieces(piece,closePiece);
 						}
@@ -182,15 +184,15 @@ public class Board {
 		System.out.println();
 	}
 
-	public float getDistanceBetweenPieces(Piece p1, Piece p2) {
-		float dif1 = p1.getLocation()[0] - p2.getLocation()[0];
-		float dif2 = p1.getLocation()[1] - p2.getLocation()[1];
+	public double getDistanceBetweenPieces(Piece p1, Piece p2) {
+		double dif1 = p1.getLocation()[0] - p2.getLocation()[0];
+		double dif2 = p1.getLocation()[1] - p2.getLocation()[1];
 		if (dif1<0) {
 			dif1=dif1*-1;
 		} if (dif2<0) {
 			dif2=dif2*-1;
 		}
-		return Math.pow(Math.pow(dif1,2)+Math.pow(dif2,2),2);
+		return Math.pow(Math.pow(dif1,2)+Math.pow(dif2,2),2.0);
 	}
 
 }
