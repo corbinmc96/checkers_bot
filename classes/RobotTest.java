@@ -33,11 +33,17 @@ public class RobotTest {
 
 				} else if (selectionPosition==1) {
 					currentMotorSpeed = (currentMotorSpeed+1)%1000;
+					Motor.A.setSpeed(currentMotorSpeed);
+					Motor.B.setSpeed(currentMotorSpeed);
+					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					if (Button.waitForAnyEvent(700)==0) {
 						while (Button.waitForAnyEvent(200)==0) {
 							currentMotorSpeed = (currentMotorSpeed+1)%1000;
+							Motor.A.setSpeed(currentMotorSpeed);
+							Motor.B.setSpeed(currentMotorSpeed);
+							Motor.C.setSpeed(currentMotorSpeed);
 							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 						}
 					}
@@ -56,11 +62,17 @@ public class RobotTest {
 
 				} else if (selectionPosition==1) {
 					currentMotorSpeed = (currentMotorSpeed-1)%1000;
+					Motor.A.setSpeed(currentMotorSpeed);
+					Motor.B.setSpeed(currentMotorSpeed);
+					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					if (Button.waitForAnyEvent(700)==0) {
 						while (Button.waitForAnyEvent(200)==0) {
 							currentMotorSpeed = (currentMotorSpeed-1)%1000;
+							Motor.A.setSpeed(currentMotorSpeed);
+							Motor.B.setSpeed(currentMotorSpeed);
+							Motor.C.setSpeed(currentMotorSpeed);
 							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 						}
 					}
@@ -72,11 +84,8 @@ public class RobotTest {
 				selectionPosition = (selectionPosition+1)%3;
 				updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
-				if (Button.waitForAnyEvent(700)==0) {
-					while (Button.waitForAnyEvent(200)==0) {
-						selectionPosition = (selectionPosition+1)%3;
-						updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
-					}
+				while (Button.ENTER.isDown()) {
+					Button.waitForAnyEvent(10000000);
 				}
 			}
 		}
