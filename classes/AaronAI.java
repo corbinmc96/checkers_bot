@@ -148,9 +148,9 @@ public class AaronAI extends AIEngine {
 			}
 		}
 
-		if (testOpponentMoves) {
-			result -= count*0.0001;
-		}
+		// if (testOpponentMoves) {
+		// 	result -= count*0.0001;
+		// }
 
 		//logs the values for debugging
 		// g.getGameBoard().printBoard();
