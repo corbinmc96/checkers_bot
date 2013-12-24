@@ -137,13 +137,14 @@ public class Board {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					double distance = 16;
-					for (Piece closePiece : opponent.getPlayerPieces(this)) {
-						if (getDistanceBetweenPieces(piece,closePiece)<distance) {
-							distance = getDistanceBetweenPieces(piece,closePiece);
-						}
-					}
+					//for (Piece closePiece : opponent.getPlayerPieces(this)) {
+						//if (getDistanceBetweenPieces(piece,closePiece)<distance) {
+						//	distance = getDistanceBetweenPieces(piece,closePiece);
+						//}
+					//}
 					//adds 3 to the player's total value for the board
-					p2Value += (3-.1*distance);
+					//p2Value += (3-.1*distance);
+					p2value += 3;
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
