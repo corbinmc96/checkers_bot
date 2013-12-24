@@ -125,6 +125,7 @@ public class AaronAI extends AIEngine {
 					return boardValues[i];
 				}
 
+				//sets the new board value to newAB if it is better for the current player
 				if ((!testOpponentMoves && boardValues[i]>newAB) || (testOpponentMoves && boardValues[i]<newAB)) {
 					newAB = boardValues[i];
 				}
@@ -138,10 +139,13 @@ public class AaronAI extends AIEngine {
 		}
 		//creates variable to count occurrences of best move
 		double count = 0;
+		//iterates over all board values
 		for (double testValue : boardValues) {
+			//if the value is better, change the result value and reset the counter
 			if ((testOpponentMoves && testValue<result) || (!testOpponentMoves && testValue>result)) {
 				result = testValue;
 				count = 1;
+			//if the value is the same as the current result, increment the counter
 			} else if (testValue==result) {
 				count++;
 			}
