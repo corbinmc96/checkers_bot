@@ -193,7 +193,7 @@ public class Board {
 		} if (dif2<0) {
 			dif2=dif2*-1;
 		}
-		return Math.pow(Math.pow(dif1,2)+Math.pow(dif2,2),2.0);
+		return Math.pow(Math.pow(dif1,2)+Math.pow(dif2,2),0.5);
 	}
 
 }

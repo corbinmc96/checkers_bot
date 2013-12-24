@@ -1,6 +1,6 @@
 import lejos.nxt.*;
 
-public class MotorTest {
+public class RobotTest {
 	private static int drawnMotorIndex = -1;
 	private static int drawnMotorSpeed = -1;
 	private static int drawnSelectionPosition = -1;

@@ -77,19 +77,23 @@ public class OldMultithreadedAI extends AIEngine {
 		private int startRecursionDepth;
 		private boolean startTestOpponentMoves;
 		private Player player;
+		private double startMax;
+		private double startMin;
 		
 		public ValueCalculator (Game g, int recursionDepth, boolean testOpponentMoves, Player p) {
 			this.origGame = g;
 			this.startRecursionDepth = recursionDepth;
 			this.startTestOpponentMoves = testOpponentMoves;
 			this.player = p;
+			this.startMax = -(recursionDepth+1)*Board.maxBoardValue;
+			this.startMin = (recursionDepth+1)*Board.maxBoardValue;
 		}
 		
 		public Double call() {
-			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves);
+			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves, this.startMax, this.startMin);
 		}
 		
-		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves) {
+		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double currentMax, double currentMin) {
 			if (g.isDraw()) {
 				// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 				// System.out.println("Detected possible draw");
@@ -116,7 +120,11 @@ public class OldMultithreadedAI extends AIEngine {
 				if (recursionDepth==1) {
 					return (new Board(g.getGameBoard(), moves[0])).calculateValue(this.player);
 				} else {
-					return this.valueOfMoves(new Game(g, moves[0]), recursionDepth-1, !testOpponentMoves);
+					if (!testOpponentMoves) {
+						return this.valueOfMoves(new Game(g, moves[0]), recursionDepth-1, !testOpponentMoves, -(recursionDepth+1)*Board.maxBoardValue, currentMin);
+					} else {
+						return this.valueOfMoves(new Game(g, moves[0]), recursionDepth-1, !testOpponentMoves, currentMax, (recursionDepth+1*Board.maxBoardValue));
+					}
 				}
 			}
 
@@ -126,29 +134,62 @@ public class OldMultithreadedAI extends AIEngine {
 			//if recursionDepth is one, calculate direct values of moves
 			if (recursionDepth==1) {
 				//iterates over all moves and calculates values to put in boardValues
-				for (int i = 0; i<moves.length; i++) {
+				for (byte i = 0; i<moves.length; i++) {
 					boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this.player);
+					if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
+						return boardValues[i];
+					}
 				}
 			
 			//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 			} else {
+				if (!testOpponentMoves) {
+					currentMax = -(recursionDepth+1)*Board.maxBoardValue;
+				} else {
+					currentMin = (recursionDepth+1)*Board.maxBoardValue;
+				}
 				//iterates over all moves and calculates value based on best opponent move
-				for (int i = 0; i<moves.length; i++) {
-					boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves);
+				for (byte i = 0; i<moves.length; i++) {
+					boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves, currentMax, currentMin);
+					if ((testOpponentMoves && boardValues[i]<=currentMax) || (!testOpponentMoves && boardValues[i]>=currentMin)) {
+						return boardValues[i];
+					}
+
+					if (!testOpponentMoves && boardValues[i]>currentMax) {
+						currentMax = boardValues[i];
+					} else if (testOpponentMoves && boardValues[i]>currentMin) {
+						currentMin = boardValues[i];
+					}
 				}
 			}
 
-			//creates array to hold sorted values from lowest to highest
-			double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
-			Arrays.sort(boardValuesSorted);
+			// //creates array to hold sorted values from lowest to highest
+			// double[] boardValuesSorted = Arrays.copyOf(boardValues, boardValues.length);
+			// Arrays.sort(boardValuesSorted);
 
-			//creates variable to hold result value
-			double result;
+			// //creates variable to hold result value
+			// double result = boardValues[0];
+			// if (testOpponentMoves) {
+			// 	result = boardValuesSorted[0]/* * 0.8 + boardValuesSorted[1] * 0.2*/; 
+			// } else {
+			// 	result = boardValuesSorted[boardValuesSorted.length-1];
+			// }
+
+			double result = boardValues[0];
+			byte multiplier;
 			if (testOpponentMoves) {
-				result = boardValuesSorted[0]/* * 0.8 + boardValuesSorted[1] * 0.2*/;
+				multiplier = -1;
 			} else {
-				result = boardValuesSorted[boardValuesSorted.length-1];
+				multiplier = 1;
 			}
+
+			for (byte i = 1; i<boardValues.length; i++) {
+				if (multiplier*boardValues[i] > multiplier*result) {
+					result = boardValues[i];
+				}
+			}
+
+
 
 			//logs the values for debugging
 			// g.getGameBoard().printBoard();

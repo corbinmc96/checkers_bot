@@ -17,7 +17,7 @@ public class AaronAI extends AIEngine {
 		} else {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue, (recursionDepth+1)*Board.maxBoardValue);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
 			}
 		}
 
@@ -51,7 +51,7 @@ public class AaronAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double currentMax, double currentMin) {
+	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
@@ -87,9 +87,9 @@ public class AaronAI extends AIEngine {
 			//if thinking multiple moves ahead, calculate the recursive value
 			} else {
 				if (!testOpponentMoves) {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves, -(recursionDepth+1)*Board.maxBoardValue, currentMin);
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
 				} else {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, !testOpponentMoves, currentMax, (recursionDepth+1*Board.maxBoardValue));
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.maxBoardValue);
 				}
 			}
 		}
@@ -103,31 +103,31 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<ab) || (!testOpponentMoves && boardValues[i]>ab)) {
 					return boardValues[i];
 				}
 			}
 		
 		//recursionDepth must be greater than one, so get values of the best opponent moves for each possible move
 		} else {
-			//resets currentMax or currentMin value based on testOpponentMoves
+			//sets new alpha-beta value based on testOpponentMoves
+			double newAB;
 			if (!testOpponentMoves) {
-				currentMax = -(recursionDepth+1)*Board.maxBoardValue;
+				newAB = -(recursionDepth+1)*Board.maxBoardValue;
 			} else {
-				currentMin = (recursionDepth+1)*Board.maxBoardValue;
+				newAB = (recursionDepth+1)*Board.maxBoardValue;
 			}
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, currentMax, currentMin);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, newAB);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<currentMax) || (!testOpponentMoves && boardValues[i]>currentMin)) {
+				if ((testOpponentMoves && boardValues[i]<ab) || (!testOpponentMoves && boardValues[i]>ab)) {
 					return boardValues[i];
 				}
 
-				if (!testOpponentMoves && boardValues[i]>currentMax) {
-					currentMax = boardValues[i];
-				} else if (testOpponentMoves && boardValues[i]>currentMin) {
-					currentMin = boardValues[i];
+				//sets the new board value to newAB if it is better for the current player
+				if ((!testOpponentMoves && boardValues[i]>newAB) || (testOpponentMoves && boardValues[i]<newAB)) {
+					newAB = boardValues[i];
 				}
 			}
 		}
@@ -139,18 +139,21 @@ public class AaronAI extends AIEngine {
 		}
 		//creates variable to count occurrences of best move
 		double count = 0;
+		//iterates over all board values
 		for (double testValue : boardValues) {
+			//if the value is better, change the result value and reset the counter
 			if ((testOpponentMoves && testValue<result) || (!testOpponentMoves && testValue>result)) {
 				result = testValue;
 				count = 1;
+			//if the value is the same as the current result, increment the counter
 			} else if (testValue==result) {
 				count++;
 			}
 		}
 
-		if (testOpponentMoves) {
-			result -= count*0.0001;
-		}
+		// if (testOpponentMoves) {
+		// 	result -= count*0.0001;
+		// }
 
 		//logs the values for debugging
 		// g.getGameBoard().printBoard();
