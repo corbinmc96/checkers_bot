@@ -92,7 +92,7 @@ public class MotorTest {
 	}
 
 	private static void updateDisplay(int motorIndex, int currentMotorSpeed, int selectionPosition) {
-		if (RobotTest.drawnMotorIndex!=motorIndex) {
+		if (MotorTest.drawnMotorIndex!=motorIndex) {
 			if (motorIndex==0) {
 				LCD.drawString("A            ", 0, 0);
 			} else if (motorIndex==1) {
@@ -103,32 +103,32 @@ public class MotorTest {
 				LCD.drawString("INVALID INDEX", 0, 0);
 			}
 
-			RobotTest.drawnMotorIndex = motorIndex;
+			MotorTest.drawnMotorIndex = motorIndex;
 		}
 
-		if (RobotTest.drawnMotorSpeed!=currentMotorSpeed) {
+		if (MotorTest.drawnMotorSpeed!=currentMotorSpeed) {
 			LCD.drawInt(currentMotorSpeed, 0, 1);
 
-			RobotTest.drawnMotorSpeed = currentMotorSpeed;
+			MotorTest.drawnMotorSpeed = currentMotorSpeed;
 		}
 
 		LCD.drawString("Run", 0, 2);
 
-		if (RobotTest.drawnRotationSpeed!=Motor.getInstance(motorIndex).getRotationSpeed()) {
+		if (MotorTest.drawnRotationSpeed!=Motor.getInstance(motorIndex).getRotationSpeed()) {
 			LCD.drawString("Actual speed:", 0, 4);
 			LCD.drawString("     ", 0, 5);
 			LCD.drawInt(Motor.getInstance(motorIndex).getRotationSpeed(), 0, 5);
 
-			RobotTest.drawnRotationSpeed = Motor.getInstance(motorIndex).getRotationSpeed();
+			MotorTest.drawnRotationSpeed = Motor.getInstance(motorIndex).getRotationSpeed();
 		}
 
-		if (RobotTest.drawnSelectionPosition!=selectionPosition) {
+		if (MotorTest.drawnSelectionPosition!=selectionPosition) {
 			LCD.drawString(" ", 15, 0);
 			LCD.drawString(" ", 15, 1);
 			LCD.drawString(" ", 15, 2);
 			LCD.drawString("<", 15, selectionPosition);
 
-			RobotTest.drawnSelectionPosition = selectionPosition;
+			MotorTest.drawnSelectionPosition = selectionPosition;
 		}
 	}
 
