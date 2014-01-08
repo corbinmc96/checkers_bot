@@ -32,15 +32,15 @@ public class MotorTest {
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed+1)%1000;
+					currentMotorSpeed = (currentMotorSpeed+1)%10000000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					if (Button.waitForAnyEvent(700)==0) {
-						while (Button.waitForAnyEvent(200)==0) {
-							currentMotorSpeed = (currentMotorSpeed+1)%1000;
+						while (Button.waitForAnyEvent(50)==0) {
+							currentMotorSpeed = (currentMotorSpeed+1)%10000000;
 							Motor.A.setSpeed(currentMotorSpeed);
 							Motor.B.setSpeed(currentMotorSpeed);
 							Motor.C.setSpeed(currentMotorSpeed);
@@ -53,7 +53,7 @@ public class MotorTest {
 				}
 			} else if (Button.LEFT.isDown()) {
 				if (selectionPosition==0) {
-					currentMotorIndex = (currentMotorIndex-1)%3;
+					currentMotorIndex = (currentMotorIndex+2)%3;
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					while (Button.LEFT.isDown()) {
@@ -61,15 +61,15 @@ public class MotorTest {
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed-1)%1000;
+					currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					if (Button.waitForAnyEvent(700)==0) {
-						while (Button.waitForAnyEvent(200)==0) {
-							currentMotorSpeed = (currentMotorSpeed-1)%1000;
+						while (Button.waitForAnyEvent(50)==0) {
+							currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
 							Motor.A.setSpeed(currentMotorSpeed);
 							Motor.B.setSpeed(currentMotorSpeed);
 							Motor.C.setSpeed(currentMotorSpeed);
