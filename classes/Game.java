@@ -74,7 +74,7 @@ public class Game {
 				this.movesSinceEvent = 0;
 				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
-
+			System.out.println(this.movesSinceEvent);
 			this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
@@ -92,6 +92,7 @@ public class Game {
 					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
 
+				System.out.println(this.movesSinceEvent);
 				this.gameBoard.printBoard();
 			}
 		}

@@ -111,7 +111,7 @@ public class Human extends Player {
 			return null;
 		
 		} else {
-			super.getBoard().printBoard();
+			// super.getBoard().printBoard();
 			
 			boolean moveEntered = false;
 			Move inputtedMove = null;
