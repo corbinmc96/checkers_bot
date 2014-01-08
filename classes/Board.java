@@ -112,7 +112,7 @@ public class Board {
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
 					//adds 3 to the player's total value for the board
-					p1Value += 3;
+					p1Value += 2;
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
@@ -133,7 +133,7 @@ public class Board {
 				}	
 				//determines if the piece is a king
 				if (piece.getIsKing()) {
-					p2Value += 3;
+					p2Value += 2;
 				//the piece is not a king
 				} else {
 					//determines which side of the board the player is on
@@ -175,7 +175,7 @@ public class Board {
 						p1Value -= .05*distance;
 					} 
 					else {
-						p2Value += .05*distance;
+						p2Value -= .05*distance;
 					}
 				}
 			}
