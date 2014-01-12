@@ -103,7 +103,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<ab) || (!testOpponentMoves && boardValues[i]>ab)) {
+				if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
 					return boardValues[i];
 				}
 			}
@@ -121,7 +121,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, newAB);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<ab) || (!testOpponentMoves && boardValues[i]>ab)) {
+				if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
 					return boardValues[i];
 				}
 
@@ -138,16 +138,16 @@ public class AaronAI extends AIEngine {
 			result = -100000000;
 		}
 		//creates variable to count occurrences of best move
-		double count = 0;
+		// double count = 0;
 		//iterates over all board values
 		for (double testValue : boardValues) {
 			//if the value is better, change the result value and reset the counter
 			if ((testOpponentMoves && testValue<result) || (!testOpponentMoves && testValue>result)) {
 				result = testValue;
-				count = 1;
+				// count = 1;
 			//if the value is the same as the current result, increment the counter
-			} else if (testValue==result) {
-				count++;
+			// } else if (testValue==result) {
+			// 	count++;
 			}
 		}
 
