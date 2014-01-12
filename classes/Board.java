@@ -103,84 +103,91 @@ public class Board {
 	public double calculateValue(Player p) {
 		double p1Value = 0;
 		double p2Value = 0;
-		Player opponent = null;
+		ArrayList<Piece> p1Pieces = new ArrayList<Piece>();
+		ArrayList<Piece> p2Pieces = new ArrayList<Piece>();
 
-		//iterates over every piece on the board
-		for (Piece piece : this.piecesOnBoard) {
-			//determines if the piece is owned by player 1
-			if (piece.getPlayer()==p) {
-				//determines if the piece is a king
-				if (piece.getIsKing()) {
-					//adds 3 to the player's total value for the board
-					p1Value += 2;
-				//the piece is not a king
-				} else {
-					//determines which side of the board the player is on
-					if (p.getIsOnZeroSide()) {
-						//adds value based on distance down the board
-						p1Value += 1 + 0.125*piece.getLocation()[1];
-					//the player is on the side of the board with index 7
-					} else {
-						//adds value based on distance down the board
-						p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
-					}
-				}
-			//the piece is owned by player 2
-			} else {
-				//sets opponent value if it has not already been set
-				if (opponent == null) {
-					opponent = piece.getPlayer();
-				}	
-				//determines if the piece is a king
-				if (piece.getIsKing()) {
-					p2Value += 2;
-				//the piece is not a king
-				} else {
-					//determines which side of the board the player is on
-					if (piece.getPlayer().getIsOnZeroSide()) {
-						//adds value based on distance down the board
-						p2Value += 1 + 0.125*piece.getLocation()[1];
-					//the player is on the side of the board with index 7
-					} else {
-						//adds value based on distance down the board
-						p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
-					}
-				}
+		//sorts ever piece as p1Piece or p2Piece
+		for (Piece piece : this.getPiecesOnBoard()) {
+			if (piece.getPlayer() == p) {
+				p1Pieces.add(piece);
+			}
+			else {
+				p2Pieces.add(piece);
 			}
 		}
 
+		//calculates point value of p's pieces
+		for (Piece piece : p1Pieces) {
+			//determines if the piece is a king
+			if (piece.getIsKing()) {
+				//adds 3 to the player's total value for the board
+				p1Value += 3;
+			//the piece is not a king
+			} else {
+				//determines which side of the board the player is on
+				if (p.getIsOnZeroSide()) {
+					//adds value based on distance down the board
+					p1Value += 1 + 0.125*piece.getLocation()[1];
+				//the player is on the side of the board with index 7
+				} else {
+					//adds value based on distance down the board
+					p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+				}
+			}
+		} 
+
+		//calculates point value of p's opponent's pieces
+		for (Piece piece : p2Pieces) {
+			//determines if the piece is a king
+			if (piece.getIsKing()) {
+				p2Value += 3;
+			//the piece is not a king
+			} else {
+				//determines which side of the board the player is on
+				if (piece.getPlayer().getIsOnZeroSide()) {
+					//adds value based on distance down the board
+					p2Value += 1 + 0.125*piece.getLocation()[1];
+				//the player is on the side of the board with index 7
+				} else {
+					//adds value based on distance down the board
+					p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+				}
+			}
+		}
+		
+
 		//discovers which player is winning by the current calculations above
-		Player winningPlayer;
+		ArrayList<Piece> winningPlayerPieces;
+		ArrayList<Piece> loserPlayerPieces;
 		if (p1Value > p2Value) {
-			winningPlayer = p;
+			winningPlayerPieces = p1Pieces;
+			loserPlayerPieces = p2Pieces;
 		} 
 		else {
-			winningPlayer = opponent;
+			winningPlayerPieces = p2Pieces;
+			loserPlayerPieces = p1Pieces;
 		}
 
 		//performs extra calculations to encourage winner's kings to attack opponent's pieces
-		for (Piece piece : this.getPiecesOnBoard()) {
-			if (piece.getPlayer()==winningPlayer) {
-				if (piece.getIsKing()) {
-					double distance = 20;
-					for (Piece piece2 : this.getPiecesOnBoard()) {
-						if (piece.getPlayer()!=winningPlayer) {
-							double testDistance = this.getDistanceBetweenPieces(piece, piece2);
-							if (testDistance < distance) {
-								distance = testDistance;
-							}
-						}
+		for (Piece p1 : winningPlayerPieces) {
+			if (p1.getIsKing()) {
+				double distance = 20;
+				for (Piece p2 : loserPlayerPieces) {
+					double testDistance = this.getDistanceBetweenPieces(p1, p2);
+					if (testDistance < distance) {
+						distance = testDistance;
 					}
-					if (p1Value > p2Value) {
-						p1Value -= .05*distance;
-					} 
-					else {
-						p2Value -= .05*distance;
-					}
+				}
+				if (p1Value > p2Value) {
+					p1Value -= .05*distance;
+				} 
+				else {
+					p2Value -= .05*distance;
 				}
 			}
 		}
 
+		//returns final calculated score
 		return p1Value-p2Value;
 	}
 
