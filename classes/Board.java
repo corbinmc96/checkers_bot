@@ -121,17 +121,17 @@ public class Board {
 			//determines if the piece is a king
 			if (piece.getIsKing()) {
 				//adds 3 to the player's total value for the board
-				p1Value += 3;
+				p1Value += 5;
 			//the piece is not a king
 			} else {
 				//determines which side of the board the player is on
 				if (p.getIsOnZeroSide()) {
 					//adds value based on distance down the board
-					p1Value += 1 + 0.125*piece.getLocation()[1];
+					p1Value += 3 + 0.125*piece.getLocation()[1];
 				//the player is on the side of the board with index 7
 				} else {
 					//adds value based on distance down the board
-					p1Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					p1Value += 3 + 0.125*(7 - piece.getLocation()[1]);
 				}
 			}
 		} 
@@ -140,17 +140,17 @@ public class Board {
 		for (Piece piece : p2Pieces) {
 			//determines if the piece is a king
 			if (piece.getIsKing()) {
-				p2Value += 3;
+				p2Value += 5;
 			//the piece is not a king
 			} else {
 				//determines which side of the board the player is on
 				if (piece.getPlayer().getIsOnZeroSide()) {
 					//adds value based on distance down the board
-					p2Value += 1 + 0.125*piece.getLocation()[1];
+					p2Value += 3 + 0.125*piece.getLocation()[1];
 				//the player is on the side of the board with index 7
 				} else {
 					//adds value based on distance down the board
-					p2Value += 1 + 0.125*(7 - piece.getLocation()[1]);
+					p2Value += 3 + 0.125*(7 - piece.getLocation()[1]);
 				}
 			}
 		}
