@@ -77,8 +77,7 @@ public class MultithreadedAI extends AIEngine {
 		private int startRecursionDepth;
 		private boolean startTestOpponentMoves;
 		private Player player;
-		private double startMax;
-		private double startMin;
+		private double startAB;
 		
 		public ValueCalculator (Game g, int recursionDepth, boolean testOpponentMoves, Player p) {
 			this.origGame = g;
@@ -96,7 +95,7 @@ public class MultithreadedAI extends AIEngine {
 			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves, this.startAB);
 		}
 		
-		private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
+		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double ab) {
 			if (g.isDraw()) {
 				// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 				// System.out.println("Detected possible draw");
