@@ -106,10 +106,10 @@ public class MultithreadedAI extends AIEngine {
 			Move[] moves;
 			if (testOpponentMoves) {
 				//gets possible moves for other player
-				moves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
+				moves = g.getOtherPlayer(this.player).getAllMoves(g.getGameBoard());
 			} else {
 				//gets possible moves for self
-				moves = p.getAllMoves(g.getGameBoard());
+				moves = this.player.getAllMoves(g.getGameBoard());
 			}
 
 			//tests if no moves are available, signaling a loss for one of the players
@@ -127,13 +127,13 @@ public class MultithreadedAI extends AIEngine {
 			if (moves.length==1) {
 				//if only thinking one move ahead, calculate the simple value
 				if (recursionDepth==1) {
-					return (new Board(g.getGameBoard(), moves[0])).calculateValue(p);
+					return (new Board(g.getGameBoard(), moves[0])).calculateValue(this.player);
 				//if thinking multiple moves ahead, calculate the recursive value
 				} else {
 					if (!testOpponentMoves) {
-						return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
+						return this.valueOfMoves(new Game(g, moves[0]), recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
 					} else {
-						return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.maxBoardValue);
+						return this.valueOfMoves(new Game(g, moves[0]), recursionDepth-1, false, (recursionDepth+1)*Board.maxBoardValue);
 					}
 				}
 			}
@@ -145,7 +145,7 @@ public class MultithreadedAI extends AIEngine {
 			if (recursionDepth==1) {
 				//iterates over all moves and calculates values to put in boardValues
 				for (int i = 0; i<moves.length; i++) {
-					boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
+					boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this.player);
 					//returns if this portion of the tree can be eliminated by alpha-beta pruning
 					if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
 						return boardValues[i];
@@ -163,7 +163,7 @@ public class MultithreadedAI extends AIEngine {
 				}
 				//iterates over all moves and calculates value based on best opponent move
 				for (int i = 0; i<moves.length; i++) {
-					boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, newAB);
+					boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves, newAB);
 					//returns if this portion of the tree can be eliminated by alpha-beta pruning
 					if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
 						return boardValues[i];
