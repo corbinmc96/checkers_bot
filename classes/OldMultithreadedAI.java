@@ -103,9 +103,9 @@ public class OldMultithreadedAI extends AIEngine {
 			//creates array to hold all possible moves
 			Move[] moves;
 			if (testOpponentMoves) {
-				moves = g.getOtherPlayer(this.player).getAllMoves(g.getGameBoard());
+				moves = g.getOtherPlayer(this.player).getAllMoves(g);
 			} else {
-				moves = this.player.getAllMoves(g.getGameBoard());
+				moves = this.player.getAllMoves(g);
 			}
 
 			if (moves.length==0) {

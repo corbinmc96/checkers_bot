@@ -3,13 +3,14 @@ public class SimulationStarter {
 		Player orig = new SimPlayer("x", true, new MultithreadedAI());
 		Player test = new SimPlayer("x", true, new OldMultithreadedAI());
 		Player rand = new SimPlayer("o", false, new RandomAI());
+		boolean testOfficialVersion = false;
 
 		int origWins = 0;
 		int testWins = 0;
 		int draws = 0;
 
 		for (int i = 0; i<500; i++) {
-			Game g = new Game(orig, rand);
+			Game g = new Game(orig, rand, testOfficialVersion);
 			Player winner = g.play();
 			if (winner==orig) {
 				origWins++;
@@ -21,7 +22,7 @@ public class SimulationStarter {
 				draws++;
 			}
 
-			g = new Game(test, rand);
+			g = new Game(test, rand, testOfficialVersion);
 			winner = g.play();
 			if (winner==test) {
 				testWins++;
@@ -42,7 +43,7 @@ public class SimulationStarter {
 		rand = new SimPlayer("x", true, new RandomAI());
 
 		for (int i = 0; i<500; i++) {
-			Game g = new Game(rand, orig);
+			Game g = new Game(rand, orig, testOfficialVersion);
 			Player winner = g.play();
 			if (winner==orig) {
 				origWins++;
@@ -54,7 +55,7 @@ public class SimulationStarter {
 				draws++;
 			}
 
-			g = new Game(rand, test);
+			g = new Game(rand, test, testOfficialVersion);
 			winner = g.play();
 			if (winner==test) {
 				testWins++;

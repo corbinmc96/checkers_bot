@@ -9,8 +9,9 @@ public class Game {
 	private ArrayList<int[][]> lastFewMoves;
 	private int movesSinceEvent;
 	private int numberOfKings;
+	private boolean isOfficialVersion;
 
-	public Game (Player p1, Player p2) {
+	public Game (Player p1, Player p2, boolean isOfficial) {
 		this.gameBoard = new Board(new Player[]{p1, p2});
 		this.player1 = p1;
 		this.player2 = p2;
@@ -19,14 +20,15 @@ public class Game {
 		this.lastFewMoves = new ArrayList<int[][]>();
 		this.movesSinceEvent = 0;
 		this.numberOfKings = 0;
+		this.isOfficialVersion = isOfficial;
 	}
 	
-	public Game (Player p1, Player p2, Robot startGameRobot) {
-		this(p1,p2);
+	public Game (Player p1, Player p2, boolean isOfficial, Robot startGameRobot) {
+		this(p1,p2,isOfficial);
 		this.gameRobot = startGameRobot;
 	}
 
-	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings) {
+	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial) {
 		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations, p1kings, p2kings);
 		this.player1 = p1;
 		this.player2 = p2;
@@ -35,6 +37,7 @@ public class Game {
 		this.lastFewMoves = new ArrayList<int[][]>();
 		this.movesSinceEvent = 0;
 		this.numberOfKings = 0;
+		this.isOfficialVersion = isOfficial;
 	}
 	
 	public Game (Game oldG, Move m) {
@@ -48,6 +51,7 @@ public class Game {
 		this.movesSinceEvent = oldG.getMovesSinceEvent();
 		this.numberOfKings = oldG.getNumberOfKings();
 		this.gameBoard = new Board(oldG.getGameBoard(), m);
+		this.isOfficialVersion = oldG.getIsOfficialVersion();
 
 		this.movesSinceEvent++;
 		if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
@@ -60,7 +64,7 @@ public class Game {
 	}
 
 	public Player play() {
-		while (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
+		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
 			if (this.lastFewMoves.size()>12) {
 				this.lastFewMoves.remove(0);
@@ -77,7 +81,7 @@ public class Game {
 			System.out.println(this.movesSinceEvent);
 			this.gameBoard.printBoard();
 
-			if (player1.getAllMoves(this.gameBoard).length>0 && player2.getAllMoves(this.gameBoard).length>0 && !this.isDraw()) {
+			if (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
 				if (this.lastFewMoves.size()>12) {
 					this.lastFewMoves.remove(0);
@@ -96,10 +100,10 @@ public class Game {
 				this.gameBoard.printBoard();
 			}
 		}
-		if (player1.getAllMoves(this.gameBoard).length==0) {
+		if (player1.getAllMoves(this).length==0) {
 			return this.player2;
 		}
-		else if (player2.getAllMoves(this.gameBoard).length==0) {
+		else if (player2.getAllMoves(this).length==0) {
 			return this.player1;
 		} else {
 			return null;
@@ -132,6 +136,10 @@ public class Game {
 
 	public int getNumberOfKings() {
 		return this.numberOfKings;
+	}
+
+	public boolean getIsOfficialVersion() {
+		return this.isOfficialVersion;
 	}
 
 	public boolean isDraw() {

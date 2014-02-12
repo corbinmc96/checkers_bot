@@ -59,9 +59,9 @@ public class CRandomAI extends AIEngine {
 		
 		Move[] unsortedMoves;
 		if (isOpponentNode) {
-			unsortedMoves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
+			unsortedMoves = g.getOtherPlayer(p).getAllMoves(g);
 		} else {
-			unsortedMoves = p.getAllMoves(g.getGameBoard());
+			unsortedMoves = p.getAllMoves(g);
 		}
 
 		if (g.isDraw()) {

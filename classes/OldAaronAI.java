@@ -62,10 +62,10 @@ public class OldAaronAI extends AIEngine {
 		Move[] moves;
 		if (testOpponentMoves) {
 			//gets possible moves for other player
-			moves = g.getOtherPlayer(p).getAllMoves(g.getGameBoard());
+			moves = g.getOtherPlayer(p).getAllMoves(g);
 		} else {
 			//gets possible moves for self
-			moves = p.getAllMoves(g.getGameBoard());
+			moves = p.getAllMoves(g);
 		}
 
 		//tests if no moves are available, signaling a loss for one of the players

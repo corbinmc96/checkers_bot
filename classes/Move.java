@@ -65,11 +65,11 @@ public class Move {
 		}
 	}
 
-	public boolean calculateIsValid () {
+	public boolean calculateIsValid (Game g) {
 		Player thePlayer = this.movePiece.getPlayer();
-		Board theBoard = this.movePiece.getParentBoard();
+		Board theBoard = g.getGameBoard();
 
-		Move[] validMoves = thePlayer.getAllMoves(theBoard);
+		Move[] validMoves = thePlayer.getAllMoves(g);
 		for (Move validMove : validMoves) {
 
 			if (validMove.getJumpsContained() != this.getJumpsContained()) {

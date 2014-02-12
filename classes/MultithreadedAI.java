@@ -106,10 +106,10 @@ public class MultithreadedAI extends AIEngine {
 			Move[] moves;
 			if (testOpponentMoves) {
 				//gets possible moves for other player
-				moves = g.getOtherPlayer(this.player).getAllMoves(g.getGameBoard());
+				moves = g.getOtherPlayer(this.player).getAllMoves(g);
 			} else {
 				//gets possible moves for self
-				moves = this.player.getAllMoves(g.getGameBoard());
+				moves = this.player.getAllMoves(g);
 			}
 
 			//tests if no moves are available, signaling a loss for one of the players

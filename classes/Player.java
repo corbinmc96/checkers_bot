@@ -66,7 +66,7 @@ public abstract class Player {
 	}
 
 	public Move calculateBestMove (Game g, int recursionDepth) {
-		return this.brain.rankBestMove(this.getAllMoves(this.myBoard), g, this, recursionDepth)[0];
+		return this.brain.rankBestMove(this.getAllMoves(g), g, this, recursionDepth)[0];
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
@@ -93,11 +93,11 @@ public abstract class Player {
 		return this.myBoard;
 	}
 
-	public Move[] getAllMoves (Board b) {
+	public Move[] getAllMoves (Game g) {
 		//creates an ArrayList to return later
 		ArrayList<Move> result = new ArrayList<Move>();
 		//iterates over each of the player's pieces
-		for (Piece playerPiece : this.getPlayerPieces(b)) {
+		for (Piece playerPiece : this.getPlayerPieces(g.getGameBoard())) {
 			//iterates over all of that piece's moves
 			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
 				//adds each move to the return ArrayList
@@ -107,6 +107,37 @@ public abstract class Player {
 
 		//returns the final result
 		return result.toArray(new Move[result.size()]);
+
+		// OFFICIAL VERSION
+		// //creates an ArrayList to return later
+		// ArrayList<Move> result = new ArrayList<Move>();
+		// //creates a variable to store whether a jump has been found
+		// boolean canJump = false;
+
+		// //iterates over each of the player's pieces
+		// for (Piece playerPiece : this.getPlayerPieces(g.getGameBoard())) {
+		// 	//iterates over all of that piece's moves
+		// 	for (Move pieceMove : playerPiece.getMovesOfPiece()) {
+		// 		//adds each move to the return ArrayList
+		// 		result.add(pieceMove);
+		// 		if (pieceMove.getJumpsContained()>0) {
+		// 			canJump = true;
+		// 		}
+		// 	}
+		// }
+
+		// if (canJump) {
+		// 	ArrayList<Move> filteredResult = new ArrayList<Move>();
+		// 	for (Move m : result) {
+		// 		if (m.getJumpsContained()>0) {
+		// 			filteredResult.add(m);
+		// 		}
+		// 	}
+		// 	return filteredResult.toArray(new Move[filteredResult.size()]);
+		// }
+
+		// //returns the final result
+		// return result.toArray(new Move[result.size()]);
 	}
 
 	public abstract Move takeTurn(Game g);

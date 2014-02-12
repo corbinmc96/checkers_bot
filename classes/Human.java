@@ -47,7 +47,7 @@ public class Human extends Player {
 			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(this.getBoard()), g, this, 1);
+			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(g), g, this, 1);
 			
 			//waits for button thread to finish
 			try {
@@ -143,7 +143,7 @@ public class Human extends Player {
 							allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
 						}
 						inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
-						if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid()) {
+						if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid(g)) {
 							moveEntered = true;
 						}
 					}
