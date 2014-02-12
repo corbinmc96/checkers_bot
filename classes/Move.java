@@ -68,48 +68,21 @@ public class Move {
 	public boolean calculateIsValid () {
 		Player thePlayer = this.movePiece.getPlayer();
 		Board theBoard = this.movePiece.getParentBoard();
-		outerloop:
-		for (int i=0; i<this.waypoints.length-1; i++) {
-			int[] start = this.waypoints[i];
-			int[] end = this.waypoints[i+1];
-			int[] midpoint = new int[]{(end[0]+start[0])/2,(end[1]+start[1])/2};
-			int[] displacement = new int[] {end[0]-start[0],end[1]-start[1]};
-			if (!this.movePiece.getIsKing()) {
-				if (thePlayer.getIsOnZeroSide()) {
-					if ((displacement[0]==1||displacement[0]==-1) && displacement[1]==1 && theBoard.getPieceAtLocation(end)==null && Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else if ((displacement[0]==2||displacement[0]==-2)&&displacement[1]==2&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else {
-						return false;
-					}
-				}
-				else {
-					if ((displacement[0]==1||displacement[0]==-1)&&displacement[1]==-1&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else if ((displacement[0]==2||displacement[0]==-2)&&displacement[1]==-2&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-						//intentionally empty
-					}
-					else {
-						return false;
-					}
+
+		Move[] validMoves = thePlayer.getAllMoves(theBoard);
+		for (Move validMove : validMoves) {
+
+			if (validMove.getJumpsContained() != this.getJumpsContained()) {
+				continue;
+			}
+
+			for (int waypoint = 0; waypoint<validMove.getJumpsContained()+1; waypoint++) {
+				if (this.waypoints[waypoint][0]!=validMove.getWaypoints()[waypoint][0] || this.waypoints[waypoint][1]!=validMove.getWaypoints()[waypoint][1]) {
+					continue;
 				}
 			}
-			else {
-				if ((displacement[0]==1||displacement[0]==-1)&&(displacement[1]==1||displacement[1]==-1)&&theBoard.getPieceAtLocation(end)==null&&Board.locationIsInBounds(end)) {
-					//intentionally empty
-				}
-				else if ((displacement[0]==2||displacement[0]==-2)&&(displacement[1]==2||displacement[1]==-2)&&theBoard.getPieceAtLocation(end)==null&&theBoard.getPieceAtLocation(midpoint)!=null&&theBoard.getPieceAtLocation(midpoint).getPlayer()!=thePlayer&&Board.locationIsInBounds(end)) {
-					//intentionally empty
-				}
-				else {
-					return false;
-				}
-			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
