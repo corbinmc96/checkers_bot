@@ -3,6 +3,10 @@ public class Robot {
 	private int[] armLocation;
 	private boolean isHoldingPiece;
 
+	public int[] getDeadLocation() {
+		return null;
+	}
+
 	public int[] getArmLocation() {
 		return null;
 	}
