@@ -12,7 +12,7 @@ public class Robot {
 	}
 
 	public void moveToXY(int[] newXY) {
-		//implementation
+
 	}
 	
 	public void resetPosition() {
@@ -32,14 +32,23 @@ public class Robot {
 	}
 
 	public void pickUpPiece() {
-		//implementation
+		Motor.C.rotateTo( 180)
+		Motor.C.rotateTo( 270)
+		(boolean) isRotating()
+		Motor.C.rotateTo( 180)
+		(boolean) isRotating()
+		dropPiece 
 	}
 
 	public void dropPiece() {
-		//implementation
+		Motor.C.rotateTo( 90)
+		(boolean) isRotating()
+		Motor.C.rotateTo( 180)
 	}
 
 	public void waitForSensorPress() {
-		//implementation
+		TouchSensor(SensorPort port)
+		boolean isPressed()
+		return;
 	}
 }
