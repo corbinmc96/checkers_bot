@@ -24,15 +24,15 @@ public class ArraysHelper {
 		return result;
 	}
 
-	public static ArrayList<Piece> asArrayList(Piece[] array) {
-		ArrayList<Piece> result = new ArrayList<Piece>();
+	// public static ArrayList<Piece> asArrayList(Piece[] array) {
+	// 	ArrayList<Piece> result = new ArrayList<Piece>();
 
-		for (Piece item : array) {
-			result.add(item);
-		}
+	// 	for (Piece item : array) {
+	// 		result.add(item);
+	// 	}
 
-		return result;
-	}
+	// 	return result;
+	// }
 
 	public static ArrayList<int[][]> asArrayList(int[][][] array) {
 		ArrayList<int[][]> result = new ArrayList<int[][]>();

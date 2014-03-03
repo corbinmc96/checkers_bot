@@ -2,14 +2,14 @@ import java.util.ArrayList;
 
 public class Move {
 
-	private Piece movePiece;
+	private int[] movePiece;
 	//waypoints are in order and include the starting point and the destination
 	private int[][] waypoints;
 	//number of jumps contained
 	private int jumpsContained;
 	//is the move valid
 
-	public Move (Piece startPiece, int[][] startWaypoints) {
+	public Move (int[] startPiece, int[][] startWaypoints) {
 		//instantiate all the variables
 		this.movePiece = startPiece;
 		this.waypoints = startWaypoints;
@@ -38,7 +38,7 @@ public class Move {
 	}
 
 	//get the piece the that is moving
-	public Piece getMovePiece () {
+	public int[] getMovePiece () {
 		return this.movePiece;
 	}
 
@@ -48,25 +48,25 @@ public class Move {
 	}
 	
 	//calculate an array of all the Piece objects that will be jumped during the move
-	public Piece[] calculatePiecesToJump () {
+	public int[][] calculatePiecesToJump (Board b) {
 		//if no jumps, return empty list
 		if (this.jumpsContained == 0) {
-			return new Piece[0];
+			return new int[0][];
 		}
 		else {
-			ArrayList<Piece> result = new ArrayList<Piece>();
+			ArrayList<int[]> result = new ArrayList<int[]>();
 			//cycle through all the movements the piece makes
 			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
 				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
-				result.add(this.movePiece.getParentBoard().getPieceAtLocation(midpoint));
+				result.add(b.getPieceAtLocation(midpoint));
 			}
-			return result.toArray(new Piece[result.size()]);
+			return result.toArray(new int[result.size()][]);
 		}
 	}
 
 	public boolean calculateIsValid (Game g) {
-		Player thePlayer = this.movePiece.getPlayer();
+		Player thePlayer = g.getGameBoard().getPlayers()[this.movePiece[2]];
 		Board theBoard = g.getGameBoard();
 
 		Move[] validMoves = thePlayer.getAllMoves(g);

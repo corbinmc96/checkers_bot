@@ -43,17 +43,6 @@ public abstract class Player {
 		return this.color;
 	}
 
-	public Piece[] getPlayerPieces (Board b) {
-		Piece[] result = new Piece[b.totalPiecesLeft(this)];
-		int i = 0;
-		for (Piece p : b.getPiecesOnBoard()) {
-			if (p.getPlayer() == this) {
-				result[i++] = p;
-			}
-		}
-		return result;
-	}
-
 	public String getXO() {
 		if (this.xo ==null) {
 			return " ";
@@ -70,17 +59,18 @@ public abstract class Player {
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
-		myMove.getMovePiece().setLocation(myMove.getDestination());
-		if (myMove.getMovePiece().getPlayer().getIsOnZeroSide()) {
-			if (myMove.getMovePiece().getLocation()[1]==7) {
-				myMove.getMovePiece().setIsKing(true);
+		myMove.getMovePiece()[0] = myMove.getDestination()[0];
+		myMove.getMovePiece()[1] = myMove.getDestination()[1];
+		if (theBoard.getPlayers()[myMove.getMovePiece()[2]].getIsOnZeroSide()) {
+			if (myMove.getMovePiece()[1]==7) {
+				myMove.getMovePiece()[3]=1;
 			}
 		} else {
-			if (myMove.getMovePiece().getLocation()[1]==0) {
-				myMove.getMovePiece().setIsKing(true);
+			if (myMove.getMovePiece()[1]==0) {
+				myMove.getMovePiece()[3]=1;
 			}
 		}
-		for (Piece deadPiece : myMove.calculatePiecesToJump()) {
+		for (int[] deadPiece : myMove.calculatePiecesToJump(theBoard)) {
 			theBoard.removePiece(deadPiece);
 		}
 	}
@@ -100,9 +90,11 @@ public abstract class Player {
 		boolean canJump = false;
 
 		//iterates over each of the player's pieces
-		for (Piece playerPiece : this.getPlayerPieces(g.getGameBoard())) {
+		for (int[] playerPiece : g.getGameBoard().getPlayerPieces(this)) {
+			if (playerPiece.length!=4) System.out.println(playerPiece);
+
 			//iterates over all of that piece's moves
-			for (Move pieceMove : playerPiece.getMovesOfPiece()) {
+			for (Move pieceMove : g.getGameBoard().getMovesOfPiece(playerPiece)) {
 				//adds each move to the return ArrayList
 				result.add(pieceMove);
 				if (g.getIsOfficialVersion() && pieceMove.getJumpsContained()>0) {

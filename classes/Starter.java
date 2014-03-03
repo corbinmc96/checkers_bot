@@ -1,7 +1,7 @@
 public class Starter {
 
 	public static void main(String[] args) {
-		Game theGame = new Game(new SimPlayer("x",true,new AaronAI()), new Human("o",false,new AaronAI()), false);
+		Game theGame = new Game(new SimPlayer("x",true,new MultithreadedAI()), new SimPlayer("o",false,new MultithreadedAI()), false);
 		Player winner = theGame.play();
 		if (winner == null) {
 			System.out.println("TIE");

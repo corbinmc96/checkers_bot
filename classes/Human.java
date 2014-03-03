@@ -143,7 +143,7 @@ public class Human extends Player {
 							allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
 						}
 						inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
-						if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid(g)) {
+						if (inputtedMove.getMovePiece()!=null && this.getBoard().getPlayers()[inputtedMove.getMovePiece()[2]]==this && inputtedMove.calculateIsValid(g)) {
 							moveEntered = true;
 						}
 					}

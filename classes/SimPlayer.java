@@ -35,9 +35,9 @@ public class SimPlayer extends Player {
 			//drops the piece
 			this.getRobot().dropPiece();
 			//iterates over all jumped pieces
-			for (Piece deadPiece : myMove.calculatePiecesToJump()) {
+			for (int[] deadPiece : myMove.calculatePiecesToJump(this.getBoard())) {
 				//move arm over the piece that was jumped
-				this.getRobot().moveToXY(deadPiece.getLocation());
+				this.getRobot().moveToXY(new int[] {deadPiece[0], deadPiece[1]});
 				//picks up jumped piece
 				this.getRobot().pickUpPiece();
 				//moves arm over drop point for dead pieces
