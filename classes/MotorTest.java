@@ -6,7 +6,7 @@ public class MotorTest {
 	private static int drawnSelectionPosition = -1;
 	private static int drawnRotationSpeed = -1;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		int currentMotorIndex = 0;
 		int currentMotorSpeed = 0;
 		int selectionPosition = 0;
@@ -17,7 +17,7 @@ public class MotorTest {
 					Motor.getInstance(currentMotorIndex).stop();
 
 					while (Button.ESCAPE.isDown()) {
-						Button.waitForAnyEvent(10000000);
+						//pass
 					}
 				} else {
 					break;
@@ -28,24 +28,24 @@ public class MotorTest {
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 					
 					while (Button.RIGHT.isDown()) {
-						Button.waitForAnyEvent(10000000);
+						//pass
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed+1)%10000000;
+					currentMotorSpeed = (currentMotorSpeed+1)%1000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
-					if (Button.waitForAnyEvent(700)==0) {
-						while (Button.waitForAnyEvent(50)==0) {
-							currentMotorSpeed = (currentMotorSpeed+1)%10000000;
-							Motor.A.setSpeed(currentMotorSpeed);
-							Motor.B.setSpeed(currentMotorSpeed);
-							Motor.C.setSpeed(currentMotorSpeed);
-							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
-						}
+					Thread.sleep(700);
+					while (Button.RIGHT.isDown()) {
+						currentMotorSpeed = (currentMotorSpeed+1)%1000;
+						Motor.A.setSpeed(currentMotorSpeed);
+						Motor.B.setSpeed(currentMotorSpeed);
+						Motor.C.setSpeed(currentMotorSpeed);
+						updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
+						Thread.sleep(50);
 					}
 
 				} else {
@@ -57,24 +57,24 @@ public class MotorTest {
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					while (Button.LEFT.isDown()) {
-						Button.waitForAnyEvent(10000000);
+						//pass
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
+					currentMotorSpeed = (currentMotorSpeed+999)%1000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
-					if (Button.waitForAnyEvent(700)==0) {
-						while (Button.waitForAnyEvent(50)==0) {
-							currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
-							Motor.A.setSpeed(currentMotorSpeed);
-							Motor.B.setSpeed(currentMotorSpeed);
-							Motor.C.setSpeed(currentMotorSpeed);
-							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
-						}
+					Thread.sleep(700);
+					while (Button.RIGHT.isDown()) {
+						currentMotorSpeed = (currentMotorSpeed+999)%1000;
+						Motor.A.setSpeed(currentMotorSpeed);
+						Motor.B.setSpeed(currentMotorSpeed);
+						Motor.C.setSpeed(currentMotorSpeed);
+						updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
+						Thread.sleep(50);
 					}
 
 				} else {
@@ -85,7 +85,7 @@ public class MotorTest {
 				updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 				while (Button.ENTER.isDown()) {
-					Button.waitForAnyEvent(10000000);
+					//pass
 				}
 			}
 		}
@@ -107,6 +107,7 @@ public class MotorTest {
 		}
 
 		if (MotorTest.drawnMotorSpeed!=currentMotorSpeed) {
+			LCD.drawString("     ", 0, 1);
 			LCD.drawInt(currentMotorSpeed, 0, 1);
 
 			MotorTest.drawnMotorSpeed = currentMotorSpeed;
@@ -116,7 +117,7 @@ public class MotorTest {
 
 		if (MotorTest.drawnRotationSpeed!=Motor.getInstance(motorIndex).getRotationSpeed()) {
 			LCD.drawString("Actual speed:", 0, 4);
-			LCD.drawString("     ", 0, 5);
+			LCD.drawString("      ", 0, 5);
 			LCD.drawInt(Motor.getInstance(motorIndex).getRotationSpeed(), 0, 5);
 
 			MotorTest.drawnRotationSpeed = Motor.getInstance(motorIndex).getRotationSpeed();
