@@ -1,10 +1,13 @@
 import lejos.nxt.*;
+import lejos.nxt.remote.*;
 
 public class MotorTest {
 	private static int drawnMotorIndex = -1;
 	private static int drawnMotorSpeed = -1;
 	private static int drawnSelectionPosition = -1;
 	private static int drawnRotationSpeed = -1;
+
+	private static RemoteMotor[] motors = new RemoteMotor[] {Motor.A, Motor.B, Motor.C};
 
 	public static void main(String[] args) throws InterruptedException {
 		int currentMotorIndex = 0;
@@ -13,8 +16,8 @@ public class MotorTest {
 		while (true) {
 			updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 			if (Button.ESCAPE.isDown()) {
-				if (Motor.getInstance(currentMotorIndex).isMoving()) {
-					Motor.getInstance(currentMotorIndex).stop();
+				if (MotorTest.motors[currentMotorIndex].isMoving()) {
+					MotorTest.motors[currentMotorIndex].stop();
 
 					while (Button.ESCAPE.isDown()) {
 						//pass
@@ -49,7 +52,7 @@ public class MotorTest {
 					}
 
 				} else {
-					Motor.getInstance(currentMotorIndex).forward();
+					MotorTest.motors[currentMotorIndex].forward();
 				}
 			} else if (Button.LEFT.isDown()) {
 				if (selectionPosition==0) {
@@ -78,7 +81,7 @@ public class MotorTest {
 					}
 
 				} else {
-					Motor.getInstance(currentMotorIndex).backward();
+					MotorTest.motors[currentMotorIndex].backward();
 				}
 			} else if (Button.ENTER.isDown()) {
 				selectionPosition = (selectionPosition+1)%3;
@@ -115,12 +118,12 @@ public class MotorTest {
 
 		LCD.drawString("Run", 0, 2);
 
-		if (MotorTest.drawnRotationSpeed!=Motor.getInstance(motorIndex).getRotationSpeed()) {
+		if (MotorTest.drawnRotationSpeed!=MotorTest.motors[motorIndex].getRotationSpeed()) {
 			LCD.drawString("Actual speed:", 0, 4);
 			LCD.drawString("      ", 0, 5);
-			LCD.drawInt(Motor.getInstance(motorIndex).getRotationSpeed(), 0, 5);
+			LCD.drawInt(MotorTest.motors[motorIndex].getRotationSpeed(), 0, 5);
 
-			MotorTest.drawnRotationSpeed = Motor.getInstance(motorIndex).getRotationSpeed();
+			MotorTest.drawnRotationSpeed = MotorTest.motors[motorIndex].getRotationSpeed();
 		}
 
 		if (MotorTest.drawnSelectionPosition!=selectionPosition) {
