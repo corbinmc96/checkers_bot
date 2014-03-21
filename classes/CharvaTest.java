@@ -4,7 +4,9 @@ import charvax.swing.*;
 import charvax.swing.border.*;
 import charvax.swing.event.*;
 
-public class CharvaTest extends JFrame implements ActionListener, ThreadListener {
+import java.io.*;;
+
+public class CharvaTest extends JFrame implements ActionListener {
 
 	public static final String COLOR_ONE = "Red";
 	public static final String COLOR_TWO = "Black";
@@ -18,7 +20,9 @@ public class CharvaTest extends JFrame implements ActionListener, ThreadListener
 
 	private JFrame _resetWindow;
 
-	private Thread _t;
+	private Process _subProcess;
+	private Thread _listenerThread;
+	private JPanel _textPanel;
 
 	public CharvaTest() {
 		super();
@@ -65,7 +69,7 @@ public class CharvaTest extends JFrame implements ActionListener, ThreadListener
 			public void valueChanged(ListSelectionEvent evt_) {
 				robotCL.processKeyEvent(new KeyEvent(humanCL.getSelectedItem()==CharvaTest.COLOR_ONE ? KeyEvent.VK_RIGHT : KeyEvent.VK_LEFT,
 													 KeyEvent.KEY_TYPED,
-													 humanCL));
+													 robotCL));
 			}
 		});
 
@@ -118,16 +122,23 @@ public class CharvaTest extends JFrame implements ActionListener, ThreadListener
 	public void actionPerformed(ActionEvent ae_) {
 		String eventName = ae_.getActionCommand();
 		if (eventName.equals("PLAY")) {
-			this._t = new Thread(new Starter(new String[] {
-											  this._humanColorTable.getSelectedItem(),
-											  this._robotColorTable.getSelectedItem(),
-											  this._difficultyBox.getSelectedItem(),
-											  this._rulesBox.getSelectedItem()
-											  },
-											  this
-			));
-			this._t.start();
+			try {
+				// CREATES STARTER SUBPROCESS
+				ProcessBuilder pb = new ProcessBuilder(new String[] {
+													  "java",
+													  this._humanColorTable.getSelectedItem(),
+													  this._robotColorTable.getSelectedItem(),
+													  this._difficultyBox.getSelectedItem(),
+													  this._rulesBox.getSelectedItem()
+				});
+				pb.redirectErrorStream(true);
+				this._subProcess = pb.start();
+			} catch (IOException e) {
+				System.err.println("Subprocess creation failed with IOException");
+				return;
+			}
 
+			// SETS UP NEW UI ELEMENTS
 			if (this._resetWindow == null) {
 				this._resetWindow = new JFrame();
 				this._resetWindow.setForeground(Color.green);
@@ -138,21 +149,59 @@ public class CharvaTest extends JFrame implements ActionListener, ThreadListener
 				resetButton.addActionListener(this);
 				resetPanel.add(resetButton, BorderLayout.CENTER);
 				this._resetWindow.getContentPane().setLayout(new GridBagLayout());
-				this._resetWindow.getContentPane().add(resetPanel, new GridBagConstraints());
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.gridy++;
+				this._resetWindow.getContentPane().add(resetPanel, gbc);
 				this._resetWindow.setLocation(0, 0);
 				this._resetWindow.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+
+				this._textPanel = new JPanel();
+				gbc.gridy--;
+				this._resetWindow.getContentPane().add(this._textPanel, gbc);
 			}
 
 			this._resetWindow.show();
 
+			// STARTS LISTENER THREAD
+			this._listenerThread = new ListenerThread(this._subProcess, this._textPanel);
+			this._listenerThread.start();
+
 		} else if (eventName.equals("RESET GAME")) {
-			this._t.interrupt();
+			if (this._listenerThread != null)
+				this._listenerThread.interrupt();
+			this._subProcess.destroy();
 			this._resetWindow.hide();
 		}
 	}
 
-	public void onThreadCompletion() {
-		this.actionPerformed(new ActionEvent(this, "RESET GAME"));
+	private class ListenerThread extends Thread {
+		private Process _process;
+		private JTextArea _textArea;
+
+		public ListenerThread(Process p, JPanel outputArea) {
+			this._process = p;
+
+			this._textArea = new JTextArea();
+			this._textArea.setEditable(false);
+			JScrollPane scrollPane = new JScrollPane(this._textArea);
+			scrollPane.setViewportBorder(new LineBorder(Color.white));
+
+			outputArea.add(scrollPane);
+		}
+
+		public void run() {
+			InputStream input = this._process.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(input));
+			try {
+				for (String line; (line = br.readLine()) != null;) {
+					this._textArea.append(line + "\n");
+				}
+			} catch (IOException e) {
+				//pass
+			}
+			EventQueue queue = Toolkit.getDefaultToolkit().getSystemEventQueue();
+			queue.postEvent(new ActionEvent(new JButton(), "RESET GAME"));
+		}
 	}
 
 	private class JSideList extends JComponent /*implements FocusListener*/ {
