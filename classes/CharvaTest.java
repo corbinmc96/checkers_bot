@@ -48,14 +48,14 @@ public class CharvaTest extends JFrame implements ActionListener {
 
 		JPanel humanColorBox = new JPanel();
 		humanColorBox.setBorder(new TitledBorder("Human Color"));
-		this._humanColorTable = new JSideList(new String[] {CharvaTest.COLOR_ONE, CharvaTest.COLOR_TWO}, 0, 3);
+		this._humanColorTable = new JSideList(new String[] {CharvaTest.COLOR_ONE, CharvaTest.COLOR_TWO}, 0, 3, Color.cyan);
 		this._humanColorTable.setBorder(new EmptyBorder(1, 2, 1, 2));
 		humanColorBox.add(this._humanColorTable);
 		colorsPanel.add(humanColorBox);
 
 		JPanel robotColorBox = new JPanel();
 		robotColorBox.setBorder(new TitledBorder("Robot Color"));
-		this._robotColorTable = new JSideList(new String[] {CharvaTest.COLOR_ONE, CharvaTest.COLOR_TWO}, 1, 3);
+		this._robotColorTable = new JSideList(new String[] {CharvaTest.COLOR_ONE, CharvaTest.COLOR_TWO}, 1, 3, Color.cyan);
 		this._robotColorTable.setBorder(new EmptyBorder(1, 2, 1, 2));
 		this._robotColorTable.setEnabled(false);
 		robotColorBox.add(this._robotColorTable);
@@ -79,13 +79,13 @@ public class CharvaTest extends JFrame implements ActionListener {
 		for (int i = 0; i < MAX_DIFFICULTY; i++) {
 			numList[i] = String.valueOf(i+1);
 		}
-		this._difficultyBox = new JSideList(numList, 4, 3);
+		this._difficultyBox = new JSideList(numList, 4, 3, Color.cyan);
 		this._difficultyBox.setBorder(new CompoundBorder(new TitledBorder("Choose the Difficulty"), new EmptyBorder(1, 3, 1, 3)));
 		this._centerPanel.add(this._difficultyBox, gbc);
 
 		// CREATES RULE TYPE OPTION BOX
 		gbc.gridy++;
-		this._rulesBox = new JSideList(new String[] {"Official", "Unofficial"}, 1, 4);
+		this._rulesBox = new JSideList(new String[] {"Official", "Unofficial"}, 1, 4, Color.cyan);
 		this._rulesBox.setBorder(new CompoundBorder(new TitledBorder("Choose the Rule Type"), new EmptyBorder(1, 3, 1, 3)));
 		this._centerPanel.add(this._rulesBox, gbc);
 
@@ -206,19 +206,23 @@ public class CharvaTest extends JFrame implements ActionListener {
 	}
 
 	private class JSideList extends JComponent /*implements FocusListener*/ {
+
 		private String[] _items;
 		private int _currentItem;
 		// private int _selectedIndex;
 		private int _interimSpace;
 		private DefaultListSelectionModel _model;
+		private Color _highlightColor;
 
-		public JSideList(String[] items, int initialSelection, int interimSpace) {
+		public JSideList(String[] items, int initialSelection, int interimSpace, Color highlightColor) {
 			this._items = items;
 			this._currentItem = ((initialSelection>=0 ? initialSelection : 0)<items.length ? (initialSelection>=0 ? initialSelection : 0) : items.length-1);
 			// this._selectedIndex = 0;
 			this._interimSpace = interimSpace;
 			this._model = new DefaultListSelectionModel();
 			this._model.setSelectionInterval(this._currentItem, this._currentItem);
+
+			this._highlightColor = highlightColor;
 
 			// this.addFocusListener(this);
 		}
@@ -283,10 +287,16 @@ public class CharvaTest extends JFrame implements ActionListener {
 				// else
 					attribute = 0;
 
-				if (i == this._currentItem)
+				if (i == this._currentItem) {
 					attribute += Toolkit.A_BOLD;
-
-				term.addString(this._items[i], attribute, colorpair);
+					Color prevColor = this.getForeground();
+					this.setForeground(this._highlightColor);
+					int highlightColorPair = this.getCursesColor();
+					term.addString(this._items[i], attribute, highlightColorPair);
+					this.setForeground(prevColor);
+				} else {
+					term.addString(this._items[i], attribute, colorpair);
+				}
 
 				columns += this._items[i].length();
 			}
