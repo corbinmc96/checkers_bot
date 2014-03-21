@@ -8,8 +8,8 @@ import java.io.*;;
 
 public class CharvaTest extends JFrame implements ActionListener {
 
-	public static final String COLOR_ONE = "Red";
-	public static final String COLOR_TWO = "Black";
+	public static final String COLOR_ONE = "x";
+	public static final String COLOR_TWO = "o";
 	public static final int MAX_DIFFICULTY = 10;
 
 	private JPanel _centerPanel;
@@ -126,6 +126,7 @@ public class CharvaTest extends JFrame implements ActionListener {
 				// CREATES STARTER SUBPROCESS
 				ProcessBuilder pb = new ProcessBuilder(new String[] {
 													  "java",
+													  "Starter",
 													  this._humanColorTable.getSelectedItem(),
 													  this._robotColorTable.getSelectedItem(),
 													  this._difficultyBox.getSelectedItem(),
@@ -160,11 +161,11 @@ public class CharvaTest extends JFrame implements ActionListener {
 				this._resetWindow.getContentPane().add(this._textPanel, gbc);
 			}
 
-			this._resetWindow.show();
-
 			// STARTS LISTENER THREAD
 			this._listenerThread = new ListenerThread(this._subProcess, this._textPanel);
 			this._listenerThread.start();
+			
+			this._resetWindow.show();
 
 		} else if (eventName.equals("RESET GAME")) {
 			if (this._listenerThread != null)
@@ -181,7 +182,7 @@ public class CharvaTest extends JFrame implements ActionListener {
 		public ListenerThread(Process p, JPanel outputArea) {
 			this._process = p;
 
-			this._textArea = new JTextArea();
+			this._textArea = new JTextArea("", 15, 20);
 			this._textArea.setEditable(false);
 			JScrollPane scrollPane = new JScrollPane(this._textArea);
 			scrollPane.setViewportBorder(new LineBorder(Color.white));
