@@ -174,10 +174,15 @@ public class AaronAI extends AIEngine {
 		return result;
 	}
 
-	public String createStringRepresentation(Game g, Player p) {
-		StringBuilder result = new StringBuilder("0000000000000000000000000000000000000000000000000000000000000000");
+	public String createStringRepresentation(Game g, Player p, Move m) {
+		StringBuilder result = new StringBuilder();
 		for (Piece p : g.getGameBoard().getPiecesOnBoard()) {
-			if ()
+			result.append(p.toString());
 		}
-	}
+		stringOfMove = m.toString();
+		result.append(stringOfMove);
+		result.append(length(stringOfMove));
+
+		return result.toString();
+	} 
 }
