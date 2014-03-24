@@ -122,7 +122,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 		if (eventName.equals("PLAY")) {
 			if (this._resetWindow == null)
 				this._resetWindow = new ProcessDialog(this);
-			this._resetWindow.startProcess(new String[] {"java",
+			this._resetWindow.startProcess(new String[] {"nxjpc",
 													  	 "Starter",
 														 this._humanColorTable.getSelectedItem(),
 														 this._robotColorTable.getSelectedItem(),

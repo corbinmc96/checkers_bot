@@ -7,9 +7,11 @@ if [ "$1" = "tui" ]; then
 	else
 		export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${2}/c/lib"
 	fi
+	nxjpcc \
+		Starter.java && \
 	javac \
 		-cp ".:${2}:${2}/java/classes:${2}/java/lib/commons-logging.jar:${2}/java/lib/log4j-1.2.8.jar" \
-		TUIStarter.java Starter.java && \
+		TUIStarter.java && \
 	java -Dcharva.color=1 \
 		-cp ".:${2}:${2}/java/classes:${2}/java/lib/commons-logging.jar:${2}/java/lib/log4j-1.2.8.jar" \
 		TUIStarter 2> charva.log
