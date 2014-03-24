@@ -85,4 +85,13 @@ public class Move {
 		}
 		return false;
 	}
+
+	public String toString() {
+		result = int[length(waypoints)+1]
+		for (i=0; i==length(waypoints); i++) {
+			result[i*2] = waypoints[i][0];
+			result[i*2+1] = waypoints[i][1];
+		}
+		return result;
+	}
 }

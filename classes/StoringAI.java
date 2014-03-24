@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class AaronAI extends AIEngine {
+public class StoringAI extends AIEngine {
 
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
@@ -174,15 +174,37 @@ public class AaronAI extends AIEngine {
 		return result;
 	}
 
-	public String createStringRepresentation(Game g, Player p, Move m) {
+	public String createStringRepresentation(Game g, Player p) {
 		StringBuilder result = new StringBuilder();
+		String[] allPieces = new String[length(g.getGameBoard.getPiecesOnBoard)];
 		for (Piece p : g.getGameBoard().getPiecesOnBoard()) {
-			result.append(p.toString());
+			allPieces.append(p.makeString());
 		}
-		stringOfMove = m.toString();
-		result.append(stringOfMove);
-		result.append(length(stringOfMove));
+		Array.sort(allPieces);
+		for (String p : allPieces) {
+			result.append(p);
+		}
 
 		return result.toString();
 	} 
+
+	public String createStringRepresentation(Game g, Player p, Move m) {
+		StringBuilder result = new StringBuilder();
+		String[] allPieces = new String[length(g.getGameBoard.getPiecesOnBoard)];
+		for (Piece p : g.getGameBoard().getPiecesOnBoard()) {
+			allPieces.append(p.makeString());
+		}
+		Array.sort(allPieces);
+		for (String p : allPieces) {
+			result.append(p);
+		}
+		result.append("="+m.toString());
+
+		return result.toString();
+	} 
+
+	public String[] splitRepresentation(String s) {
+		int location = s.indexOf("=");
+		return [s.substring(0,location), s.substring(location+1)];
+	}
 }

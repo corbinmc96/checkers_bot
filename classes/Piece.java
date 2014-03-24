@@ -153,4 +153,10 @@ public class Piece {
 		result.setIsKing(this.isKing);
 		return result;
 	}
+
+	public String makeString(p Player) {
+		int pIsPlayersPiece = (p==this.owningPlayer)? 1:0;
+		int pIsKing = (this.isKing)? 1:0;
+		return this.location[0].toString() + this.location[1].toString() + pIsPlayersPiece + pIsKing;
+	}
 }
