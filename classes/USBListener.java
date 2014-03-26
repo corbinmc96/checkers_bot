@@ -5,6 +5,6 @@ public class USBListener {
 	public static void main(String[] args) {
 		NXTConnection connection = USB.waitForConnection();
 		System.out.println("connected");
-		Button.waitForAnyEvent(2000);
+		Button.waitForAnyEvent(1000000000);
 	}
 }
