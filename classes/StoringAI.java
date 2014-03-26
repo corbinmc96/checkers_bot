@@ -2,7 +2,16 @@ import java.util.Arrays;
 
 public class StoringAI extends AIEngine {
 
+	private final fileManager = new FileHandler("./values.savedata");
+
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
+		currentScenario = createStringRepresentation(g,p);
+		for (String storedScenario : fileManager.getAllLines()) {
+			if (splitRepresentation(storedScenario)[0]==currentScenario) {
+				//working here -- Corbin
+			}
+		}
+
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
 
