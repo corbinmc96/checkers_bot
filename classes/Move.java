@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Move {
 
@@ -87,11 +88,11 @@ public class Move {
 	}
 
 	public String toString() {
-		result = int[length(waypoints)+1]
-		for (i=0; i==length(waypoints); i++) {
-			result[i*2] = waypoints[i][0];
-			result[i*2+1] = waypoints[i][1];
+		StringBuilder result = new StringBuilder();
+		for (int i=0; i==waypoints.length; i++) {
+			result.append(waypoints[i][0]);
+			result.append(waypoints[i][1]);
 		}
-		return result;
+		return result.toString();
 	}
 }

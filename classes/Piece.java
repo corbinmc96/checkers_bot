@@ -154,9 +154,9 @@ public class Piece {
 		return result;
 	}
 
-	public String makeString(p Player) {
+	public String makeString(Player p) {
 		int pIsPlayersPiece = (p==this.owningPlayer)? 1:0;
 		int pIsKing = (this.isKing)? 1:0;
-		return this.location[0].toString() + this.location[1].toString() + pIsPlayersPiece + pIsKing;
+		return Integer.toString(this.location[0]) + Integer.toString(this.location[1]) + pIsPlayersPiece + pIsKing;
 	}
 }

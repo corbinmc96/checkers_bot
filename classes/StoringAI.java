@@ -1,14 +1,21 @@
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class StoringAI extends AIEngine {
 
-	private final fileManager = new FileHandler("./values.savedata");
+	private final FileHandler fileManager = new FileHandler("./values.savedata");
 
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
-		currentScenario = createStringRepresentation(g,p);
+		String currentScenario = createStringRepresentation(g,p);
 		for (String storedScenario : fileManager.getAllLines()) {
 			if (splitRepresentation(storedScenario)[0]==currentScenario) {
-				//working here -- Corbin
+				String moveString = splitRepresentation(storedScenario)[1];
+				Piece movePiece = g.getGameBoard().getPieceAtLocation(new int[]{Character.getNumericValue(moveString.charAt(0)),Character.getNumericValue(moveString.charAt(0))});
+				int[][] waypoints = new int[moveString.length()/2][];
+				for (int i=0; i==waypoints.length; i++) {
+					waypoints[i] = new int[]{Integer.parseInt(moveString.substring(i*2,i*2+1)), Integer.parseInt(moveString.substring(i*2+1,i*2+2))};
+				}
+				return new Move[]{new Move(movePiece,waypoints)};
 			}
 		}
 
@@ -185,13 +192,15 @@ public class StoringAI extends AIEngine {
 
 	public String createStringRepresentation(Game g, Player p) {
 		StringBuilder result = new StringBuilder();
-		String[] allPieces = new String[length(g.getGameBoard.getPiecesOnBoard)];
-		for (Piece p : g.getGameBoard().getPiecesOnBoard()) {
-			allPieces.append(p.makeString());
+		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
+			allPieces.add(piece.makeString(p));
 		}
-		Array.sort(allPieces);
-		for (String p : allPieces) {
-			result.append(p);
+		String[] thePieces = new String[allPieces.size()];
+		thePieces = allPieces.toArray(thePieces);
+		Arrays.sort(thePieces);
+		for (String piece : thePieces) {
+			result.append(piece);
 		}
 
 		return result.toString();
@@ -199,13 +208,15 @@ public class StoringAI extends AIEngine {
 
 	public String createStringRepresentation(Game g, Player p, Move m) {
 		StringBuilder result = new StringBuilder();
-		String[] allPieces = new String[length(g.getGameBoard.getPiecesOnBoard)];
-		for (Piece p : g.getGameBoard().getPiecesOnBoard()) {
-			allPieces.append(p.makeString());
+		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
+			allPieces.add(piece.makeString(p));
 		}
-		Array.sort(allPieces);
-		for (String p : allPieces) {
-			result.append(p);
+		String[] thePieces = new String[allPieces.size()];
+		thePieces = allPieces.toArray(thePieces);
+		Arrays.sort(thePieces);
+		for (String piece : thePieces) {
+			result.append(piece);
 		}
 		result.append("="+m.toString());
 
@@ -214,6 +225,6 @@ public class StoringAI extends AIEngine {
 
 	public String[] splitRepresentation(String s) {
 		int location = s.indexOf("=");
-		return [s.substring(0,location), s.substring(location+1)];
+		return new String[]{s.substring(0,location), s.substring(location+1)};
 	}
 }

@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.Arrays;
+import java.util.ArrayList;
+
 
 public class FileHandler {
 
@@ -11,18 +13,21 @@ public class FileHandler {
 	public FileHandler(String path) {
 		filePath = path;
 		br = new BufferedReader(new FileReader(path));
-		while ((String line = br.readLine()) != null) {
-			if (line[-1]=='/n') {
-				fileContents.append(line.substring(0,length(line)-1));
+		String line;
+		while ((line = br.readLine()) != null) {
+			if (line.substring(-1)=="/n") {
+				fileContents.add(line.substring(0,line.length()-1));
 			} else {
-				fileContents.append(line);
+				fileContents.add(line);
 			}
 		}
 		bw = new BufferedWriter(new FileWriter(path));
 	}
 
 	public String[] getAllLines() {
-		return fileContents;
+		String[] result = new String[fileContents.size()];
+		result = fileContents.toArray(result);
+		return result;
 	}
 
 	public void addLine(String line) {
