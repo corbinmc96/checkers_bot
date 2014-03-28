@@ -12,7 +12,7 @@ public class StoringAI extends AIEngine {
 				String moveString = splitRepresentation(storedScenario)[1];
 				Piece movePiece = g.getGameBoard().getPieceAtLocation(new int[]{Character.getNumericValue(moveString.charAt(0)),Character.getNumericValue(moveString.charAt(0))});
 				int[][] waypoints = new int[moveString.length()/2][];
-				for (int i=0; i==waypoints.length; i++) {
+				for (int i=0; i<waypoints.length; i++) {
 					waypoints[i] = new int[]{Integer.parseInt(moveString.substring(i*2,i*2+1)), Integer.parseInt(moveString.substring(i*2+1,i*2+2))};
 				}
 				return new Move[]{new Move(movePiece,waypoints)};
@@ -63,6 +63,9 @@ public class StoringAI extends AIEngine {
 		// }
 		// System.out.print("" + recursionDepth + " ");
 		// System.out.println(Arrays.toString(boardValuesSorted));
+
+		fileManager.addLine(this.createStringRepresentation(g,p,sortedMoves[0]));
+
 
 		return sortedMoves;
 	}

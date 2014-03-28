@@ -10,18 +10,21 @@ public class FileHandler {
 	private BufferedReader br;
 	private BufferedWriter bw;
 
-	public FileHandler(String path) {
-		filePath = path;
-		br = new BufferedReader(new FileReader(path));
-		String line;
-		while ((line = br.readLine()) != null) {
-			if (line.substring(-1)=="/n") {
-				fileContents.add(line.substring(0,line.length()-1));
-			} else {
+	public FileHandler(String path) { 
+		try{
+			filePath = path;
+			br = new BufferedReader(new FileReader(path));
+			String line;
+			while ((line = br.readLine()) != null) {
 				fileContents.add(line);
 			}
+			br.close();
+		} catch (FileNotFoundException ex1) {
+			System.out.println(ex1.toString());
+			System.out.print("no file");
+		} catch (IOException ex2) {
+			System.out.println(ex2.toString());
 		}
-		bw = new BufferedWriter(new FileWriter(path));
 	}
 
 	public String[] getAllLines() {
@@ -31,8 +34,14 @@ public class FileHandler {
 	}
 
 	public void addLine(String line) {
-		bw.write(line);
-		bw.newLine();
+		try {
+			bw = new BufferedWriter(new FileWriter(this.filePath, true));
+			bw.write(line);
+			bw.newLine();
+			bw.close();
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+		}
 	}
 
 }
