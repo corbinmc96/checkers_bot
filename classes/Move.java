@@ -77,9 +77,9 @@ public class Move {
 				continue;
 			}
 
-			for (int waypoint = 0; waypoint<validMove.getJumpsContained()+1; waypoint++) {
+			for (int waypoint = 0; waypoint<validMove.getJumpsContained()+2; waypoint++) {
 				if (this.waypoints[waypoint][0]!=validMove.getWaypoints()[waypoint][0] || this.waypoints[waypoint][1]!=validMove.getWaypoints()[waypoint][1]) {
-					continue;
+					return false;
 				}
 			}
 			return true;
