@@ -228,6 +228,8 @@ public class StoringAI extends AIEngine {
 
 	public String[] splitRepresentation(String s) {
 		int location = s.indexOf("=");
+		System.out.print(s+"\n");
+		System.out.print(location+"\n");
 		return new String[]{s.substring(0,location), s.substring(location+1)};
 	}
 }
