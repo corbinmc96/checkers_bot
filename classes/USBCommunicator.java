@@ -15,6 +15,11 @@ public class USBCommunicator {
 		Motor.A.forward();
 		Thread.sleep(2000);
 		Motor.A.stop();
+
+		Motor.A.rotateTo(90);
+		Thread.sleep(2000);
+		Motor.A.rotateTo(0);
+		
 		System.out.println("done");
 
 		conn.close();
