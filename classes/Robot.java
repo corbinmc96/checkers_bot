@@ -1,11 +1,22 @@
+import lejos.pc.comm.*;
+import lejos.nxt.remote.NXTCommand;
+import java.io.IOException;
+
 public class Robot {
-	
+
+	private NXTConnector conn;
 	private int[] armLocation;
 	private boolean isHoldingPiece;
-	private final int[] getDeadLocation; // need to add location here
+	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
-	public int[] getDeadLocation() {
-		return null;
+	public Robot() throws NXTCommException {
+		this.conn = new NXTConnector();
+		this.conn.connectTo(NXTComm.LCP);
+		NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
+	}
+
+	public void disconnect() throws IOException {
+		this.conn.close();
 	}
 
 	public int[] getArmLocation() {
