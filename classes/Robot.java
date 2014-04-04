@@ -3,6 +3,7 @@ public class Robot {
 	private int[] armLocation;
 	private boolean isHoldingPiece;
 	private final int[] getDeadLocation; // need to add location here
+	private int[] location
 
 	public int[] getDeadLocation() {
 		return null;
@@ -16,35 +17,50 @@ public class Robot {
 		return false;
 	}
 
+	public int[] location
+		write float v;
+
 	public void moveToXY(int[] newXY) {
 
 	}
 	
 	public void resetPosition() {
-		//implementation
+		Motor.C.rotateTo (DeadLocation-x)
 	}
 	
 	public String examineLocation(int[] location) {
+		while(SensorValue(lightSensor)>40)
+			motor[MotorA] = 0
+			motor[MotorB] = 0
 		return null;
 	}
 
 	public void pickUpPiece() {
-		Motor.C.rotateTo( 180);
-		Motor.C.rotateTo( 270);
+		Motor.C.rotateTo( + 180);
+		Motor.C.rotateTo( + 270);
 		(boolean) isRotating();
-		Motor.C.rotateTo( 180);
+		Motor.C.rotateTo( + 180);
 		(boolean) isRotating();
 	}
 
 	public void dropPiece() {
-		Motor.C.rotateTo( 90);
+		Motor.C.rotateTo( + 90);
 		(boolean) isRotating();
-		Motor.C.rotateTo( 180);
+		Motor.C.rotateTo( + 180);
 	}
 
 	public void waitForSensorPress() {
-		TouchSensor(SensorPort port);
-		boolean isPressed();
-		return;
-	}
+		
+   public class TouchTest {
+	public static void main (String[] args) Throws Exception{
+		TouchSensor touch - new TouchSensor( SensorPort.S1)
+		while (!touch.isPressed()) {
+			return True
+	}	
 }
+	}
+
+	
+}
+
+
