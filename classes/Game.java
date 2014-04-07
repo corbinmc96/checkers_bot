@@ -6,7 +6,7 @@ public class Game {
 	private Robot gameRobot;
 	private Player player1;
 	private Player player2;
-	private ArrayList<Move> lastFewMoves;
+	private ArrayList<int[][]> lastFewMoves;
 	private int movesSinceEvent;
 	private int numberOfKings;
 	private boolean isOfficialVersion;
@@ -17,7 +17,7 @@ public class Game {
 		this.player2 = p2;
 		this.player1.setBoard(gameBoard);
 		this.player2.setBoard(gameBoard);
-		this.lastFewMoves = new ArrayList<Move>();
+		this.lastFewMoves = new ArrayList<int[][]>();
 		this.movesSinceEvent = 0;
 		this.numberOfKings = 0;
 		this.isOfficialVersion = isOfficial;
@@ -29,22 +29,17 @@ public class Game {
 	}
 
 	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial) {
+		this(p1, p2, isOfficial);
 		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations, p1kings, p2kings);
-		this.player1 = p1;
-		this.player2 = p2;
 		this.player1.setBoard(this.gameBoard);
 		this.player2.setBoard(this.gameBoard);
-		this.lastFewMoves = new ArrayList<Move>();
-		this.movesSinceEvent = 0;
-		this.numberOfKings = 0;
-		this.isOfficialVersion = isOfficial;
 	}
 	
 	public Game (Game oldG, Move m) {
 		this.player1 = oldG.getPlayers()[0];
 		this.player2 = oldG.getPlayers()[1];
 		this.lastFewMoves = ArraysHelper.asArrayList(oldG.getLastFewMoves());
-		this.lastFewMoves.add(m);
+		this.lastFewMoves.add(m.getWaypoints());
 		if (this.lastFewMoves.size()>12) {
 			this.lastFewMoves.remove(0);
 		}
@@ -54,7 +49,8 @@ public class Game {
 		this.isOfficialVersion = oldG.getIsOfficialVersion();
 
 		this.movesSinceEvent++;
-		if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+		int[][] lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+		if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 			this.movesSinceEvent = 0;
 		}
 		if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
@@ -64,6 +60,7 @@ public class Game {
 	}
 
 	public Player play() {
+		int[][] lastMove;
 		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
 			if (this.lastFewMoves.size()>12) {
@@ -71,7 +68,8 @@ public class Game {
 			}
 
 			this.movesSinceEvent++;
-			if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+			lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+			if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 				this.movesSinceEvent = 0;
 			}
 			if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
@@ -88,7 +86,8 @@ public class Game {
 				}
 
 				this.movesSinceEvent++;
-				if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+				lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+				if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 					this.movesSinceEvent = 0;
 				}
 				if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
