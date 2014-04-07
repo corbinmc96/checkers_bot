@@ -16,6 +16,6 @@ if [ "$1" = "tui" ]; then
 		-cp ".:${2}:${2}/java/classes:${2}/java/lib/commons-logging.jar:${2}/java/lib/log4j-1.2.8.jar" \
 		TUIStarter 2> charva.log
 else
-	javac Starter.java
-	java Starter ${1}
+	nxjpcc Starter.java
+	nxjpc Starter ${1}
 fi

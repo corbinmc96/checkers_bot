@@ -6,7 +6,7 @@ public class Game {
 	private Robot gameRobot;
 	private Player player1;
 	private Player player2;
-	private ArrayList<int[][]> lastFewMoves;
+	private ArrayList<Move> lastFewMoves;
 	private int movesSinceEvent;
 	private int numberOfKings;
 	private boolean isOfficialVersion;
@@ -17,7 +17,7 @@ public class Game {
 		this.player2 = p2;
 		this.player1.setBoard(gameBoard);
 		this.player2.setBoard(gameBoard);
-		this.lastFewMoves = new ArrayList<int[][]>();
+		this.lastFewMoves = new ArrayList<Move>();
 		this.movesSinceEvent = 0;
 		this.numberOfKings = 0;
 		this.isOfficialVersion = isOfficial;
@@ -34,7 +34,7 @@ public class Game {
 		this.player2 = p2;
 		this.player1.setBoard(this.gameBoard);
 		this.player2.setBoard(this.gameBoard);
-		this.lastFewMoves = new ArrayList<int[][]>();
+		this.lastFewMoves = new ArrayList<Move>();
 		this.movesSinceEvent = 0;
 		this.numberOfKings = 0;
 		this.isOfficialVersion = isOfficial;
@@ -44,7 +44,7 @@ public class Game {
 		this.player1 = oldG.getPlayers()[0];
 		this.player2 = oldG.getPlayers()[1];
 		this.lastFewMoves = ArraysHelper.asArrayList(oldG.getLastFewMoves());
-		this.lastFewMoves.add(m.getWaypoints());
+		this.lastFewMoves.add(m);
 		if (this.lastFewMoves.size()>12) {
 			this.lastFewMoves.remove(0);
 		}

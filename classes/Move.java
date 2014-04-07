@@ -77,11 +77,15 @@ public class Move {
 				continue;
 			}
 
-			for (int waypoint = 0; waypoint<validMove.getJumpsContained()+2; waypoint++) {
+			boolean failed = false;
+			for (int waypoint = 0; waypoint<(validMove.getJumpsContained()==0 ? 2 : validMove.getJumpsContained()+1); waypoint++) {
 				if (this.waypoints[waypoint][0]!=validMove.getWaypoints()[waypoint][0] || this.waypoints[waypoint][1]!=validMove.getWaypoints()[waypoint][1]) {
-					return false;
+					failed = true;
+					break;
 				}
 			}
+			if (failed) 
+				continue;
 			return true;
 		}
 		return false;
