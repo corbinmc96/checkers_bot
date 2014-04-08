@@ -50,7 +50,7 @@ public class CorbinAI extends AIEngine {
 		if (unsortedMoves.length == 0) {
 			return (recursionDepth+1)*-36;
 		}
-
+		
 		else {
 			Game[] ga = new Game[unsortedMoves.length];
 			double[] va = new double[unsortedMoves.length];
