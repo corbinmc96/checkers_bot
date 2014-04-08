@@ -10,13 +10,10 @@ public class CorbinAI extends AIEngine {
 		for (int i=0;i<unsortedMoves.length;i++) {
 			ga[i] = new Game(g,unsortedMoves[i]);
 			va[i] = this.minimax(ga[i],recursionDepth-1,true,p);
-			//System.out.println(Arrays.deepToString(unsortedMoves[i].getWaypoints()));
 		}
 		Double[] sortedva = new Double[unsortedMoves.length];
 		for (int i=0;i<unsortedMoves.length;i++) {
 			sortedva[i] = va[i];
-			//logs unsorted move values
-			//System.out.println("                 2:" + Double.toString(va[i]));
 		}
 		Move[] result = new Move[unsortedMoves.length];
 		
@@ -28,10 +25,7 @@ public class CorbinAI extends AIEngine {
 			int index = ArraysHelper.find(va,sortedva[i]);
 			va[index] = 1000000;
 			result[i] = unsortedMoves[index];
-			//System.out.println(Arrays.deepToString(unsortedMoves[index].getWaypoints()));
-			//System.out.println(Arrays.deepToString(unsortedMoves[index].getWaypoints())+"  "+Double.toString(new Board(this.getBoard(),unsortedMoves[index]).calculateValue()));				
 		}			
-		//System.out.println();
 		
 		return result;
 	}
@@ -39,9 +33,11 @@ public class CorbinAI extends AIEngine {
 	private double minimax(Game g, int recursionDepth, boolean isOpponentNode, Player p) {
 	
 		if (recursionDepth == 0) {
-			double value = g.getGameBoard().calculateValue(p);
-			//System.out.println("                0:" + Double.toString(value));
-			return value;
+			return g.getGameBoard().calculateValue(p);
+		}
+
+		if (g.isDraw()) {
+			return 0;
 		}
 		
 		Move[] unsortedMoves;
@@ -55,18 +51,12 @@ public class CorbinAI extends AIEngine {
 			return (recursionDepth+1)*-36;
 		}
 
-		if (g.isDraw()) {
-			return 0;
-		}
-		
-		
 		else {
 			Game[] ga = new Game[unsortedMoves.length];
 			double[] va = new double[unsortedMoves.length];
 			for (int i=0;i<unsortedMoves.length;i++) {
 				ga[i] = new Game(g,unsortedMoves[i]);
 				va[i] = this.minimax(ga[i],recursionDepth-1,!isOpponentNode,p);
-				//System.out.println(Arrays.deepToString(unsortedMoves[i].getWaypoints()));
 
 			}
 			double value;
@@ -87,11 +77,6 @@ public class CorbinAI extends AIEngine {
 					}
 				}
 			}
-			//if (recursionDepth==2) {
-			//	System.out.println("                               2: "+Double.toString(value));
-			//} if (recursionDepth==1) {
-			//	System.out.println("                     1: "+Double.toString(value));
-			//}
 			return value;
 		}
 	}

@@ -44,4 +44,12 @@ public class FileHandler {
 		}
 	}
 
+	public boolean containsLine(String s) {
+		for (String line : fileContents) {
+			if (line == s) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
