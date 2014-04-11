@@ -1,3 +1,5 @@
+// COLLABORATION BETWEEN CORBIN AND AARON
+
 public class Starter {
 
 	public static void main(String[] args) {

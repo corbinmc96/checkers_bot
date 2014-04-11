@@ -1,3 +1,6 @@
+// ALL AARON EXCEPT CORBIN WROTE locationIsInBounds, printBoard, and getDistanceBetweenPieces
+// CORBIN AND AARON COLLABORATED ON calculateValue
+
 import java.util.ArrayList;
 
 public class Board {

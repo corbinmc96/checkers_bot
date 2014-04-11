@@ -1,3 +1,5 @@
+// ALL CORBIN, EXCEPT THAT AARON WROTE copyToBoard
+
 import java.util.ArrayList;
 
 public class Piece {

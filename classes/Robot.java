@@ -1,3 +1,5 @@
+// AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE EVERYTHING ELSE
+
 import lejos.pc.comm.*;
 import lejos.nxt.remote.NXTCommand;
 import java.io.IOException;

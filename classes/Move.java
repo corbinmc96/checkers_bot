@@ -1,3 +1,5 @@
+// ALL CORBIN, AARON CONTRIBUTED SOME TO calculateIsValid
+
 import java.util.ArrayList;
 import java.util.Arrays;
 

@@ -1,3 +1,5 @@
+// ALL CORBIN, AARON CONTRIBUTED TO inputMove
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
