@@ -87,11 +87,13 @@ public class AaronAI extends AIEngine {
 				return (new Board(g.getGameBoard(), moves[0])).calculateValue(p);
 			//if thinking multiple moves ahead, calculate the recursive value
 			} else {
-				if (!testOpponentMoves) {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
-				} else {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.MAX_BOARD_VALUE);
-				}
+				return this.valueOfMoves(
+					new Game(g, moves[0]),
+					p,
+					recursionDepth-1,
+					!testOpponentMoves,
+					(testOpponentMoves ? 1 : -1) * recursionDepth * Board.MAX_BOARD_VALUE
+				);
 			}
 		}
 
