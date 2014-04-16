@@ -7,8 +7,8 @@ public class Board {
 
 	private ArrayList<Piece> piecesOnBoard;
 
-	public static final String color = "black";
-	public static final double maxBoardValue = 36;
+	public static final String COLOR = "black";
+	public static final double MAX_BOARD_VALUE = 36;
 
 	public Board (Player[] players) {
 		this.piecesOnBoard = new ArrayList<Piece>();

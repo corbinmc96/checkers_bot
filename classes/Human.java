@@ -80,7 +80,7 @@ public class Human extends Player {
 						locationValues.add(pointColor);
 					}
 					//breaks and continues to the next move if the square is not empty
-					if (pointColor!=Board.color) {
+					if (pointColor!=Board.COLOR) {
 						shouldContinue = true;
 						break;
 					}
