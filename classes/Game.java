@@ -64,6 +64,9 @@ public class Game {
 	public Player play() {
 		int[][] lastMove;
 		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+			System.out.println(this.movesSinceEvent);
+			this.gameBoard.printBoard();
+
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
 			if (this.lastFewMoves.size()>12) {
 				this.lastFewMoves.remove(0);
@@ -78,10 +81,11 @@ public class Game {
 				this.movesSinceEvent = 0;
 				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
-			System.out.println(this.movesSinceEvent);
-			this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+				System.out.println(this.movesSinceEvent);
+				this.gameBoard.printBoard();
+
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
 				if (this.lastFewMoves.size()>12) {
 					this.lastFewMoves.remove(0);
@@ -97,8 +101,6 @@ public class Game {
 					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
 
-				System.out.println(this.movesSinceEvent);
-				this.gameBoard.printBoard();
 			}
 		}
 		if (player1.getAllMoves(this).length==0) {
