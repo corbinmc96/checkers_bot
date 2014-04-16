@@ -1,4 +1,4 @@
 #!/bin/bash
 rm -f *.class
-javac TestAIEquality.java
-java TestAIEquality
+nxjpcc TestAIEquality.java
+nxjpc TestAIEquality
