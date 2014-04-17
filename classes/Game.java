@@ -103,10 +103,13 @@ public class Game {
 
 			}
 		}
+
+		if (this.gameRobot != null)
+			this.gameRobot.disconnect();
+
 		if (player1.getAllMoves(this).length==0) {
 			return this.player2;
-		}
-		else if (player2.getAllMoves(this).length==0) {
+		} else if (player2.getAllMoves(this).length==0) {
 			return this.player1;
 		} else {
 			return null;
