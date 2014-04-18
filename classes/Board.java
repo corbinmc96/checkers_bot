@@ -1,3 +1,6 @@
+// ALL AARON EXCEPT CORBIN WROTE locationIsInBounds, printBoard, and getDistanceBetweenPieces
+// CORBIN AND AARON COLLABORATED ON calculateValue
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,8 +10,8 @@ public class Board {
 
 	private Player[] players;
 
-	public static final String color = "black";
-	public static final double maxBoardValue = 36;
+	public static final String COLOR = "black";
+	public static final double MAX_BOARD_VALUE = 36;
 
 	public Board (Player[] players) {
 		this.players = players;

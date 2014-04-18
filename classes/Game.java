@@ -1,3 +1,5 @@
+// ALL AARON
+
 import java.util.ArrayList;
 
 public class Game {
@@ -29,15 +31,10 @@ public class Game {
 	}
 
 	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial) {
+		this(p1, p2, isOfficial);
 		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations, p1kings, p2kings);
-		this.player1 = p1;
-		this.player2 = p2;
 		this.player1.setBoard(this.gameBoard);
 		this.player2.setBoard(this.gameBoard);
-		this.lastFewMoves = new ArrayList<int[][]>();
-		this.movesSinceEvent = 0;
-		this.numberOfKings = 0;
-		this.isOfficialVersion = isOfficial;
 	}
 	
 	public Game (Game oldG, Move m) {
@@ -54,7 +51,8 @@ public class Game {
 		this.isOfficialVersion = oldG.getIsOfficialVersion();
 
 		this.movesSinceEvent++;
-		if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+		int[][] lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+		if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 			this.movesSinceEvent = 0;
 		}
 		if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
@@ -64,31 +62,38 @@ public class Game {
 	}
 
 	public Player play() {
+		int[][] lastMove;
 		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+			System.out.println(this.movesSinceEvent);
+			this.gameBoard.printBoard();
+
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
 			if (this.lastFewMoves.size()>12) {
 				this.lastFewMoves.remove(0);
 			}
 
 			this.movesSinceEvent++;
-			if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+			lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+			if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 				this.movesSinceEvent = 0;
 			}
 			if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
 				this.movesSinceEvent = 0;
 				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
-			System.out.println(this.movesSinceEvent);
-			this.gameBoard.printBoard();
 
 			if (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+				System.out.println(this.movesSinceEvent);
+				this.gameBoard.printBoard();
+
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
 				if (this.lastFewMoves.size()>12) {
 					this.lastFewMoves.remove(0);
 				}
 
 				this.movesSinceEvent++;
-				if (this.lastFewMoves.get(this.lastFewMoves.size()-1).length > 2) {
+				lastMove = this.lastFewMoves.get(this.lastFewMoves.size()-1);
+				if (Math.abs(lastMove[0][0] - lastMove[1][0])==2) {
 					this.movesSinceEvent = 0;
 				}
 				if (this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2)!=this.numberOfKings) {
@@ -96,14 +101,15 @@ public class Game {
 					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
 
-				System.out.println(this.movesSinceEvent);
-				this.gameBoard.printBoard();
 			}
 		}
+
+		if (this.gameRobot != null)
+			this.gameRobot.disconnect();
+
 		if (player1.getAllMoves(this).length==0) {
 			return this.player2;
-		}
-		else if (player2.getAllMoves(this).length==0) {
+		} else if (player2.getAllMoves(this).length==0) {
 			return this.player1;
 		} else {
 			return null;

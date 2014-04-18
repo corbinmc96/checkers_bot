@@ -1,3 +1,5 @@
+// ALL AARON
+
 public class TestAIEquality {
 	public static void main(String[] args) {
 		AIEngine AI1 = new AaronAI();
@@ -9,6 +11,7 @@ public class TestAIEquality {
 		for (int i = 0; i<100; i++) {
 			Game g = new Game(randPlayer1, randPlayer2, testOfficialVersion);
 			while (randPlayer1.getAllMoves(g).length>0 && randPlayer2.getAllMoves(g).length>0 && !g.isDraw()) {
+				System.out.println("two turns successful");
 				// System.out.println("moving player 1");
 				Move[] unrankedMoves = randPlayer1.getAllMoves(g);
 				Move[] moves1 = AI1.rankBestMove(unrankedMoves, g, randPlayer1, 5);

@@ -1,9 +1,26 @@
-// ALL AARON
-import java.util.Arrays;
+// ALL CORBIN
 
-public class AaronAI extends AIEngine {
+import java.util.Arrays;
+import java.util.ArrayList;
+
+public class StoringAI extends AIEngine {
+
+	private final FileHandler fileManager = new FileHandler("./values.savedata");
 
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
+		String currentScenario = createStringRepresentation(g,p);
+		for (String storedScenario : fileManager.getAllLines()) {
+			if (splitRepresentation(storedScenario)[0]==currentScenario) {
+				String moveString = splitRepresentation(storedScenario)[1];
+				Piece movePiece = g.getGameBoard().getPieceAtLocation(new int[]{Character.getNumericValue(moveString.charAt(0)),Character.getNumericValue(moveString.charAt(0))});
+				int[][] waypoints = new int[moveString.length()/2][];
+				for (int i=0; i<waypoints.length; i++) {
+					waypoints[i] = new int[]{Integer.parseInt(moveString.substring(i*2,i*2+1)), Integer.parseInt(moveString.substring(i*2+1,i*2+2))};
+				}
+				return new Move[]{new Move(movePiece,waypoints)};
+			}
+		}
+
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
 
@@ -49,6 +66,9 @@ public class AaronAI extends AIEngine {
 		// System.out.print("" + recursionDepth + " ");
 		// System.out.println(Arrays.toString(boardValuesSorted));
 
+		fileManager.addLine(this.createStringRepresentation(g,p,sortedMoves[0]));
+
+
 		return sortedMoves;
 	}
 
@@ -87,13 +107,11 @@ public class AaronAI extends AIEngine {
 				return (new Board(g.getGameBoard(), moves[0])).calculateValue(p);
 			//if thinking multiple moves ahead, calculate the recursive value
 			} else {
-				return this.valueOfMoves(
-					new Game(g, moves[0]),
-					p,
-					recursionDepth-1,
-					!testOpponentMoves,
-					(testOpponentMoves ? 1 : -1) * recursionDepth * Board.MAX_BOARD_VALUE
-				);
+				if (!testOpponentMoves) {
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
+				} else {
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.MAX_BOARD_VALUE);
+				}
 			}
 		}
 
@@ -175,5 +193,45 @@ public class AaronAI extends AIEngine {
 		// System.out.println(result);
 
 		return result;
+	}
+
+	public String createStringRepresentation(Game g, Player p) {
+		StringBuilder result = new StringBuilder();
+		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
+			allPieces.add(piece.makeString(p));
+		}
+		String[] thePieces = new String[allPieces.size()];
+		thePieces = allPieces.toArray(thePieces);
+		Arrays.sort(thePieces);
+		for (String piece : thePieces) {
+			result.append(piece);
+		}
+
+		return result.toString();
+	} 
+
+	public String createStringRepresentation(Game g, Player p, Move m) {
+		StringBuilder result = new StringBuilder();
+		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
+			allPieces.add(piece.makeString(p));
+		}
+		String[] thePieces = new String[allPieces.size()];
+		thePieces = allPieces.toArray(thePieces);
+		Arrays.sort(thePieces);
+		for (String piece : thePieces) {
+			result.append(piece);
+		}
+		result.append("="+m.toString());
+
+		return result.toString();
+	} 
+
+	public String[] splitRepresentation(String s) {
+		int location = s.indexOf("=");
+		System.out.print(s+"\n");
+		System.out.print(location+"\n");
+		return new String[]{s.substring(0,location), s.substring(location+1)};
 	}
 }

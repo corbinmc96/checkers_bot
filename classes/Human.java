@@ -1,3 +1,5 @@
+// ALL CORBIN, AARON CONTRIBUTED TO inputMove
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -53,7 +55,7 @@ public class Human extends Player {
 			try {
 				t.join();
 			} catch (InterruptedException e) {
-				
+				System.out.print(e);
 			}
 
 			//iterates over all possible moves
@@ -78,7 +80,7 @@ public class Human extends Player {
 						locationValues.add(pointColor);
 					}
 					//breaks and continues to the next move if the square is not empty
-					if (pointColor!=Board.color) {
+					if (pointColor!=Board.COLOR) {
 						shouldContinue = true;
 						break;
 					}
@@ -129,23 +131,13 @@ public class Human extends Player {
 					for (int i=0; i<numberOfWaypoints; i++) {
 						waypointStrings[i] = inputLine.substring(3*i,3*(i+1));
 					}
-					boolean validMove = true;
-					//CORBIN IS WORKING HERE
-					//for (String waypointString : waypointStrings) {
-						//could also test if first two characters are numbers
-						//if (waypointString.substring(2) == " ") {
-							//System.out.println(waypointString);
-							//validMove = false; 
-						//}
-					//}
-					if (validMove) {
-						for (int i=0; i<numberOfWaypoints; i++) {
-							allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
-						}
-						inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
-						if (inputtedMove.getMovePiece()!=null && this.getBoard().getPlayers()[inputtedMove.getMovePiece()[2]]==this && inputtedMove.calculateIsValid(g)) {
-							moveEntered = true;
-						}
+				
+					for (int i=0; i<numberOfWaypoints; i++) {
+						allWaypoints[i] = new int[] {Integer.parseInt(inputLine.substring(3*i, 3*i+1)),Integer.parseInt(inputLine.substring(3*i+1, 3*i+2))};
+					}
+					inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
+					if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid(g)) {
+						moveEntered = true;
 					}
 				}
 			}

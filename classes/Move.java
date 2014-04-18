@@ -1,4 +1,7 @@
+// ALL CORBIN, AARON CONTRIBUTED SOME TO calculateIsValid
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Move {
 
@@ -76,13 +79,28 @@ public class Move {
 				continue;
 			}
 
-			for (int waypoint = 0; waypoint<validMove.getJumpsContained()+1; waypoint++) {
+			boolean failed = false;
+			for (int waypoint = 0; waypoint<(validMove.getJumpsContained()==0 ? 2 : validMove.getJumpsContained()+1); waypoint++) {
 				if (this.waypoints[waypoint][0]!=validMove.getWaypoints()[waypoint][0] || this.waypoints[waypoint][1]!=validMove.getWaypoints()[waypoint][1]) {
-					continue;
+					failed = true;
+					break;
 				}
 			}
+			if (failed) 
+				continue;
 			return true;
 		}
 		return false;
+	}
+
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		for (int i=0; i<waypoints.length; i++) {
+			System.out.print(i);
+			result.append(waypoints[i][0]);
+			result.append(waypoints[i][1]);
+		}
+		System.out.println(result.toString());
+		return result.toString();
 	}
 }

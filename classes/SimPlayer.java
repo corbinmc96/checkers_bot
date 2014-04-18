@@ -1,3 +1,5 @@
+// ALL CORBIN
+
 import java.util.Arrays;
 
 public class SimPlayer extends Player {
@@ -14,7 +16,7 @@ public class SimPlayer extends Player {
 
 	public Move takeTurn(Game g) {
 		//calculates the best move to make the specified number of plies ahead
-		Move m = this.calculateBestMove(g, 8);
+		Move m = this.calculateBestMove(g, 7);
 		//performs the move on the stored (and the physical) board
 		this.performMove(m);
 		// System.out.println(Arrays.deepToString(m.getWaypoints()));
@@ -41,7 +43,7 @@ public class SimPlayer extends Player {
 				//picks up jumped piece
 				this.getRobot().pickUpPiece();
 				//moves arm over drop point for dead pieces
-				this.getRobot().moveToXY(this.getRobot().getDeadLocation());
+				this.getRobot().moveToXY(Robot.DEAD_LOCATION);
 				//drops the piece
 				this.getRobot().dropPiece();
 			}
