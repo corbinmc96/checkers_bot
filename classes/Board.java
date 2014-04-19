@@ -82,7 +82,31 @@ public class Board {
 	}
 
 	public void removePiece (int[] pieceToRemove) {
-		this.piecesOnBoard.remove(pieceToRemove);
+		for (int[] p : this.p1Pieces) {
+			if (p[0]==pieceToRemove[0] && p[1]==pieceToRemove[1]) {
+				this.p1Pieces.remove(p);
+				return;
+			}
+		}
+		for (int[] p : this.p2Pieces) {
+			if (p[0]==pieceToRemove[0] && p[1]==pieceToRemove[1]) {
+				this.p2Pieces.remove(p);
+				return;
+			}
+		}
+		for (int[] p : this.p1Kings) {
+			if (p[0]==pieceToRemove[0] && p[1]==pieceToRemove[1]) {
+				this.p1Kings.remove(p);
+				return;
+			}
+		}
+		for (int[] p : this.p2Kings) {
+			if (p[0]==pieceToRemove[0] && p[1]==pieceToRemove[1]) {
+				this.p2Kings.remove(p);
+				return;
+			}
+		}
+		System.out.println("Removal failed");
 	}
 
 	public int totalPiecesLeft(Player p) {
