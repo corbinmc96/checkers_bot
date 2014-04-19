@@ -84,7 +84,7 @@ public class Piece {
 					result.add(new int[][] {pieceLocation,testDestination});
 					//cycles through possible multi-jump scenarios
 					for (int[][] potentialMove : this.getMovesFromLocation(testDestination, new Board(b, new Move(this, new int[][]{pieceLocation, testDestination})), true)) {
-						result.add(ArraysHelper.addTwoArrays(new int[][] {pieceLocation, testDestination},potentialMove));
+						result.add(ArraysHelper.addTwoArrays(new int[][] {pieceLocation}, potentialMove));
 					}
 				}
 			}
