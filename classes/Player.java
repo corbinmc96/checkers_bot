@@ -61,15 +61,14 @@ public abstract class Player {
 	}
 
 	public static void performMove(Move myMove, Board theBoard) {
-		myMove.getMovePiece()[0] = myMove.getDestination()[0];
-		myMove.getMovePiece()[1] = myMove.getDestination()[1];
-		if (theBoard.getPlayers()[myMove.getMovePiece()[2]].getIsOnZeroSide()) {
-			if (myMove.getMovePiece()[1]==7) {
-				myMove.getMovePiece()[3]=1;
+		theBoard.movePiece(myMove.getSource(), myMove.getDestination());
+		if (theBoard.ownerOfPieceAtLocation(myMove.getDestination()).getIsOnZeroSide()) {
+			if (myMove.getDestination()[1]==7) {
+				theBoard.kingPiece(myMove.getDestination());
 			}
 		} else {
-			if (myMove.getMovePiece()[1]==0) {
-				myMove.getMovePiece()[3]=1;
+			if (myMove.getDestination()[1]==0) {
+				theBoard.kingPiece(myMove.getDestination());
 			}
 		}
 		for (int[] deadPiece : myMove.calculatePiecesToJump(theBoard)) {
@@ -90,31 +89,37 @@ public abstract class Player {
 		ArrayList<Move> result = new ArrayList<Move>();
 		//creates a variable to store whether a jump has been found, only used in official version
 		boolean canJump = false;
+		boolean playOfficial = g.getIsOfficialVersion();
+
+		Board b = g.getGameBoard();
 
 		//iterates over each of the player's pieces
-		for (int[] playerPiece : g.getGameBoard().getPlayerPieces(this)) {
-			if (playerPiece.length!=4) System.out.println(playerPiece);
+		for (int[] playerPiece : b.getPlayerPieces(this)) {
 
 			//iterates over all of that piece's moves
-			for (Move pieceMove : g.getGameBoard().getMovesOfPiece(playerPiece)) {
+			for (Move pieceMove : b.getMovesOfPiece(playerPiece)) {
 				//adds each move to the return ArrayList
-				result.add(pieceMove);
-				if (g.getIsOfficialVersion() && pieceMove.getJumpsContained()>0) {
+				if (pieceMove.getJumpsContained()>0) {
+					result.add(0, pieceMove);
 					canJump = true;
+				} else {
+					result.add(pieceMove);
 				}
 			}
 		}
 
-		if (canJump && g.getIsOfficialVersion()) {
+		if (playOfficial && canJump) {
 			ArrayList<Move> filteredResult = new ArrayList<Move>();
 			for (Move m : result) {
 				if (m.getJumpsContained()>0) {
 					filteredResult.add(m);
+				} else {
+					break;
 				}
 			}
 			return filteredResult.toArray(new Move[filteredResult.size()]);
 		}
-
+		
 		//returns the final result
 		return result.toArray(new Move[result.size()]);
 	}
