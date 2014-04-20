@@ -1,0 +1,3 @@
+changed Board to use separate arrays for players and piece types
+put jumps at the beginning of the getAllMoves return list to improve alpha-beta pruning
+other small optimizations
