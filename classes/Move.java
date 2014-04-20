@@ -59,10 +59,10 @@ public class Move {
 		else {
 			ArrayList<int[]> result = new ArrayList<int[]>();
 			//cycle through all the movements the piece makes
-			for (int i=1; i<this.waypoints.length; i++) {
+			for (int i=1; i<=this.waypoints.length-1;i++) {
 				//find the location that is being jumped over
 				int[] midpoint = {(this.waypoints[i][0]+this.waypoints[i-1][0])/2, (this.waypoints[i][1]+this.waypoints[i-1][1])/2};
-				result.add(midpoint);
+				result.add(b.getPieceAtLocation(midpoint));
 			}
 			return result.toArray(new int[result.size()][]);
 		}
@@ -96,11 +96,11 @@ public class Move {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		for (int i=0; i<waypoints.length; i++) {
-			// System.out.print(i);
+			System.out.print(i);
 			result.append(waypoints[i][0]);
 			result.append(waypoints[i][1]);
 		}
-		// System.out.println(result.toString());
+		System.out.println(result.toString());
 		return result.toString();
 	}
 }

@@ -129,7 +129,7 @@ public class AaronAI extends AIEngine {
 				}
 
 				//sets the new board value to newAB if it is better for the current player
-				if ((testOpponentMoves && boardValues[i]<newAB) || (!testOpponentMoves && boardValues[i]>newAB)) {
+				if ((!testOpponentMoves && boardValues[i]>newAB) || (testOpponentMoves && boardValues[i]<newAB)) {
 					newAB = boardValues[i];
 				}
 			}
