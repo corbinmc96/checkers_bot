@@ -1,4 +1,4 @@
 #!/bin/bash
 rm -f *.class
-javac SimulationStarter.java
-java SimulationStarter
+nxjpcc SimulationStarter.java
+nxjpc -Xmx500M SimulationStarter
