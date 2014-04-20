@@ -42,7 +42,7 @@ public class Game {
 		this.player2 = oldG.getPlayers()[1];
 		this.lastFewMoves = ArraysHelper.asArrayList(oldG.getLastFewMoves());
 		this.lastFewMoves.add(m.getWaypoints());
-		if (this.lastFewMoves.size()>12) {
+		if (this.lastFewMoves.size()>8) {
 			this.lastFewMoves.remove(0);
 		}
 		this.movesSinceEvent = oldG.getMovesSinceEvent();
@@ -63,12 +63,16 @@ public class Game {
 
 	public Player play() {
 		int[][] lastMove;
+
+		double newTime;
+		double lastTime = System.currentTimeMillis();
+
 		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
 			System.out.println(this.movesSinceEvent);
 			this.gameBoard.printBoard();
 
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
-			if (this.lastFewMoves.size()>12) {
+			if (this.lastFewMoves.size()>8) {
 				this.lastFewMoves.remove(0);
 			}
 
@@ -82,12 +86,16 @@ public class Game {
 				this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 			}
 
+			newTime = System.currentTimeMillis();
+			System.out.println(newTime - lastTime);
+			lastTime = newTime;
+
 			if (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
 				System.out.println(this.movesSinceEvent);
 				this.gameBoard.printBoard();
 
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
-				if (this.lastFewMoves.size()>12) {
+				if (this.lastFewMoves.size()>8) {
 					this.lastFewMoves.remove(0);
 				}
 
@@ -100,6 +108,10 @@ public class Game {
 					this.movesSinceEvent = 0;
 					this.numberOfKings = this.gameBoard.kingsLeft(this.player1)+this.gameBoard.kingsLeft(player2);
 				}
+				
+				newTime = System.currentTimeMillis();
+				System.out.println(newTime - lastTime);
+				lastTime = newTime;
 
 			}
 		}
@@ -154,23 +166,23 @@ public class Game {
 			return true;
 		}
 
-		//returns false if there have been fewer than 12 moves
-		if (this.lastFewMoves.size()<12) {
+		//returns false if there have been fewer than 8 moves
+		if (this.lastFewMoves.size()<8) {
 			return false;
 		}
-		//creates array to hold triplets of moves which should be identical
+		//creates array to hold copies of moves which should be identical
 		int[][][] identicals;
-		//iterates over each set of three moves
+		//iterates over each set of two moves
 		for (int moveIndex=0; moveIndex<4; moveIndex++) {
-			//sets identicals to three moves which should be equal
-			identicals = new int[][][] {this.lastFewMoves.get(moveIndex), this.lastFewMoves.get(moveIndex+4), this.lastFewMoves.get(moveIndex+8)};
+			//sets identicals to two moves which should be equal
+			identicals = new int[][][] {this.lastFewMoves.get(moveIndex), this.lastFewMoves.get(moveIndex+4)};
 			//returns false if the moves do not have the same number of waypoints
-			if (identicals[0].length!=identicals[1].length || identicals[1].length!=identicals[2].length) {
+			if (identicals[0].length!=identicals[1].length) {
 				return false;
 			}
-			//iterates over all waypoints and returns false if any of them are not the same for all three moves
+			//iterates over all waypoints and returns false if any of them are not the same for both moves
 			for (int i=0; i<identicals[0].length; i++) {
-				if (!(identicals[0][i][0]==identicals[1][i][0] && identicals[0][i][1]==identicals[1][i][1]) || !(identicals[1][i][0]==identicals[2][i][0] && identicals[1][i][1]==identicals[2][i][1])) {
+				if (identicals[0][i][0]!=identicals[1][i][0] || identicals[0][i][1]!=identicals[1][i][1]) {
 					return false;
 				}
 			}
