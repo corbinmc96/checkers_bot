@@ -1,4 +1,4 @@
-// AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE EVERYTHING ELSE
+// AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
 
 import lejos.pc.comm.*;
 import lejos.nxt.remote.NXTCommand;
@@ -6,15 +6,14 @@ import java.io.IOException;
 
 public class Robot {
 
+	private int currentX;
+	private int currentY;
+	private boolean holding;
 	private NXTConnector conn;
 	private int[] armLocation;
 	private boolean isHoldingPiece;
-<<<<<<< HEAD
-	private final int[] getDeadLocation; // need to add location here
-	private int[] location
-=======
+
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
->>>>>>> 09f96dc8dc44dea2ecfd063d420a977eda6f82e1
 
 	public Robot() throws NXTCommException {
 		this.conn = new NXTConnector();
@@ -27,61 +26,64 @@ public class Robot {
 	}
 
 	public int[] getArmLocation() {
-		return null;
+		return new int[] {currentX, currentY};
 	}
 	
 	public boolean getIsHoldingPiece() {
-		return false;
+		return holding;
 	}
 
-	public int[] location
-		write float v;
-
 	public void moveToXY(int[] newXY) {
-
+	int diff;
+	int newX = newXY[0];
+	int newY = newXY[1];
+	if (newX < currentX) {
+		diff = (currentX-newX);
+		motor.A.rotateTo(-diff*() );
+	} 
+	else if (newX > currentX) {
+		diff = (newX-currentX);
+		motor.A.rotateTo(diff*() );
+	}
+	
+	if (newY < currentY) {
+		diff = (currentX-newX);
+		motor.B.rotateTo(-diff*() );
+	}
+	else if (newY > currentY) {
+		diff = (newY-currentY);
+		motor.B.rotateTo(diff*() );
+	
+	}
 	}
 	
 	public void resetPosition() {
-		Motor.C.rotateTo (DeadLocation-x)
+		int resetX = currentX;
+		motor.A.rotateTo(-resetX*() );
+		int resetY = currentY;
+		motor.B.rotateTo(-resetY*() );
 	}
 	
 	public String examineLocation(int[] location) {
-		while(SensorValue(lightSensor)>40)
-			motor[MotorA] = 0
-			motor[MotorB] = 0
-		return null;
+		return null
 	}
 
 	public void pickUpPiece() {
-		Motor.C.rotateTo( + 180);
-		Motor.C.rotateTo( + 270);
-		(boolean) isRotating();
-		Motor.C.rotateTo( + 180);
-		(boolean) isRotating();
+		Motor.C.rotate( + 180);
+		Motor.C.rotate( + 270);
+		Motor.C.rotate( + 180);
+		holding = true;
 	}
 
 	public void dropPiece() {
-		Motor.C.rotateTo( + 90);
-		(boolean) isRotating();
-		Motor.C.rotateTo( + 180);
+		Motor.C.rotate( + 90);
+		Motor.C.rotate( + 180);
+		holding = false;
 	}
 
 	public void waitForSensorPress() {
-		
-   public class TouchTest {
-	public static void main (String[] args) Throws Exception{
-		TouchSensor touch - new TouchSensor( SensorPort.S1)
-		while (!touch.isPressed()) {
-			return True
+		TouchSensor touch = new TouchSensor(SensorPort.S1);
+		while(!touch.isPressed()){
+		}
 	}	
 }
-	}
-<<<<<<< HEAD
-
-	
-}
-
-
-=======
-}
->>>>>>> 09f96dc8dc44dea2ecfd063d420a977eda6f82e1
