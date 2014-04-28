@@ -1,3 +1,5 @@
+// ALL CORBIN
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -33,7 +35,7 @@ public class StoringAI extends AIEngine {
 		} else {
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
-				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
+				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
 			}
 		}
 
@@ -50,7 +52,7 @@ public class StoringAI extends AIEngine {
 			//finds the index of the current values in the original move list
 			index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
 			//sets the value at index to very large so that the same move is not used again, even if multiple moves have equal values
-			boardValues[index] = Board.maxBoardValue*1000;
+			boardValues[index] = Board.MAX_BOARD_VALUE*1000;
 
 			//puts the correct move in the correct position in the final array
 			sortedMoves[moves.length-i-1] = moves[index];
@@ -91,10 +93,10 @@ public class StoringAI extends AIEngine {
 		if (moves.length==0) {
 			if (testOpponentMoves) {
 				//result is an opponent loss, or a positive value
-				return (recursionDepth+1)*Board.maxBoardValue;
+				return (recursionDepth+1)*Board.MAX_BOARD_VALUE;
 			} else {
 				//result is a loss, or a negative value
-				return -(recursionDepth+1)*Board.maxBoardValue;
+				return -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
 			}
 		}
 
@@ -106,9 +108,9 @@ public class StoringAI extends AIEngine {
 			//if thinking multiple moves ahead, calculate the recursive value
 			} else {
 				if (!testOpponentMoves) {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.maxBoardValue);
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
 				} else {
-					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.maxBoardValue);
+					return this.valueOfMoves(new Game(g, moves[0]), p, recursionDepth-1, false, (recursionDepth+1)*Board.MAX_BOARD_VALUE);
 				}
 			}
 		}
@@ -132,9 +134,9 @@ public class StoringAI extends AIEngine {
 			//sets new alpha-beta value based on testOpponentMoves
 			double newAB;
 			if (!testOpponentMoves) {
-				newAB = -(recursionDepth+1)*Board.maxBoardValue;
+				newAB = -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
 			} else {
-				newAB = (recursionDepth+1)*Board.maxBoardValue;
+				newAB = (recursionDepth+1)*Board.MAX_BOARD_VALUE;
 			}
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
@@ -180,7 +182,7 @@ public class StoringAI extends AIEngine {
 		// int index = 0;
 		// for (int i = 0; i<boardValuesSorted.length; i++) {
 		// 	index = ArraysHelper.find(boardValues, boardValuesSorted[i]);
-		// 	boardValues[index] = Board.maxBoardValue*1000;
+		// 	boardValues[index] = Board.MAX_BOARD_VALUE*1000;
 		// 	sortedMoves[moves.length-i-1] = moves[index];
 		// }
 		// for (Move m : sortedMoves) {

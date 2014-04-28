@@ -1,12 +1,29 @@
+// AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE EVERYTHING ELSE
+
+import lejos.pc.comm.*;
+import lejos.nxt.remote.NXTCommand;
+import java.io.IOException;
+
 public class Robot {
-	
+
+	private NXTConnector conn;
 	private int[] armLocation;
 	private boolean isHoldingPiece;
+<<<<<<< HEAD
 	private final int[] getDeadLocation; // need to add location here
 	private int[] location
+=======
+	public static final int[] DEAD_LOCATION = new int[] {0, -1};
+>>>>>>> 09f96dc8dc44dea2ecfd063d420a977eda6f82e1
 
-	public int[] getDeadLocation() {
-		return null;
+	public Robot() throws NXTCommException {
+		this.conn = new NXTConnector();
+		this.conn.connectTo(NXTComm.LCP);
+		NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
+	}
+
+	public void disconnect() throws IOException {
+		this.conn.close();
 	}
 
 	public int[] getArmLocation() {
@@ -59,8 +76,12 @@ public class Robot {
 	}	
 }
 	}
+<<<<<<< HEAD
 
 	
 }
 
 
+=======
+}
+>>>>>>> 09f96dc8dc44dea2ecfd063d420a977eda6f82e1

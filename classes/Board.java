@@ -1,11 +1,14 @@
+// ALL AARON EXCEPT CORBIN WROTE locationIsInBounds, printBoard, and getDistanceBetweenPieces
+// CORBIN AND AARON COLLABORATED ON calculateValue
+
 import java.util.ArrayList;
 
 public class Board {
 
 	private ArrayList<Piece> piecesOnBoard;
 
-	public static final String color = "black";
-	public static final double maxBoardValue = 36;
+	public static final String COLOR = "black";
+	public static final double MAX_BOARD_VALUE = 36;
 
 	public Board (Player[] players) {
 		this.piecesOnBoard = new ArrayList<Piece>();
@@ -57,7 +60,14 @@ public class Board {
 	}
 
 	public void removePiece (Piece pieceToRemove) {
-		this.piecesOnBoard.remove(pieceToRemove);
+		int[] location = pieceToRemove.getLocation();
+		for (Piece p : this.piecesOnBoard) {
+			if (p.getLocation()[0]==location[0] && p.getLocation()[1]==location[1]) {
+				this.piecesOnBoard.remove(p);
+				return;
+			}
+		}
+		System.out.println("Removal failed");
 	}
 
 	public int totalPiecesLeft(Player p) {
@@ -107,7 +117,7 @@ public class Board {
 		ArrayList<Piece> p2Pieces = new ArrayList<Piece>();
 
 		//sorts ever piece as p1Piece or p2Piece
-		for (Piece piece : this.getPiecesOnBoard()) {
+		for (Piece piece : this.piecesOnBoard) {
 			if (piece.getPlayer() == p) {
 				p1Pieces.add(piece);
 			}

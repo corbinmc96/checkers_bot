@@ -1,3 +1,5 @@
+// ALL AARON
+
 public class SimulationStarter {
 	public static void main(String[] args) {
 		Player orig = new SimPlayer("x", true, new MultithreadedAI());

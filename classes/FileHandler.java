@@ -1,3 +1,5 @@
+// ALL CORBIN
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -44,4 +46,12 @@ public class FileHandler {
 		}
 	}
 
+	public boolean containsLine(String s) {
+		for (String line : fileContents) {
+			if (line == s) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
