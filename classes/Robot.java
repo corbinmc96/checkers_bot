@@ -65,6 +65,27 @@ public class Robot {
 	}
 	
 	public String examineLocation(int[] location) {
+		if (newX < currentX) {
+        	diff = (newX - currentX)
+          	motor.A.rotate(diff()+())
+    	}
+     
+    	if (newX > currentX) {
+      	    diff = (currentX - newX)
+            motor.A.rotate(-diff()+())
+     	}
+   
+     	if (newY < currentY) {
+            diff = (newY - currentY)
+            motor.A.rotate(diff()+())
+     	}
+     
+     	if (newY > currentY) {
+            diff = (currentY - newY)
+            motor.A.rotate(-diff()+())
+     	}
+		
+     	
 		return null
 	}
 
