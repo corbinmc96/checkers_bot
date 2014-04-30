@@ -1,7 +1,4 @@
-// ALL AARON
-
 import lejos.nxt.*;
-import lejos.nxt.remote.*;
 
 public class MotorTest {
 	private static int drawnMotorIndex = -1;
@@ -9,20 +6,18 @@ public class MotorTest {
 	private static int drawnSelectionPosition = -1;
 	private static int drawnRotationSpeed = -1;
 
-	private static RemoteMotor[] motors = new RemoteMotor[] {Motor.A, Motor.B, Motor.C};
-
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		int currentMotorIndex = 0;
 		int currentMotorSpeed = 0;
 		int selectionPosition = 0;
 		while (true) {
 			updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 			if (Button.ESCAPE.isDown()) {
-				if (MotorTest.motors[currentMotorIndex].isMoving()) {
-					MotorTest.motors[currentMotorIndex].stop();
+				if (Motor.getInstance(currentMotorIndex).isMoving()) {
+					Motor.getInstance(currentMotorIndex).stop();
 
 					while (Button.ESCAPE.isDown()) {
-						//pass
+						Button.waitForAnyEvent(10000000);
 					}
 				} else {
 					break;
@@ -33,28 +28,28 @@ public class MotorTest {
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 					
 					while (Button.RIGHT.isDown()) {
-						//pass
+						Button.waitForAnyEvent(10000000);
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed+1)%1000;
+					currentMotorSpeed = (currentMotorSpeed+1)%10000000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
-					Thread.sleep(700);
-					while (Button.RIGHT.isDown()) {
-						currentMotorSpeed = (currentMotorSpeed+1)%1000;
-						Motor.A.setSpeed(currentMotorSpeed);
-						Motor.B.setSpeed(currentMotorSpeed);
-						Motor.C.setSpeed(currentMotorSpeed);
-						updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
-						Thread.sleep(50);
+					if (Button.waitForAnyEvent(700)==0) {
+						while (Button.waitForAnyEvent(50)==0) {
+							currentMotorSpeed = (currentMotorSpeed+1)%10000000;
+							Motor.A.setSpeed(currentMotorSpeed);
+							Motor.B.setSpeed(currentMotorSpeed);
+							Motor.C.setSpeed(currentMotorSpeed);
+							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
+						}
 					}
 
 				} else {
-					MotorTest.motors[currentMotorIndex].forward();
+					Motor.getInstance(currentMotorIndex).forward();
 				}
 			} else if (Button.LEFT.isDown()) {
 				if (selectionPosition==0) {
@@ -62,35 +57,35 @@ public class MotorTest {
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 					while (Button.LEFT.isDown()) {
-						//pass
+						Button.waitForAnyEvent(10000000);
 					}
 
 				} else if (selectionPosition==1) {
-					currentMotorSpeed = (currentMotorSpeed+999)%1000;
+					currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
 					Motor.A.setSpeed(currentMotorSpeed);
 					Motor.B.setSpeed(currentMotorSpeed);
 					Motor.C.setSpeed(currentMotorSpeed);
 					updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
-					Thread.sleep(700);
-					while (Button.RIGHT.isDown()) {
-						currentMotorSpeed = (currentMotorSpeed+999)%1000;
-						Motor.A.setSpeed(currentMotorSpeed);
-						Motor.B.setSpeed(currentMotorSpeed);
-						Motor.C.setSpeed(currentMotorSpeed);
-						updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
-						Thread.sleep(50);
+					if (Button.waitForAnyEvent(700)==0) {
+						while (Button.waitForAnyEvent(50)==0) {
+							currentMotorSpeed = (currentMotorSpeed+9999999)%10000000;
+							Motor.A.setSpeed(currentMotorSpeed);
+							Motor.B.setSpeed(currentMotorSpeed);
+							Motor.C.setSpeed(currentMotorSpeed);
+							updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
+						}
 					}
 
 				} else {
-					MotorTest.motors[currentMotorIndex].backward();
+					Motor.getInstance(currentMotorIndex).backward();
 				}
 			} else if (Button.ENTER.isDown()) {
 				selectionPosition = (selectionPosition+1)%3;
 				updateDisplay(currentMotorIndex, currentMotorSpeed, selectionPosition);
 
 				while (Button.ENTER.isDown()) {
-					//pass
+					Button.waitForAnyEvent(10000000);
 				}
 			}
 		}
@@ -112,7 +107,6 @@ public class MotorTest {
 		}
 
 		if (MotorTest.drawnMotorSpeed!=currentMotorSpeed) {
-			LCD.drawString("     ", 0, 1);
 			LCD.drawInt(currentMotorSpeed, 0, 1);
 
 			MotorTest.drawnMotorSpeed = currentMotorSpeed;
@@ -120,12 +114,12 @@ public class MotorTest {
 
 		LCD.drawString("Run", 0, 2);
 
-		if (MotorTest.drawnRotationSpeed!=MotorTest.motors[motorIndex].getRotationSpeed()) {
+		if (MotorTest.drawnRotationSpeed!=Motor.getInstance(motorIndex).getRotationSpeed()) {
 			LCD.drawString("Actual speed:", 0, 4);
-			LCD.drawString("      ", 0, 5);
-			LCD.drawInt(MotorTest.motors[motorIndex].getRotationSpeed(), 0, 5);
+			LCD.drawString("     ", 0, 5);
+			LCD.drawInt(Motor.getInstance(motorIndex).getRotationSpeed(), 0, 5);
 
-			MotorTest.drawnRotationSpeed = MotorTest.motors[motorIndex].getRotationSpeed();
+			MotorTest.drawnRotationSpeed = Motor.getInstance(motorIndex).getRotationSpeed();
 		}
 
 		if (MotorTest.drawnSelectionPosition!=selectionPosition) {
