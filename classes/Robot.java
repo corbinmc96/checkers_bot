@@ -1,7 +1,8 @@
 // AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
 
 import lejos.pc.comm.*;
-import lejos.nxt.remote.NXTCommand;
+import lejos.nxt.*;
+import lejos.nxt.remote.*;
 import java.io.IOException;
 
 public class Robot {
@@ -39,54 +40,69 @@ public class Robot {
 	int newY = newXY[1];
 	if (newX < currentX) {
 		diff = (currentX-newX);
-		motor.A.rotateTo(-diff*() );
+		Motor.A.rotateTo(-diff*() );
 	} 
 	else if (newX > currentX) {
 		diff = (newX-currentX);
-		motor.A.rotateTo(diff*() );
+		Motor.A.rotateTo(diff*() );
 	}
 	
 	if (newY < currentY) {
 		diff = (currentX-newX);
-		motor.B.rotateTo(-diff*() );
+		Motor.B.rotateTo(-diff*() );
 	}
 	else if (newY > currentY) {
 		diff = (newY-currentY);
-		motor.B.rotateTo(diff*() );
+		Motor.B.rotateTo(diff*() );
 	
 	}
 	}
 	
 	public void resetPosition() {
 		int resetX = currentX;
-		motor.A.rotateTo(-resetX*() );
+		Motor.A.rotateTo(-resetX*() );
 		int resetY = currentY;
-		motor.B.rotateTo(-resetY*() );
+		Motor.B.rotateTo(-resetY*() );
 	}
 	
 	public String examineLocation(int[] location) {
+		int lightValue;
+		String color; 
+
 		if (newX < currentX) {
-        	diff = (newX - currentX)
-          	motor.A.rotate(diff()+())
+        	diff = (newX - currentX);
+          	Motor.A.rotate(diff*()+());
     	}
      
     	if (newX > currentX) {
-      	    diff = (currentX - newX)
-            motor.A.rotate(-diff()+())
+      	    diff = (currentX - newX);
+            Motor.A.rotate(-diff*()+());
      	}
    
      	if (newY < currentY) {
-            diff = (newY - currentY)
-            motor.A.rotate(diff()+())
+            diff = (newY - currentY);
+            Motor.A.rotate(diff*()+());
      	}
      
      	if (newY > currentY) {
-            diff = (currentY - newY)
-            motor.A.rotate(-diff()+())
+            diff = (currentY - newY);
+            Motor.A.rotate(-diff*()+());
      	}
 		
-     	
-		return null
+		LightSensor light = new LightSensor(SensorPort.S1);
+
+    			lightValue = light.getLightValue();
+     		
+     		if (lightValue > 0 && lightValue <= 100) {
+     			color = "green";
+     		}
+     		if (lightValue > 100 && lightValue <= 200) {
+     			color = "gray";
+     		}
+     		if (lightValue > 200 && lightValue <= 300) {
+     			color = "black";
+     		}
+		return color;
 	}
 
 	public void pickUpPiece() {
