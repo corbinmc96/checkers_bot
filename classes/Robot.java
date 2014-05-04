@@ -1,4 +1,4 @@
-// AARON WROTE INSTANCE VARIABLES, CONSTRUCTOR, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
+// AARON WROTE CONSTRUCTOR, main, connect, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
 
 import lejos.pc.comm.*;
 import lejos.nxt.*;
@@ -13,17 +13,29 @@ public class Robot {
 	private NXTConnector conn;
 	private int[] armLocation;
 	private boolean isHoldingPiece;
+	private Thread hook;
+	private boolean connected;
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
-	public Robot() throws NXTCommException {
+	public Robot() {
+		this.connected = false;
 		this.conn = new NXTConnector();
-		this.conn.connectTo(NXTComm.LCP);
-		NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
+
+		this.hook = new Thread() {
+			public void start() {
+				try {
+					disconnect();
+				} catch (IOException e) {
+					// do nothing
+				}
+			}
+		};
 	}
 
-	public static void main(String[] args) throws NXTCommException {
+	public static void main(String[] args) {
 		Robot r = new Robot();
+		r.connect();
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,14 +55,13 @@ public class Robot {
 				System.out.println("7\twaitForSensorPress");
 				System.out.println("8\tQUIT");
 
-				System.out.print("Execute: ");
-
 				int input = -1;
 				while (input == -1) {
+					System.out.print("Execute: ");
 					try {
 						input = Integer.parseInt(br.readLine());
 					} catch (IOException e) {
-						System.err.println(e);
+						//do nothing
 					}
 					if (input<0 || input>8) {
 						input = -1;
@@ -123,8 +134,24 @@ public class Robot {
 		}
 	}
 
+	public void connect() {
+		if (!this.connected) {
+			this.conn.connectTo(NXTComm.LCP);
+			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
+			Runtime.getRuntime().addShutdownHook(this.hook);
+			this.connected = true;
+		}
+	}
+
 	public void disconnect() throws IOException {
-		this.conn.close();
+		if (this.connected) {
+			Motor.A.flt();
+			Motor.B.flt();
+			Motor.C.flt();
+			this.conn.close();
+			Runtime.getRuntime().removeShutdownHook(this.hook);
+			this.connected = false;
+		}
 	}
 
 	public int[] getArmLocation() {
