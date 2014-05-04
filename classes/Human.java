@@ -30,19 +30,13 @@ public class Human extends Player {
 
 	public Move inputMove(Game g) {
 		if (this.getRobot()!=null) {
-			//defines class to concurrently wait for the touch sensor to be pressed
-			class ButtonThread extends Thread {
-				private Robot r;
-				public ButtonThread(Robot r) {
-					this.r = r;
-				}
+			Robot r = this.getRobot();
+			//starts concurrent thread waiting for button press
+			Thread t = new Thread() {
 				public void run() {
 					r.waitForSensorPress();
 				}
-			}
-
-			//starts concurrent thread waiting for button press
-			Thread t = new ButtonThread(this.getRobot());
+			};
 			t.start();
 
 			//creates pair of lists to hold scanned values
