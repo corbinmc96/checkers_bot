@@ -163,86 +163,91 @@ public class Robot {
 	}
 
 	public void moveToXY(int[] newXY) {
-	int diff;
-	int newX = newXY[0];
-	int newY = newXY[1];
-	if (newX < currentX) {
-		diff = (currentX-newX);
-		Motor.A.rotateTo(-diff*() );
-	} 
-	else if (newX > currentX) {
-		diff = (newX-currentX);
-		Motor.A.rotateTo(diff*() );
-	}
-	
-	if (newY < currentY) {
-		diff = (currentX-newX);
-		Motor.B.rotateTo(-diff*() );
-	}
-	else if (newY > currentY) {
-		diff = (newY-currentY);
-		Motor.B.rotateTo(diff*() );
-	
-	}
+		System.out.println("in moveToXY");
+		int diff;
+		int newX = newXY[0];
+		int newY = newXY[1];
+		if (newX < currentX) {
+			diff = (currentX-newX);
+			Motor.A.rotate(-diff*(150) );
+		}
+		else if (newX > currentX) {
+			diff = (newX-currentX);
+			Motor.A.rotate(diff*(150) );
+		}
+
+		System.out.println("done moving X");
+		
+		if (newY < currentY) {
+			diff = (currentX-newX);
+			Motor.B.rotateTo((int) Math.round(-diff*(163.7022)) );
+		}
+		else if (newY > currentY) {
+			diff = (newY-currentY);
+			Motor.B.rotateTo((int) Math.round(diff*(163.7022)) );
+		}
+
+		System.out.println("exiting moveToXY");
 	}
 	
 	public void resetPosition() {
 		int resetX = currentX;
-		Motor.A.rotateTo(-resetX*() );
+		Motor.A.rotate(-resetX*(150) );
 		int resetY = currentY;
-		Motor.B.rotateTo(-resetY*() );
+		Motor.B.rotate((int) Math.round(-resetY*(163.7022)) );
 	}
 	
 	public String examineLocation(int[] location) {
 		int lightValue;
-		String color; 
+		String color = "";
+		int diff;
+
+		int newX = location[0];
+		int newY = location[1];
 
 		if (newX < currentX) {
         	diff = (newX - currentX);
-          	Motor.A.rotate(diff*()+());
+          	Motor.A.rotate(diff*(150)+(50));
     	}
      
     	if (newX > currentX) {
       	    diff = (currentX - newX);
-            Motor.A.rotate(-diff*()+());
+            Motor.A.rotate(-diff*(150)+(50));
      	}
    
      	if (newY < currentY) {
             diff = (newY - currentY);
-            Motor.A.rotate(diff*()+());
+            Motor.A.rotate((int) Math.round(diff*(163.7022) + (50)) );
      	}
      
      	if (newY > currentY) {
             diff = (currentY - newY);
-            Motor.A.rotate(-diff*()+());
+            Motor.A.rotate((int) Math.round(-diff*(163.7022) + (50)) );
      	}
 		
 		LightSensor light = new LightSensor(SensorPort.S1);
 
     			lightValue = light.getLightValue();
      		
-     		if (lightValue > 0 && lightValue <= 100) {
+     		if (lightValue <= 33) {
      			color = "green";
      		}
-     		if (lightValue > 100 && lightValue <= 200) {
+     		else if (lightValue <= 66) {
      			color = "gray";
      		}
-     		if (lightValue > 200 && lightValue <= 300) {
+     		else {
      			color = "black";
      		}
 		return color;
 	}
 
 	public void pickUpPiece() {
-		Motor.C.rotate( + 180);
-		Motor.C.rotate( + 270);
-		Motor.C.rotate( + 180);
+		Motor.C.rotate(240);
 		holding = true;
 	}
 
 	public void dropPiece() {
-		Motor.C.rotate( + 90);
-		Motor.C.rotate( + 180);
+		Motor.C.rotate(120);
 		holding = false;
 	}
 
