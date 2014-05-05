@@ -1,6 +1,7 @@
 // ALL AARON
 
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class Game {
 
@@ -116,8 +117,13 @@ public class Game {
 			}
 		}
 
-		if (this.gameRobot != null)
-			this.gameRobot.disconnect();
+		if (this.gameRobot != null) {
+			try {
+				this.gameRobot.disconnect();
+			} catch (IOException e) {
+				// do nothing
+			}
+		}
 
 		if (player1.getAllMoves(this).length==0) {
 			return this.player2;
