@@ -7,18 +7,33 @@ import java.io.*;
 
 public class Robot {
 
-	private int currentX;
-	private int currentY;
-	private boolean holding;
+	// INSTANCE VARIABLES
 	private NXTConnector conn;
+	private LightSensor lightSensor;
+	private TouchSensor touchSensor;
 	private int[] armLocation;
 	private boolean isHoldingPiece;
 	private Thread hook;
 	private boolean connected;
-	private int metal_value;
-	private int green_value;
 
+	// CLASS VARIABLES
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
+
+	public static String darkColor = "black";
+	public static String middleColor = "gray";
+	public static String lightColor = "green";
+	public static int lowerCutoff = 35;
+	public static int upperCutoff = 75;
+
+	// all lengths are in same units
+	private static final double BASELINE_X_DISTANCE = 50;
+	private static final double BASELINE_Y_DISTANCE = 12;
+	private static final double X_SQUARE_SPACING = 15;
+	private static final double Y_SQUARE_SPACING = 6;
+	private static final double GEAR_CIRCUMFERENCE = 36;
+	private static final double WHEEL_CIRCUMFERENCE = 4.2 * Math.PI;
+	private static final double SENSOR_OFFSET_X = 7;
+	private static final double SENSOR_OFFSET_Y = 0;
 
 	public Robot() {
 		this.connected = false;
@@ -33,19 +48,6 @@ public class Robot {
 				}
 			}
 		};
-		int[] check_values = new int[] {0,0,0};
-		LightSensor light = new LightSensor(SensorPort.S1);
-		for (check_location : new int[] {new int[] {0,0},new int[] {0,5},new int[] {0,7}}) {
-			trash = this.examineLocation(check_location);
-
-			for (int i = 0; i<3; i++):
-				if check_location[i]==0:
-					check_location[i]=light.getLightValue();
-		}
-		Arrays.sort(check_values);
-		metal_value = (check_values[0]+check_values[1])/2
-		green_value = (check_values[1]+check_values[2])/2
-
 	}
 
 	public static void main(String[] args) {
@@ -60,7 +62,6 @@ public class Robot {
 
 			while (!done) {
 				System.out.println("");
-				System.out.println("0\tgetArmLocation");
 				System.out.println("1\tgetIsHoldingPiece");
 				System.out.println("2\tmoveToXY");
 				System.out.println("3\tresetPosition");
@@ -84,9 +85,6 @@ public class Robot {
 				}
 
 				switch (input) {
-					case 0:
-						System.out.println("[" + r.getArmLocation()[0] + ", " + r.getArmLocation()[1] + "]");
-						break;
 					case 1:
 						System.out.println(r.getIsHoldingPiece());
 						break;
@@ -154,121 +152,90 @@ public class Robot {
 			this.conn.connectTo(NXTComm.LCP);
 			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
 			Runtime.getRuntime().addShutdownHook(this.hook);
+
+			Motor.A.setSpeed(100);
+			Motor.B.setSpeed(100);
+			Motor.C.setSpeed(150);
+
+			this.touchSensor = new TouchSensor(SensorPort.S1);
+			this.lightSensor = new LightSensor(SensorPort.S2);
+
 			this.connected = true;
 		}
 	}
 
 	public void disconnect() throws IOException {
+		System.out.println("in disconnect");
 		if (this.connected) {
+			System.out.println("disconnecting");
 			Motor.A.flt();
 			Motor.B.flt();
 			Motor.C.flt();
 			this.conn.close();
 			Runtime.getRuntime().removeShutdownHook(this.hook);
+
+			this.touchSensor = null;
+			this.lightSensor = null;
+
 			this.connected = false;
+			System.out.println("done disconnecting");
 		}
 	}
 
-	public int[] getArmLocation() {
-		return new int[] {currentX, currentY};
+	public boolean getIsHoldingPiece() {
+		return this.isHoldingPiece;
 	}
 	
-	public boolean getIsHoldingPiece() {
-		return holding;
-	}
-
 	public void moveToXY(int[] newXY) {
-		System.out.println("in moveToXY");
-		int diff;
-		int newX = newXY[0];
-		int newY = newXY[1];
-		if (newX < currentX) {
-			diff = (currentX-newX);
-			Motor.A.rotate(-diff*(150) );
-		}
-		else if (newX > currentX) {
-			diff = (newX-currentX);
-			Motor.A.rotate(diff*(150) );
-		}
-
-		System.out.println("done moving X");
-		
-		if (newY < currentY) {
-			diff = (currentX-newX);
-			Motor.B.rotateTo((int) Math.round(-diff*(163.7022)) );
-		}
-		else if (newY > currentY) {
-			diff = (newY-currentY);
-			Motor.B.rotateTo((int) Math.round(diff*(163.7022)) );
-		}
-
-		System.out.println("exiting moveToXY");
+		Motor.A.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (newXY[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE)), true);
+		Motor.B.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (newXY[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE)));
+		while (Motor.A.isMoving());
+			//do nothing
 	}
 	
 	public void resetPosition() {
-		int resetX = currentX;
-		Motor.A.rotate(-resetX*(150) );
-		int resetY = currentY;
-		Motor.B.rotate((int) Math.round(-resetY*(163.7022)) );
+		Motor.A.rotateTo(0, true);
+		Motor.B.rotateTo(0);
+		while (Motor.A.isMoving());
+			//do nothing
 	}
 	
 	public String examineLocation(int[] location) {
-		int lightValue;
-		String color = "";
-		int diff;
+		Motor.A.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
+		Motor.B.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (location[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE + Robot.SENSOR_OFFSET_X)));
+		while (Motor.A.isMoving());
+			//do nothing
 
-		int newX = location[0];
-		int newY = location[1];
+		int lightValue = this.lightSensor.readValue();
 
-		if (newX < currentX) {
-        	diff = (newX - currentX);
-          	Motor.A.rotate(diff*(150)+(50));
-    	}
-     
-    	if (newX > currentX) {
-      	    diff = (currentX - newX);
-            Motor.A.rotate(-diff*(150)+(50));
-     	}
-   
-     	if (newY < currentY) {
-            diff = (newY - currentY);
-            Motor.A.rotate((int) Math.round(diff*(163.7022) + (50)) );
-     	}
-     
-     	if (newY > currentY) {
-            diff = (currentY - newY);
-            Motor.A.rotate((int) Math.round(-diff*(163.7022) + (50)) );
-     	}
-		
-		LightSensor light = new LightSensor(SensorPort.S1);
-
-    			lightValue = light.getLightValue();
-     		
-     		if (lightValue <= metal_value) {
-     			color = "gray";
-     		}
-     		else if (lightValue <= green_value) {
-     			color = "green";
-     		}
-     		else {
-     			color = "black";
-     		}
-		return color;
+		if (lightValue <= Robot.lowerCutoff) {
+			return Robot.darkColor;
+		} else if (lightValue <= Robot.upperCutoff) {
+			return Robot.middleColor;
+		} else {
+			return Robot.lightColor;
+		}
 	}
 
 	public void pickUpPiece() {
-		Motor.C.rotate(240);
-		holding = true;
+		if (!this.isHoldingPiece) {
+			Motor.C.rotateTo(-240);
+			this.isHoldingPiece = true;
+		}
 	}
 
 	public void dropPiece() {
-		Motor.C.rotate(120);
-		holding = false;
+		if (this.isHoldingPiece) {
+			Motor.C.rotateTo(-360);
+			Motor.C.resetTachoCount();
+			this.isHoldingPiece = false;
+		}
 	}
 
 	public void waitForSensorPress() {
-		TouchSensor touch = new TouchSensor(SensorPort.S1);
-		while(!touch.isPressed()){
-		}
-	}	
+		while (!this.touchSensor.isPressed());
+			//wait for sensor to be pressed
+		while (this.touchSensor.isPressed());
+			//wait for sensor to be released
+	}
 }
