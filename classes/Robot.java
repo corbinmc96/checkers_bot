@@ -15,6 +15,8 @@ public class Robot {
 	private boolean isHoldingPiece;
 	private Thread hook;
 	private boolean connected;
+	private int metal_value;
+	private int green_value;
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
@@ -31,6 +33,19 @@ public class Robot {
 				}
 			}
 		};
+		int[] check_values = new int[] {0,0,0};
+		LightSensor light = new LightSensor(SensorPort.S1);
+		for (check_location : new int[] {new int[] {0,0},new int[] {0,5},new int[] {0,7}}) {
+			trash = this.examineLocation(check_location);
+
+			for (int i = 0; i<3; i++):
+				if check_location[i]==0:
+					check_location[i]=light.getLightValue();
+		}
+		Arrays.sort(check_values);
+		metal_value = (check_values[0]+check_values[1])/2
+		green_value = (check_values[1]+check_values[2])/2
+
 	}
 
 	public static void main(String[] args) {
@@ -229,11 +244,11 @@ public class Robot {
 
     			lightValue = light.getLightValue();
      		
-     		if (lightValue <= 33) {
-     			color = "green";
-     		}
-     		else if (lightValue <= 66) {
+     		if (lightValue <= metal_value) {
      			color = "gray";
+     		}
+     		else if (lightValue <= green_value) {
+     			color = "green";
      		}
      		else {
      			color = "black";
