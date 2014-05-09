@@ -31,12 +31,15 @@ public class Robot {
 	// all lengths are in same units
 	private static final double BASELINE_X_DISTANCE = 50;
 	private static final double BASELINE_Y_DISTANCE = 12;
+
 	private static final double X_SQUARE_SPACING = 15;
 	private static final double Y_SQUARE_SPACING = 6;
+
 	private static final double GEAR_CIRCUMFERENCE = 36;
 	private static final double WHEEL_CIRCUMFERENCE = 4.2 * Math.PI;
-	private static final double SENSOR_OFFSET_X = 7;
-	private static final double SENSOR_OFFSET_Y = 0;
+
+	private static final double SENSOR_OFFSET_X = 11;
+	private static final double SENSOR_OFFSET_Y = 1;
 
 	public Robot() {
 		this.connected = false;
@@ -182,12 +185,14 @@ public class Robot {
 	}
 
 	public void disconnect() throws IOException {
-		System.out.println("in disconnect");
+		// System.out.println("in disconnect");
 		if (this.connected) {
-			System.out.println("disconnecting");
-			Motor.A.flt();
-			Motor.B.flt();
-			Motor.C.flt();
+			// System.out.println("disconnecting");
+
+			// MotorPort.A.controlMotor(0, 4);
+			// MotorPort.B.controlMotor(0, 4);
+			// MotorPort.C.controlMotor(0, 4);
+
 			this.conn.close();
 			Runtime.getRuntime().removeShutdownHook(this.hook);
 
@@ -195,7 +200,7 @@ public class Robot {
 			this.lightSensor = null;
 
 			this.connected = false;
-			System.out.println("done disconnecting");
+			// System.out.println("done disconnecting");
 		}
 	}
 
