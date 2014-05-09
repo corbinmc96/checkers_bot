@@ -32,7 +32,7 @@ public class Robot {
 	private static final double Y_SQUARE_SPACING = 6;
 	private static final double GEAR_CIRCUMFERENCE = 36;
 	private static final double WHEEL_CIRCUMFERENCE = 4.2 * Math.PI;
-	private static final double SENSOR_OFFSET_X = 15;
+	private static final double SENSOR_OFFSET_X = 7;
 	private static final double SENSOR_OFFSET_Y = 0;
 
 	public Robot() {
@@ -153,6 +153,10 @@ public class Robot {
 			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
+			Motor.A.setSpeed(100);
+			Motor.B.setSpeed(100);
+			Motor.C.setSpeed(150);
+
 			this.touchSensor = new TouchSensor(SensorPort.S1);
 			this.lightSensor = new LightSensor(SensorPort.S2);
 
@@ -161,7 +165,9 @@ public class Robot {
 	}
 
 	public void disconnect() throws IOException {
+		System.out.println("in disconnect");
 		if (this.connected) {
+			System.out.println("disconnecting");
 			Motor.A.flt();
 			Motor.B.flt();
 			Motor.C.flt();
@@ -172,6 +178,7 @@ public class Robot {
 			this.lightSensor = null;
 
 			this.connected = false;
+			System.out.println("done disconnecting");
 		}
 	}
 
@@ -212,14 +219,15 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			Motor.C.rotate(240);
+			Motor.C.rotateTo(-240);
 			this.isHoldingPiece = true;
 		}
 	}
 
 	public void dropPiece() {
 		if (this.isHoldingPiece) {
-			Motor.C.rotate(120);
+			Motor.C.rotateTo(-360);
+			Motor.C.resetTachoCount();
 			this.isHoldingPiece = false;
 		}
 	}
