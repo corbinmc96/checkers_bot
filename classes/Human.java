@@ -29,8 +29,9 @@ public class Human extends Player {
 	}
 
 	public Move inputMove(Game g) {
+		// THIS DOES NOT APPEAR TO DIFFERENTIATE BETWEEN DIFFERENT MOVES WITH SAME START AND ENDPOINTS
 		if (this.getRobot()!=null) {
-			Robot r = this.getRobot();
+			final Robot r = this.getRobot();
 			//starts concurrent thread waiting for button press
 			Thread t = new Thread() {
 				public void run() {
@@ -54,6 +55,7 @@ public class Human extends Player {
 
 			//iterates over all possible moves
 			for (Move m : possibleMoves) {
+				System.out.print("\n");
 				//gets all waypoints of the move
 				int[][] waypoints = m.getWaypoints();
 				//declares pointColor variable
@@ -65,9 +67,13 @@ public class Human extends Player {
 				for (int[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
 					if (scannedLocations.contains(waypoint)) {
 						//sets pointColor to the previously stored value
+						System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
+						System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 					} else {
 						//scans the board to get pointColor
+						System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
+						System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
 						pointColor = this.getRobot().examineLocation(waypoint);
 						//stores the color in the pair of arrays holding the scanned locations and values
 						scannedLocations.add(waypoint);
@@ -75,6 +81,7 @@ public class Human extends Player {
 					}
 					//breaks and continues to the next move if the square is not empty
 					if (pointColor!=Board.COLOR) {
+						System.out.println("The piece was NOT moved. Moving on to next move\n");
 						shouldContinue = true;
 						break;
 					}
@@ -83,15 +90,21 @@ public class Human extends Player {
 				if (shouldContinue) {
 					continue;
 				}
+
+				System.out.println("Piece WAS moved. Checking potential endpoint");
 				
 				//sets last waypoint
 				int[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
 				if (scannedLocations.contains(waypoint)) {
 					//sets pointColor to the previously stored value
+					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
+					System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
 				} else {
 					//scans the board to get pointColor
+					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
+					System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
 					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
 					//stores the color in the pair of arrays holding the scanned locations and values
 					scannedLocations.add(waypoint);
@@ -99,8 +112,10 @@ public class Human extends Player {
 				}
 				//returns the move if the final square matches the color of this player's pieces
 				if (pointColor==this.getColor()) {
+					System.out.println("Color matches. This was the move.\n");
 					return m;
 				}
+				System.out.println("Endpoint is not the Human's color. Checking next move...\n");
 			}
 			
 			//failed to find the right move
