@@ -28,9 +28,6 @@ public class Robot {
 	public static String middleColor = "gray";
 	public static String lightColor = "green";
 
-	public int middle_cutoff;
-	public int light_cutoff;
-
 	// all lengths are in same units
 	private static final double BASELINE_X_DISTANCE = 1;
 	private static final double BASELINE_Y_DISTANCE = 0;
