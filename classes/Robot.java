@@ -18,15 +18,15 @@ public class Robot {
 	private Thread hook;
 	private boolean connected;
 
+	public int middle_cutoff;
+	public int light_cutoff;
+
 	// CLASS VARIABLES
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
 	public static String darkColor = "black";
 	public static String middleColor = "gray";
 	public static String lightColor = "green";
-
-	public int middle_cutoff;
-	public int light_cutoff;
 
 	// all lengths are in same units
 	private static final double BASELINE_X_DISTANCE = 50;
@@ -54,23 +54,24 @@ public class Robot {
 				}
 			}
 		};
-		int[] check_values = new int[] {0,0,0};
-		LightSensor light = new LightSensor(SensorPort.S1);
-		for (int[] check_location : new int[][] {new int[] {0,0},new int[] {0,5},new int[] {0,7}}) {
-			this.examineLocation(check_location);
+		// int[] check_values = new int[] {0,0,0};
+		// LightSensor light = new LightSensor(SensorPort.S1);
+		// for (int[] check_location : new int[][] {new int[] {0,0},new int[] {0,5},new int[] {0,7}}) {
+		// 	this.examineLocation(check_location);
 
-			for (int i = 0; i<3; i++) {
-				if (check_location[i]==0) {
-					check_location[i]=light.getLightValue();
-				}
-			}
-		}
-		Arrays.sort(check_values);
-		middle_cutoff = (check_values[0]+check_values[1])/2;
-		light_cutoff = (check_values[1]+check_values[2])/2;
+		// 	for (int i = 0; i<3; i++) {
+		// 		if (check_location[i]==0) {
+		// 			check_location[i]=light.getLightValue();
+		// 		}
+		// 	}
+		// }
+		// Arrays.sort(check_values);
+		// middle_cutoff = (check_values[0]+check_values[1])/2;
+		// light_cutoff = (check_values[1]+check_values[2])/2;
 	}
 
 	public static void main(String[] args) {
+
 		Robot r = new Robot();
 		r.connect();
 
@@ -169,7 +170,8 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			this.conn.connectTo(NXTComm.LCP);
+			System.out.print(this.conn.connectTo(null, null, NXTCommFactory.USB, NXTComm.LCP));
+
 			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
 			Runtime.getRuntime().addShutdownHook(this.hook);
 

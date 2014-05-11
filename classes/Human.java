@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Human extends Player {
 	//stores the Scanner object for taking input
@@ -112,7 +113,26 @@ public class Human extends Player {
 				}
 				//returns the move if the final square matches the color of this player's pieces
 				if (pointColor==this.getColor()) {
-					System.out.println("Color matches. This was the move.\n");
+					for (Move like_m : possibleMoves) {
+						boolean is_correct = true;
+						int[][] m_waypoints = m.getWaypoints();
+						Integer[] first_m = Human.convert(m_waypoints[0]);
+						Integer[] last_m = Human.convert(m_waypoints[m_waypoints.length-1]);
+						int[][] like_m_waypoints = like_m.getWaypoints();
+						Integer[] first_like_m = Human.convert(like_m_waypoints[0]);
+						Integer[] last_like_m = Human.convert(like_m_waypoints[like_m_waypoints.length - 1]);
+						if (Arrays.deepEquals(first_m, first_like_m) && Arrays.deepEquals(last_m, last_like_m)) {
+							for (Piece jumped_piece : like_m.calculatePiecesToJump()) {
+								if (this.getRobot().examineLocation(jumped_piece.getLocation())!="green"){
+									is_correct = false;
+									break;
+								} 
+							}
+							if (is_correct) {
+								return like_m;
+							}
+						} 
+					}
 					return m;
 				}
 				System.out.println("Endpoint is not the Human's color. Checking next move...\n");
@@ -152,5 +172,13 @@ public class Human extends Player {
 			}
 			return inputtedMove;
 		}
+	}
+
+	public static Integer[] convert(int[] old) {
+		Integer[] result = new Integer[old.length];
+		for (int i = 0; i<old.length; i++) {
+			result[i] = Integer.valueOf(old[i]);
+		}
+		return result;
 	}
 }
