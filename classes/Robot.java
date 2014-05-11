@@ -29,8 +29,8 @@ public class Robot {
 	public int light_cutoff;
 
 	// all lengths are in same units
-	private static final double BASELINE_X_DISTANCE = 50;
-	private static final double BASELINE_Y_DISTANCE = 12;
+	private static final double BASELINE_X_DISTANCE = 1;
+	private static final double BASELINE_Y_DISTANCE = 0;
 
 	private static final double X_SQUARE_SPACING = 15;
 	private static final double Y_SQUARE_SPACING = 6;
@@ -38,8 +38,8 @@ public class Robot {
 	private static final double GEAR_CIRCUMFERENCE = 36;
 	private static final double WHEEL_CIRCUMFERENCE = 4.2 * Math.PI;
 
-	private static final double SENSOR_OFFSET_X = 11;
-	private static final double SENSOR_OFFSET_Y = 1;
+	private static final double SENSOR_OFFSET_X = 12.5;
+	private static final double SENSOR_OFFSET_Y = -1;
 
 	public Robot() {
 		this.connected = false;
@@ -54,20 +54,6 @@ public class Robot {
 				}
 			}
 		};
-		int[] check_values = new int[] {0,0,0};
-		LightSensor light = new LightSensor(SensorPort.S1);
-		for (int[] check_location : new int[][] {new int[] {0,0},new int[] {0,5},new int[] {0,7}}) {
-			this.examineLocation(check_location);
-
-			for (int i = 0; i<3; i++) {
-				if (check_location[i]==0) {
-					check_location[i]=light.getLightValue();
-				}
-			}
-		}
-		Arrays.sort(check_values);
-		middle_cutoff = (check_values[0]+check_values[1])/2;
-		light_cutoff = (check_values[1]+check_values[2])/2;
 	}
 
 	public static void main(String[] args) {
@@ -98,6 +84,8 @@ public class Robot {
 						input = Integer.parseInt(br.readLine());
 					} catch (IOException e) {
 						//do nothing
+					} catch (NumberFormatException e) {
+						input = -1;
 					}
 					if (input<0 || input>8) {
 						input = -1;
@@ -173,12 +161,18 @@ public class Robot {
 			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
-			Motor.A.setSpeed(100);
-			Motor.B.setSpeed(100);
+			Motor.A.setSpeed(150);
+			Motor.B.setSpeed(150);
 			Motor.C.setSpeed(150);
+
+			Motor.A.resetTachoCount();
+			Motor.B.resetTachoCount();
+			Motor.C.resetTachoCount();
 
 			this.touchSensor = new TouchSensor(SensorPort.S1);
 			this.lightSensor = new LightSensor(SensorPort.S2);
+
+			this.calibrate();
 
 			this.connected = true;
 		}
@@ -259,5 +253,23 @@ public class Robot {
 			//wait for sensor to be pressed
 		while (this.touchSensor.isPressed());
 			//wait for sensor to be released
+	}
+
+	public void calibrate() {
+		int[] check_values = new int[] {0,0,0};
+		LightSensor light = new LightSensor(SensorPort.S1);
+		for (int[] check_location : new int[][] {new int[] {0,1},new int[] {0,3},new int[] {0,7}}) {
+			this.examineLocation(check_location);
+
+			for (int i = 0; i<3; i++) {
+				if (check_values[i]==0) {
+					check_values[i]=light.getLightValue();
+					break;
+				}
+			}
+		}
+		Arrays.sort(check_values);
+		middle_cutoff = (check_values[0]+check_values[1])/2;
+		light_cutoff = (check_values[1]+check_values[2])/2;
 	}
 }
