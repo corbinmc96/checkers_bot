@@ -164,8 +164,8 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			this.conn1.connectTo(null, null, NXTCommFactory.USB, NXTComm.LCP);
-			this.conn2.connectTo(null, null, NXTCommFactory.USB, NXTComm.LCP);
+			System.out.println(this.conn1.connectTo("cart", null, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.conn2.connectTo("arch", null, NXTCommFactory.USB, NXTComm.LCP));
 
 			this.xMotor = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 0);
 			this.yMotor1 = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 1);
@@ -176,6 +176,9 @@ public class Robot {
 
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
+			this.touchSensor = new TouchSensor(SensorPort.S1);
+			this.lightSensor = new LightSensor(SensorPort.S2);
+
 			this.yMotor1.setSpeed(150);
 			this.yMotor2.setSpeed(150);
 			this.xMotor.setSpeed(150);
@@ -185,9 +188,6 @@ public class Robot {
 			this.yMotor2.resetTachoCount();
 			this.xMotor.resetTachoCount();
 			this.magnetMotor.resetTachoCount();
-
-			this.touchSensor = new TouchSensor(SensorPort.S1);
-			this.lightSensor = new LightSensor(SensorPort.S2);
 
 			this.calibrate();
 
