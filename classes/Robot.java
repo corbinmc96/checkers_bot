@@ -28,11 +28,14 @@ public class Robot {
 	public int light_cutoff;
 
 	// CLASS VARIABLES
-	public static final int[] DEAD_LOCATION = new int[] {0, -1};
-
 	public static String darkColor = "black";
 	public static String middleColor = "gray";
 	public static String lightColor = "green";
+
+	public static final int[] DEAD_LOCATION = new int[] {0, -1};
+
+	public static final String CART_BRICK_ADDRESS = "001653058875";
+	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
 	// all lengths are in same units
 	private static final double BASELINE_X_DISTANCE = 1;
@@ -164,8 +167,8 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			System.out.println(this.conn1.connectTo("cart", null, NXTCommFactory.USB, NXTComm.LCP));
-			System.out.println(this.conn2.connectTo("arch", null, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.conn1.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.conn2.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
 
 			this.xMotor = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 0);
 			this.yMotor1 = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 1);
