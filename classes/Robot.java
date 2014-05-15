@@ -31,8 +31,8 @@ public class Robot {
 
 	// CLASS VARIABLES
 	public static String darkColor = "black";
-	public static String middleColor = "gray";
-	public static String lightColor = "green";
+	public static String middleColor = "green";
+	public static String lightColor = "gray";
 	
 	public static final String BOARD_COLOR = "green";
 
@@ -42,7 +42,7 @@ public class Robot {
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
 	// all lengths are in same units
-	private static final double BASELINE_X_DISTANCE = 6;
+	private static final double BASELINE_X_DISTANCE = 0;
 	private static final double BASELINE_Y_DISTANCE = 16.5;
 
 	private static final double X_SQUARE_SPACING = 15;
@@ -51,8 +51,8 @@ public class Robot {
 	private static final double GEAR_CIRCUMFERENCE = 36;
 	private static final double WHEEL_CIRCUMFERENCE = 4.4 * Math.PI;
 
-	private static final double SENSOR_OFFSET_X = 12.5;
-	private static final double SENSOR_OFFSET_Y = -1;
+	private static final double SENSOR_OFFSET_X = 15;
+	private static final double SENSOR_OFFSET_Y = 0;
 
 	public Robot() {
 		this.connected = false;
@@ -62,7 +62,12 @@ public class Robot {
 		this.hook = new Thread() {
 			public void start() {
 				try {
-					disconnect();
+					yMotor1.stop();
+					yMotor2.stop();
+					xMotor.stop();
+					magnetMotor.stop();
+					cartConnector.close();
+					archConnector.close();
 				} catch (IOException e) {
 					// do nothing
 				}
@@ -72,7 +77,9 @@ public class Robot {
 
 	public static void main(String[] args) {
 		Robot r = new Robot();
+		System.out.println("constructor finished");
 		r.connect();
+		System.out.println("connected");
 
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -173,6 +180,8 @@ public class Robot {
 		if (!this.connected) {
 			System.out.println(this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
 			System.out.println(this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
+			
+			Runtime.getRuntime().addShutdownHook(this.hook);
 
 			NXTCommand comm1 = new NXTCommand(this.cartConnector.getNXTComm());
 			NXTCommand comm2 = new NXTCommand(this.archConnector.getNXTComm());
@@ -182,12 +191,7 @@ public class Robot {
 			this.yMotor2 = new RemoteMotor(comm1, 1);
 			this.magnetMotor = new RemoteMotor(comm1, 2);
 
-			this.lightSensor = new LightSensor(SensorPort.S1);
-			this.touchSensor = new TouchSensor(SensorPort.S2);
-
-			Runtime.getRuntime().addShutdownHook(this.hook);
-
-			this.lightSensor = new LightSensor(SensorPort.S1);
+			this.lightSensor = new LightSensor(SensorPort.S4);
 			this.touchSensor = new TouchSensor(SensorPort.S2);
 			this.xBumper = new TouchSensor(SensorPort.S3);
 
@@ -257,10 +261,16 @@ public class Robot {
 		System.out.println("entering resetPosition");
 		this.yMotor1.rotateTo(180, true);
 		this.yMotor2.rotateTo(180, true);
-		this.xMotor.backward();
-		while (!this.xBumper.isPressed());
-			//do nothing
-		this.xMotor.stop();
+		this.xMotor.rotateTo(0);
+		// this.xMotor.backward();
+		// while (!this.xBumper.isPressed());
+		// 	//do nothing
+		// try {
+		// 	Thread.sleep(50);
+		// } catch (InterruptedException e) {
+		// 	e.printStackTrace();
+		// }
+		// this.xMotor.stop();
 		while (this.yMotor1.isMoving());
 		while (this.yMotor2.isMoving());
 			//do nothing
@@ -278,7 +288,13 @@ public class Robot {
 		while (this.yMotor2.isMoving());
 			//do nothing
 
-		int lightValue = this.lightSensor.readValue();
+		int lightValue = this.lightSensor.getNormalizedLightValue();
+		System.out.println(lightValue);
+
+		if (lightValue==0) {
+			System.out.println("zero returned from sensor");
+			return null;
+		}
 
 		if (lightValue <= this.middle_cutoff) {
 			return Robot.darkColor;
@@ -291,7 +307,7 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-210);
+			this.magnetMotor.rotateTo(-230);
 			this.isHoldingPiece = true;
 		}
 	}
@@ -318,7 +334,12 @@ public class Robot {
 
 			for (int i = 0; i<3; i++) {
 				if (check_values[i]==0) {
-					check_values[i]=this.lightSensor.getLightValue();
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					check_values[i]=this.lightSensor.getNormalizedLightValue();
 					break;
 				}
 			}
