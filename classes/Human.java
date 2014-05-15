@@ -51,7 +51,7 @@ public class Human extends Player {
 			try {
 				t.join();
 			} catch (InterruptedException e) {
-				System.out.print(e);
+				e.printStackTrace();
 			}
 
 			//iterates over all possible moves
@@ -62,9 +62,6 @@ public class Human extends Player {
 				//declares pointColor variable
 				String pointColor;
 				
-				//declares variable to determine if the loop needs to continue
-				boolean shouldContinue = true;
-
 				//sets origin waypoint of piece
 				int[] waypoint = waypoints[0];
 				if (scannedLocations.contains(waypoint)) {
@@ -81,13 +78,8 @@ public class Human extends Player {
 					locationValues.add(pointColor);
 				}
 				//breaks and continues to the next move if the square is not empty
-				if (pointColor==Board.COLOR) {
+				if (!pointColor.equals(Robot.BOARD_COLOR)) {
 					System.out.println("The piece was NOT moved. Moving on to next move\n");
-					shouldContinue = false;
-					break;
-				}
-				//continue to the next move if this move failed
-				if (shouldContinue) {
 					continue;
 				}
 
@@ -96,22 +88,21 @@ public class Human extends Player {
 				//sets last waypoint
 				waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
+				System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
 				if (scannedLocations.contains(waypoint)) {
 					//sets pointColor to the previously stored value
-					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-					System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
+					System.out.println("Already know color: "+pointColor+"\n");
 				} else {
 					//scans the board to get pointColor
-					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-					System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
-					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
+					pointColor = r.examineLocation(waypoint);
+					System.out.println("Color found: "+pointColor+"\n");
 					//stores the color in the pair of arrays holding the scanned locations and values
 					scannedLocations.add(waypoint);
 					locationValues.add(pointColor);
 				}
 				//returns the move if the final square matches the color of this player's pieces
-				if (pointColor==this.getColor()) {
+				if (pointColor.equals(this.getColor())) {
 					if (waypoints.length!=2) {
 						for (Move like_m : possibleMoves) {
 							boolean is_correct = true;
@@ -124,22 +115,21 @@ public class Human extends Player {
 							if (Arrays.deepEquals(first_m, first_like_m) && Arrays.deepEquals(last_m, last_like_m)) {
 								for (Piece jumped_piece : like_m.calculatePiecesToJump()) {
 									String piece_color;
+									System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
 									if (scannedLocations.contains(waypoint)) {
 										//sets pointColor to the previously stored value
-										System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-										System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 										piece_color = locationValues.get(scannedLocations.indexOf(waypoint));
+										System.out.println("Already know color: "+piece_color+"\n");
 									} else {
 										//scans the board to get pointColor
-										System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-										System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
-										piece_color = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
+										piece_color = r.examineLocation(waypoints[waypoints.length-1]);
+										System.out.println("Color found: "+piece_color+"\n");
 										//stores the color in the pair of arrays holding the scanned locations and values
 										scannedLocations.add(waypoint);
 										locationValues.add(piece_color);
 									}
 						
-									if (piece_color != "green") {
+									if (!piece_color.equals(Robot.BOARD_COLOR)) {
 										is_correct = false;
 										break;
 									} 
@@ -147,10 +137,13 @@ public class Human extends Player {
 								if (is_correct) {
 									return like_m;
 								}
-							} 
+							}
 						}
+						System.out.println("Start and end points were correct, but no moves matched");
+						return null;
+					} else {
+						return m;
 					}
-					return m;
 				}
 				System.out.println("Endpoint is not the Human's color. Checking next move...\n");
 			}
