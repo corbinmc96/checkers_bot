@@ -29,8 +29,8 @@ public class Robot {
 
 	// CLASS VARIABLES
 	public static String darkColor = "black";
-	public static String middleColor = "gray";
-	public static String lightColor = "green";
+	public static String middleColor = "green";
+	public static String lightColor = "gray";
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
@@ -38,17 +38,17 @@ public class Robot {
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
 	// all lengths are in same units
-	private static final double BASELINE_X_DISTANCE = 0;
-	private static final double BASELINE_Y_DISTANCE = -1;
+	private static final double BASELINE_X_DISTANCE = 6;
+	private static final double BASELINE_Y_DISTANCE = 16.5;
 
 	private static final double X_SQUARE_SPACING = 15;
 	private static final double Y_SQUARE_SPACING = 6;
 
 	private static final double GEAR_CIRCUMFERENCE = 36;
-	private static final double WHEEL_CIRCUMFERENCE = 3.7 * Math.PI;
+	private static final double WHEEL_CIRCUMFERENCE = 4.4 * Math.PI;
 
 	private static final double SENSOR_OFFSET_X = 12.5;
-	private static final double SENSOR_OFFSET_Y = 1;
+	private static final double SENSOR_OFFSET_Y = -1;
 
 	public Robot() {
 		this.connected = false;
@@ -177,25 +177,40 @@ public class Robot {
 
 			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn1.getNXTComm()));
 
-			Runtime.getRuntime().addShutdownHook(this.hook);
-
-			this.touchSensor = new TouchSensor(SensorPort.S2);
 			this.lightSensor = new LightSensor(SensorPort.S1);
+			this.touchSensor = new TouchSensor(SensorPort.S2);
+
+			Runtime.getRuntime().addShutdownHook(this.hook);
 
 			this.yMotor1.setSpeed(100);
 			this.yMotor2.setSpeed(100);
-			this.xMotor.setSpeed(200);
+			this.xMotor.setSpeed(150);
 			this.magnetMotor.setSpeed(150);
 
 			this.yMotor1.setAcceleration(100);
 			this.yMotor2.setAcceleration(100);
+			this.xMotor.setAcceleration(100);
 
 			this.yMotor1.resetTachoCount();
 			this.yMotor2.resetTachoCount();
 			this.xMotor.resetTachoCount();
 			this.magnetMotor.resetTachoCount();
 
-			// this.calibrate();
+			this.magnetMotor.setStallThreshold(1, 0);
+
+			// this.xMotor.rotateTo(0);
+			// this.xMotor.backward();
+			// try {
+			// 	Thread.sleep(100);
+			// } catch (InterruptedException e) {
+			// 	e.printStackTrace();
+			// }
+			// this.xMotor.stop();
+			// this.xMotor.resetTachoCount();
+
+			this.resetPosition();
+
+			this.calibrate();
 
 			this.resetPosition();
 
@@ -244,15 +259,27 @@ public class Robot {
 	}
 	
 	public void resetPosition() {
+		System.out.println("entering resetPosition");
 		this.yMotor1.rotateTo(180, true);
 		this.yMotor2.rotateTo(180, true);
 		this.xMotor.rotateTo(0);
+		// this.xMotor.backward();
+		// try {
+		// 	Thread.sleep(1000);
+		// } catch (InterruptedException e) {
+		// 	e.printStackTrace();
+		// }
+		// this.xMotor.stop();
+
 		while (this.yMotor1.isMoving());
 		while (this.yMotor2.isMoving());
 			//do nothing
 
 		this.yMotor1.resetTachoCount();
 		this.yMotor2.resetTachoCount();
+		this.xMotor.resetTachoCount();
+
+		System.out.println("exiting resetPosition");
 	}
 	
 	public String examineLocation(int[] location) {
@@ -276,7 +303,7 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-240);
+			this.magnetMotor.rotateTo(-210);
 			this.isHoldingPiece = true;
 		}
 	}
