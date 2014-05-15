@@ -1,0 +1,2 @@
+added Robot.BOARD_COLOR constant
+added new touch sensor in Robot to use as a bumper; this should prevent jerking of the x-direction motor
