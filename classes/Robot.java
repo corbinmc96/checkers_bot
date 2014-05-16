@@ -191,13 +191,13 @@ public class Robot {
 			this.yMotor2 = new RemoteMotor(comm1, 1);
 			this.magnetMotor = new RemoteMotor(comm1, 2);
 
-			this.lightSensor = new LightSensor(SensorPort.S4);
+			this.lightSensor = new LightSensor(SensorPort.S1);
 			this.touchSensor = new TouchSensor(SensorPort.S2);
 			this.xBumper = new TouchSensor(SensorPort.S3);
 
-			this.yMotor1.setSpeed(150);
-			this.yMotor2.setSpeed(150);
-			this.xMotor.setSpeed(225);
+			this.yMotor1.setSpeed(200);
+			this.yMotor2.setSpeed(200);
+			this.xMotor.setSpeed(300);
 			this.magnetMotor.setSpeed(150);
 
 			this.yMotor1.setAcceleration(100);
