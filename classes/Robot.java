@@ -307,7 +307,7 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-230);
+			this.magnetMotor.rotateTo(-215);
 			this.isHoldingPiece = true;
 		}
 	}

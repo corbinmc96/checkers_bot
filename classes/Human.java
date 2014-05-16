@@ -144,9 +144,11 @@ public class Human extends Player {
 					} else {
 						return m;
 					}
+				} else {
+					System.out.println("Endpoint is not the Human's color. Checking next move...\n");
 				}
-				System.out.println("Endpoint is not the Human's color. Checking next move...\n");
 			}
+
 			
 			//failed to find the right move
 			return null;
