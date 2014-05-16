@@ -45,7 +45,7 @@ public class Human extends Player {
 			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
 			ArrayList<String> locationValues = new ArrayList<String>();
 			//gets list of moves from best to worst
-			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(g), g, this, 1);
+			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(g), g, this, 3);
 			
 			//waits for button thread to finish
 			try {
@@ -64,8 +64,8 @@ public class Human extends Player {
 				
 				//sets origin waypoint of piece
 				int[] waypoint = waypoints[0];
-				if (scannedLocations.contains(waypoint)) {
 				System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
+				if (scannedLocations.contains(waypoint)) {
 					//sets pointColor to the previously stored value
 					System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));

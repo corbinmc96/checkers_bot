@@ -16,7 +16,7 @@ public class SimPlayer extends Player {
 
 	public Move takeTurn(Game g) {
 		//calculates the best move to make the specified number of plies ahead
-		Move m = this.calculateBestMove(g, 7);
+		Move m = this.calculateBestMove(g, 8);
 		//performs the move on the stored (and the physical) board
 		this.performMove(m);
 		// System.out.println(Arrays.deepToString(m.getWaypoints()));
@@ -24,8 +24,6 @@ public class SimPlayer extends Player {
 	}
 		
 	public void performMove(Move myMove) {
-		//performs the move on the stored board
-		Player.performMove(myMove,this.getBoard());
 		//tests if game is using the robot
 		if (this.getRobot()!=null) {
 			//move arm over moving piece
@@ -50,5 +48,7 @@ public class SimPlayer extends Player {
 			//resets arm after all pieces have been moved.
 			this.getRobot().resetPosition();
 		}
+		//performs the move on the stored board
+		Player.performMove(myMove,this.getBoard());
 	}
 }

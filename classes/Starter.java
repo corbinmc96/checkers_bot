@@ -12,8 +12,8 @@ public class Starter {
 		System.out.println(12);
 		
 		try {
-			Game theGame = new Game(new SimPlayer(args.length>0 ? args[0] : "x",true, r, new AaronAI()),
-									new Human(args.length>1 ? args[1] : "o",false, r, new AaronAI()),
+			Game theGame = new Game(new SimPlayer(args.length>0 ? args[0] : "x",true, r, new MultithreadedAI()),
+									new Human(args.length>1 ? args[1] : "o",false, r, new MultithreadedAI()),
 									(args.length>3 && args[3].equals("official")),
 									r
 			);

@@ -38,7 +38,7 @@ public class Robot {
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
-	public static final String CART_BRICK_ADDRESS = "001653058875";
+	public static final String CART_BRICK_ADDRESS = "001653058C81";
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
 	// all lengths are in same units
@@ -178,8 +178,8 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			System.out.println(this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
-			System.out.println(this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP));
+			System.out.println(this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP));
 			
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
@@ -195,9 +195,9 @@ public class Robot {
 			this.touchSensor = new TouchSensor(SensorPort.S2);
 			this.xBumper = new TouchSensor(SensorPort.S3);
 
-			this.yMotor1.setSpeed(100);
-			this.yMotor2.setSpeed(100);
-			this.xMotor.setSpeed(150);
+			this.yMotor1.setSpeed(150);
+			this.yMotor2.setSpeed(150);
+			this.xMotor.setSpeed(225);
 			this.magnetMotor.setSpeed(150);
 
 			this.yMotor1.setAcceleration(100);
@@ -314,8 +314,7 @@ public class Robot {
 
 	public void dropPiece() {
 		if (this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-360);
-			this.magnetMotor.resetTachoCount();
+			this.magnetMotor.rotateTo(0);
 			this.isHoldingPiece = false;
 		}
 	}
