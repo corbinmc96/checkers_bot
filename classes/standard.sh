@@ -15,7 +15,11 @@ if [ "$1" = "tui" ]; then
 	java -Dcharva.color=1 \
 		-cp ".:${2}:${2}/java/classes:${2}/java/lib/commons-logging.jar:${2}/java/lib/log4j-1.2.8.jar" \
 		TUIStarter 2> charva.log
+elif [ "$1" = "gui" ]; then
+	nxjpcc Starter.java && \
+	javac GUIStarter.java && \
+	java GUIStarter
 else
-	nxjpcc Starter.java
-	nxjpc Starter ${1}
+	nxjpcc Starter.java && \
+	nxjpc Starter ${1} ${2} ${3}
 fi
