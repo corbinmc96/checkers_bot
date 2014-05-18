@@ -3,8 +3,8 @@
 import lejos.pc.comm.*;
 import lejos.nxt.*;
 import lejos.nxt.remote.*;
-import java.io.*;
 
+import java.io.*;
 import java.util.Arrays;
 
 public class Robot {
@@ -60,16 +60,32 @@ public class Robot {
 		this.archConnector = new NXTConnector();
 
 		this.hook = new Thread() {
-			public void start() {
+			public void run() {
 				try {
-					yMotor1.stop();
-					yMotor2.stop();
-					xMotor.stop();
-					magnetMotor.stop();
+					(new Thread() {
+						public void run() {
+							xMotor.stop();
+							yMotor2.stop();
+							magnetMotor.stop();
+						}
+					}).start();
+
+					(new Thread() {
+						public void run() {
+							yMotor1.stop();
+						}
+					}).start();
+
+					Thread.sleep(2000);
 					cartConnector.close();
 					archConnector.close();
+
 				} catch (IOException e) {
-					// do nothing
+					System.out.println("Exception disconnecting robot");
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					System.out.println("Interrupted during disconnect of robot");
+					e.printStackTrace();
 				}
 			}
 		};
@@ -178,10 +194,56 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			System.out.println(this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP));
-			System.out.println(this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP));
-			
 			Runtime.getRuntime().addShutdownHook(this.hook);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
+				System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
+				try {
+					br.readLine();
+				} catch (IOException e) {
+					System.out.println("IOException reading line while connecting");
+					e.printStackTrace();
+				}
+			}
+			while (!this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
+				System.out.println("Unable to connect to the NXT brick mounted on the arch.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
+				try {
+					br.readLine();
+				} catch (IOException e) {
+					System.out.println("IOException reading line while connecting");
+					e.printStackTrace();
+				}
+			}
+
+			while ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()==0) {
+				System.out.println("Bad connection. Starting over...");
+				try {
+					this.cartConnector.close();
+					this.archConnector.close();
+				} catch (IOException e) {
+					System.out.println("IOException closing NXTConnectors after bad sensor");
+					e.printStackTrace();
+				}
+				while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
+					System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
+					try {
+						br.readLine();
+					} catch (IOException e) {
+						System.out.println("IOException reading line while connecting");
+						e.printStackTrace();
+					}
+				}
+				while (!this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
+					System.out.println("Unable to connect to the NXT brick mounted on the arch.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
+					try {
+						br.readLine();
+					} catch (IOException e) {
+						System.out.println("IOException reading line while connecting");
+						e.printStackTrace();
+					}
+				}
+			}
 
 			NXTCommand comm1 = new NXTCommand(this.cartConnector.getNXTComm());
 			NXTCommand comm2 = new NXTCommand(this.archConnector.getNXTComm());
@@ -220,13 +282,13 @@ public class Robot {
 	public void disconnect() throws IOException {
 		if (this.connected) {
 
-			// MotorPort.A.controlMotor(0, 4);
-			// MotorPort.B.controlMotor(0, 4);
-			// MotorPort.C.controlMotor(0, 4);
-
-			this.cartConnector.close();
-			this.archConnector.close();
-
+			this.hook.start();
+			try {
+				this.hook.join();
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted waiting for disconnect thread to run");
+				e.printStackTrace();
+			}
 			Runtime.getRuntime().removeShutdownHook(this.hook);
 
 			this.xMotor = null;
