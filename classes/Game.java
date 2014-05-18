@@ -37,6 +37,11 @@ public class Game {
 		this.player1.setBoard(this.gameBoard);
 		this.player2.setBoard(this.gameBoard);
 	}
+
+	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial, Robot startGameRobot) {
+		this(p1, p2, p1Locations, p2Locations, p1kings, p2kings, isOfficial);
+		this.gameRobot = startGameRobot;
+	}
 	
 	public Game (Game oldG, Move m) {
 		this.player1 = oldG.getPlayers()[0];
