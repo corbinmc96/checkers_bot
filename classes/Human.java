@@ -115,6 +115,7 @@ public class Human extends Player {
 							if (Arrays.deepEquals(first_m, first_like_m) && Arrays.deepEquals(last_m, last_like_m)) {
 								for (Piece jumped_piece : like_m.calculatePiecesToJump()) {
 									String piece_color;
+									waypoint = jumped_piece.getLocation();
 									System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
 									if (scannedLocations.contains(waypoint)) {
 										//sets pointColor to the previously stored value
@@ -132,15 +133,19 @@ public class Human extends Player {
 									if (!piece_color.equals(Robot.BOARD_COLOR)) {
 										is_correct = false;
 										break;
-									} 
+									}
 								}
 								if (is_correct) {
 									return like_m;
 								}
 							}
 						}
-						System.out.println("Start and end points were correct, but no moves matched");
-						return null;
+						System.out.println("Start and end points were correct, but no moves matched.");
+						System.out.println("Please fix the board.  You might have made an illegal move, or a piece might not be centered.");
+						System.out.println("Press the sensor when the board is fixed.");
+						r.resetPosition();
+						r.waitForSensorPress();
+						return this.inputMove(g);
 					} else {
 						return m;
 					}
@@ -149,9 +154,12 @@ public class Human extends Player {
 				}
 			}
 
-			
 			//failed to find the right move
-			return null;
+			System.out.println("Please fix the board.  You might have made an illegal move, or a piece might not be centered.");
+			System.out.println("Press the sensor when the board is fixed.");
+			r.resetPosition();
+			r.waitForSensorPress();
+			return this.inputMove(g);
 		
 		} else {
 			// super.getBoard().printBoard();
