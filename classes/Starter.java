@@ -11,7 +11,7 @@ public class Starter {
 		
 		try {
 			Game theGame = new Game(new SimPlayer(args.length>0 ? args[0] : "x", true, r, new MultithreadedAI()),
-									new Human(args.length>1 ? args[1] : "o", false, r, new MultithreadedAI()),
+									new SimPlayer(args.length>1 ? args[1] : "o", false, r, new CorbinAI()),
 									(args.length>3 && args[3].equals("official")),
 									r
 			);
