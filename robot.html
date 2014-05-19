@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>The Robot</title>
+
+    <!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Custom styles for this template -->
+    <link href="carousel.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">WCS Advanced Topics Robot</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Project Details<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/code.html">The Code</a></li>
+                    <li><a href="/robot.html">The Robot</a></li>
+                    <li><a href="/pi.html">Raspberry Pi</a></li>
+
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+
+
+
+<div class="container">
+<div class="row" id="maincontainer">
+
+                    <h1>The Robot</h1>
+<p> The robot that makes up the body of our project is made from LEGO MINDSTORMS parts. The robot is made up of three major componants: the arch, the cart, and the bricks. </p>
+<p> The arch runs along the entire width of the checker board. It contains two motors which power the wheels along the bottom. These wheels run along the inside of a track that keeps them within the confines of the game. Connected to the top of the wheel setups are two long rods. These rods carry gear pieces that allow the cart to move laterally across the board. </p>
+<p> The cart is where the action happens on the robot. It contains the sensors and magnet that allow the robot to make its moves. There are two gears on either side of the cart. These follow the tracks on the arch that move the cart from side to side. The cart also has a 'claw' that picks up and drops the checker pieces. This is accomplished by lowering the magnet, picking up the pieces, moving to where the bricks want to go, and then raising the magnet to where it looses its grip on the piece and the piece falls to its new location. There is also a light sensor that detects the conditions of a certain square on the board. The sensor detects the amount of light that reflects of a certain square and returns either black, gray, or green. This tells the brick the current condtions of the board.</p>
+<p> The bricks control the movement of the robot. Once a move is passed in by the computer, the bricks tell the motors and sensors to start moving. There is one brick on top of the cart which controls the magnet the light sensor and moves the cart along the arch.  The second brich, which is mounted on the arch, moves the arch up and down the board allowing for the full range of movement.</p>
+
+
+</div>
+</div>
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="docs.min.js"></script>
+  </body>
+</html>
+
+
