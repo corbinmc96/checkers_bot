@@ -25,7 +25,6 @@ public class Starter {
 			try {
 				r.disconnect();
 			} catch (IOException e) {
-				System.err.println(e);
 				e.printStackTrace();
 			}
 		}

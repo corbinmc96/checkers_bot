@@ -163,7 +163,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					this._textArea.append(line + "\n");
 				}
 			} catch (IOException e) {
-				//pass
+				e.printStackTrace();
 			}
 		}
 	}
@@ -183,6 +183,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 			try {
 				this._process.waitFor();
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 				return;
 			}
 			this._actionListener.actionPerformed(new ActionEvent(new JButton(), "RESET GAME"));
@@ -251,7 +252,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._listenerThread.join();
 					} catch (InterruptedException e) {
-						//pass
+						e.printStackTrace();
 					}
 				}
 				if (this._readerThread != null) {
@@ -259,7 +260,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._readerThread.join();
 					} catch (InterruptedException e) {
-						//pass
+						e.printStackTrace();
 					}
 				}
 				if (this._subProcess != null) {
@@ -267,7 +268,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._subProcess.waitFor();
 					} catch (InterruptedException e) {
-						//pass
+						e.printStackTrace();
 					}
 				}
 				this.hide();

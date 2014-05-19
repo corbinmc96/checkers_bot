@@ -165,7 +165,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 					this._textArea.append(line + "\n");
 				}
 			} catch (IOException e) {
-				System.out.println("Exception reading stdout from process");
+				System.err.println("Exception reading stdout from process");
 				e.printStackTrace();
 			}
 		}
@@ -203,7 +203,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 				pb.redirectErrorStream(true);
 				this._subProcess = pb.start();
 			} catch (IOException e) {
-				System.out.println("Subprocess creation failed with IOException");
+				System.err.println("Subprocess creation failed with IOException");
 				e.printStackTrace();
 				return;
 			}
@@ -218,7 +218,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 					try {
 						_subProcess.waitFor();
 					} catch (InterruptedException e) {
-						System.out.println("Interrupted waiting for process");
+						System.err.println("Interrupted waiting for process");
 						e.printStackTrace();
 					}
 					close();
@@ -233,7 +233,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 					try {
 						this._listenerThread.join();
 					} catch (InterruptedException e) {
-						System.out.println("InterruptedException waiting for listener thread");
+						System.err.println("InterruptedException waiting for listener thread");
 						e.printStackTrace();
 					}
 				}
@@ -242,7 +242,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 					try {
 						this._readerThread.join();
 					} catch (InterruptedException e) {
-						System.out.println("InterruptedException waiting for reader thread");
+						System.err.println("InterruptedException waiting for reader thread");
 						e.printStackTrace();
 					}
 				}
@@ -251,7 +251,7 @@ public class GUIStarter extends JFrame implements ActionListener {
 					try {
 						this._subProcess.waitFor();
 					} catch (InterruptedException e) {
-						System.out.println("InterruptedException waiting for subprocess");
+						System.err.println("InterruptedException waiting for subprocess");
 						e.printStackTrace();
 					}
 				}

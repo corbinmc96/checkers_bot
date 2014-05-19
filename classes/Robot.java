@@ -81,10 +81,10 @@ public class Robot {
 					archConnector.close();
 
 				} catch (IOException e) {
-					System.out.println("Exception disconnecting robot");
+					System.err.println("Exception disconnecting robot");
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					System.out.println("Interrupted during disconnect of robot");
+					System.err.println("Interrupted during disconnect of robot");
 					e.printStackTrace();
 				}
 			}
@@ -120,7 +120,7 @@ public class Robot {
 					try {
 						input = Integer.parseInt(br.readLine());
 					} catch (IOException e) {
-						//do nothing
+						e.printStackTrace();
 					} catch (NumberFormatException e) {
 						input = -1;
 					}
@@ -140,7 +140,7 @@ public class Robot {
 							try {
 								locationString = br.readLine();
 							} catch (IOException e) {
-								System.err.println(e);
+								e.printStackTrace();
 							}
 							if (!locationString.matches("[0-7] [0-7]")) {
 								locationString = null;
@@ -158,7 +158,7 @@ public class Robot {
 							try {
 								locationString = br.readLine();
 							} catch (IOException e) {
-								System.err.println(e);
+								e.printStackTrace();
 							}
 							if (!locationString.matches("[0-7] [0-7]")) {
 								locationString = null;
@@ -187,7 +187,7 @@ public class Robot {
 			try {
 				r.disconnect();
 			} catch (IOException e) {
-				System.err.println(e);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -202,7 +202,7 @@ public class Robot {
 				try {
 					br.readLine();
 				} catch (IOException e) {
-					System.out.println("IOException reading line while connecting");
+					System.err.println("IOException reading line while connecting");
 					e.printStackTrace();
 				}
 			}
@@ -211,7 +211,7 @@ public class Robot {
 				try {
 					br.readLine();
 				} catch (IOException e) {
-					System.out.println("IOException reading line while connecting");
+					System.err.println("IOException reading line while connecting");
 					e.printStackTrace();
 				}
 			}
@@ -222,7 +222,7 @@ public class Robot {
 					this.cartConnector.close();
 					this.archConnector.close();
 				} catch (IOException e) {
-					System.out.println("IOException closing NXTConnectors after bad sensor");
+					System.err.println("IOException closing NXTConnectors after bad sensor");
 					e.printStackTrace();
 				}
 				while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
@@ -230,7 +230,7 @@ public class Robot {
 					try {
 						br.readLine();
 					} catch (IOException e) {
-						System.out.println("IOException reading line while connecting");
+						System.err.println("IOException reading line while connecting");
 						e.printStackTrace();
 					}
 				}
@@ -239,7 +239,7 @@ public class Robot {
 					try {
 						br.readLine();
 					} catch (IOException e) {
-						System.out.println("IOException reading line while connecting");
+						System.err.println("IOException reading line while connecting");
 						e.printStackTrace();
 					}
 				}
@@ -286,7 +286,7 @@ public class Robot {
 			try {
 				this.hook.join();
 			} catch (InterruptedException e) {
-				System.out.println("Interrupted waiting for disconnect thread to run");
+				System.err.println("Interrupted waiting for disconnect thread to run");
 				e.printStackTrace();
 			}
 			Runtime.getRuntime().removeShutdownHook(this.hook);

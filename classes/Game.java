@@ -126,7 +126,7 @@ public class Game {
 			try {
 				this.gameRobot.disconnect();
 			} catch (IOException e) {
-				// do nothing
+				e.printStackTrace();
 			}
 		}
 
