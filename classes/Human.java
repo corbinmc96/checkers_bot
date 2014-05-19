@@ -104,16 +104,18 @@ public class Human extends Player {
 				//returns the move if the final square matches the color of this player's pieces
 				if (pointColor.equals(this.getColor())) {
 					if (waypoints.length!=2) {
-						for (Move like_m : possibleMoves) {
+						int[][] original_waypoints = m.getWaypoints();
+						Integer[] first_waypoint = Human.convert(original_waypoints[0]);
+						Integer[] last_waypoint = Human.convert(original_waypoints[original_waypoints.length-1]);
+
+						for (Move possible_m : possibleMoves) {
 							boolean is_correct = true;
-							int[][] m_waypoints = m.getWaypoints();
-							Integer[] first_m = Human.convert(m_waypoints[0]);
-							Integer[] last_m = Human.convert(m_waypoints[m_waypoints.length-1]);
-							int[][] like_m_waypoints = like_m.getWaypoints();
-							Integer[] first_like_m = Human.convert(like_m_waypoints[0]);
-							Integer[] last_like_m = Human.convert(like_m_waypoints[like_m_waypoints.length - 1]);
-							if (Arrays.deepEquals(first_m, first_like_m) && Arrays.deepEquals(last_m, last_like_m)) {
-								for (Piece jumped_piece : like_m.calculatePiecesToJump()) {
+							int[][] possible_m_waypoints = possible_m.getWaypoints();
+							Integer[] first_possible_m = Human.convert(possible_m_waypoints[0]);
+							Integer[] last_possible_m = Human.convert(possible_m_waypoints[possible_m_waypoints.length - 1]);
+
+							if (Arrays.deepEquals(first_waypoint, first_possible_m) && Arrays.deepEquals(last_waypoint, last_possible_m)) {
+								for (Piece jumped_piece : possible_m.calculatePiecesToJump()) {
 									String piece_color;
 									waypoint = jumped_piece.getLocation();
 									System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
@@ -123,7 +125,7 @@ public class Human extends Player {
 										System.out.println("Already know color: "+piece_color+"\n");
 									} else {
 										//scans the board to get pointColor
-										piece_color = r.examineLocation(waypoints[waypoints.length-1]);
+										piece_color = r.examineLocation(waypoint);
 										System.out.println("Color found: "+piece_color+"\n");
 										//stores the color in the pair of arrays holding the scanned locations and values
 										scannedLocations.add(waypoint);
@@ -136,7 +138,7 @@ public class Human extends Player {
 									}
 								}
 								if (is_correct) {
-									return like_m;
+									return possible_m;
 								}
 							}
 						}
