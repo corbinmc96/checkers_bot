@@ -99,7 +99,7 @@ public class GUIStarter extends JFrame {
 		JPanel rulesPanel = new JPanel();
 		rulesPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		rulesPanel.setBorder(new CompoundBorder(new TitledBorder("Choose the Rule Type"), new EmptyBorder(10, 20, 10, 20)));
-		this._rulesBox = new JList<String>(new String[] {"Official", "Unofficial"});
+		this._rulesBox = new JList<String>(new String[] {"official", "unofficial"});
 		this._rulesBox.setSelectedIndex(1);
 		this._rulesBox.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		this._rulesBox.setVisibleRowCount(1);
