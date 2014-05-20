@@ -8,10 +8,12 @@ public class Starter {
 
 		Robot r = new Robot();
 		r.connect();
+		r.calibrate();
+		r.resetPosition();
 		
 		try {
 			Game theGame = new Game(new SimPlayer(args.length>0 ? args[0] : "x", true, r, new MultithreadedAI()),
-									new SimPlayer(args.length>1 ? args[1] : "o", false, r, new CorbinAI()),
+									new Human(args.length>1 ? args[1] : "o", false, r, new MultithreadedAI()),
 									(args.length>3 && args[3].equals("official")),
 									r
 			);

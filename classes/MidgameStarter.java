@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class MidgameStarter {
 	public static void main(String[] args) {
 
-		Robot r = new PseudoRobot();
+		Robot r = new Robot();
 		r.connect();
 
 		if (!args[0].equals("robot") && !args[0].equals("human")) {
@@ -52,8 +52,8 @@ public class MidgameStarter {
 		try {
 			Game theGame;
 			if (args[0].equals("robot")) {
-				theGame = new Game(new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
-								   new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
+				theGame = new Game(new SimPlayer(args.length>6 ? args[6] : "x", true, r, new MultithreadedAI()),
+								   new Human(args.length>5 ? args[5] : "o", false, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -62,8 +62,8 @@ public class MidgameStarter {
 								   r
 				);
 			} else {
-				theGame = new Game(new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
-								   new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
+				theGame = new Game(new Human(args.length>5 ? args[5] : "o", false, r, new MultithreadedAI()),
+								   new SimPlayer(args.length>6 ? args[6] : "x", true, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -72,6 +72,26 @@ public class MidgameStarter {
 								   r
 				);
 			}
+
+			int[][] squaresToCalibrate = new int[3][];
+			Player[] players = theGame.getPlayers();
+			for (Player p : players) {
+				if (p.getColor().equals("gray")) {
+					squaresToCalibrate[0] = p.getPlayerPieces(theGame.getGameBoard())[0].getLocation();
+				} else {
+					squaresToCalibrate[2] = p.getPlayerPieces(theGame.getGameBoard())[0].getLocation();
+				}
+			}
+			for (int i = 0; i<8; i++) {
+				for (int j = 0; j<8; j++) {
+					if (theGame.getGameBoard().getPieceAtLocation(new int[] {i, j})==null) {
+						squaresToCalibrate[1] = new int[] {i, j};
+					}
+				}
+			}
+			r.calibrate(squaresToCalibrate);
+			r.resetPosition();
+
 			Player winner = theGame.play();
 			if (winner == null) {
 				System.out.println("TIE");

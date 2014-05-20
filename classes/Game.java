@@ -119,6 +119,8 @@ public class Game {
 				System.out.println(newTime - lastTime);
 				lastTime = newTime;
 
+			} else {
+				break;
 			}
 		}
 

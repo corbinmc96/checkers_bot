@@ -51,7 +51,7 @@ public class Robot {
 	private static final double GEAR_CIRCUMFERENCE = 36;
 	private static final double WHEEL_CIRCUMFERENCE = 4.4 * Math.PI;
 
-	private static final double SENSOR_OFFSET_X = 15;
+	private static final double SENSOR_OFFSET_X = 17;
 	private static final double SENSOR_OFFSET_Y = 0;
 
 	public Robot() {
@@ -198,35 +198,11 @@ public class Robot {
 
 			System.out.println("Connecting...");
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
-				System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
-				try {
-					br.readLine();
-				} catch (IOException e) {
-					System.err.println("IOException reading line while connecting");
-					e.printStackTrace();
-				}
-			}
-			while (!this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
-				System.out.println("Unable to connect to the NXT brick mounted on the arch.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
-				try {
-					br.readLine();
-				} catch (IOException e) {
-					System.err.println("IOException reading line while connecting");
-					e.printStackTrace();
-				}
-			}
+			boolean successful = false;
 
-			while ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()<2) {
-				System.out.println("Bad connection. Starting over...");
-				try {
-					this.cartConnector.close();
-					this.archConnector.close();
-				} catch (IOException e) {
-					System.err.println("IOException closing NXTConnectors after bad sensor");
-					e.printStackTrace();
-				}
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+			do {
 				while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
 					System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
 					try {
@@ -245,7 +221,27 @@ public class Robot {
 						e.printStackTrace();
 					}
 				}
-			}
+				successful = true;
+				NXTCommandConnector.setNXTCommand(new NXTCommand(this.cartConnector.getNXTComm()));
+
+				try {
+					Motor.B.resetTachoCount();
+					Motor.B.rotate(53);
+				} catch (Exception e) {
+					// successful = false;
+				}
+				if ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()<2 || Math.abs(Motor.B.getTachoCount()-53)>15/* || !successful*/) {
+					successful = false;
+					System.out.println("Bad connection. Starting over...");
+					try {
+						this.cartConnector.close();
+						this.archConnector.close();
+					} catch (IOException e) {
+						System.err.println("IOException closing NXTConnectors after bad sensor");
+						e.printStackTrace();
+					}
+				}
+			} while (!successful);
 
 			NXTCommand comm1 = new NXTCommand(this.cartConnector.getNXTComm());
 			NXTCommand comm2 = new NXTCommand(this.archConnector.getNXTComm());
@@ -261,21 +257,13 @@ public class Robot {
 
 			this.yMotor1.setSpeed(200);
 			this.yMotor2.setSpeed(200);
-			this.xMotor.setSpeed(300);
+			this.xMotor.setSpeed(200);
 			this.magnetMotor.setSpeed(150);
-
-			this.yMotor1.setAcceleration(100);
-			this.yMotor2.setAcceleration(100);
-			this.xMotor.setAcceleration(100);
 
 			this.yMotor1.resetTachoCount();
 			this.yMotor2.resetTachoCount();
 			this.xMotor.resetTachoCount();
 			this.magnetMotor.resetTachoCount();
-
-			this.resetPosition();
-			this.calibrate();
-			this.resetPosition();
 
 			this.connected = true;
 		}
@@ -371,7 +359,7 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-215);
+			this.magnetMotor.rotateTo(-225);
 			this.isHoldingPiece = true;
 		}
 	}
@@ -416,16 +404,47 @@ public class Robot {
 		for (int i=0; i<light_values.length;i++) {
 			average_light+=light_values[i];
 		}
+		average_light/=3;
+
 		int average_board = 0;
 		for (int i=0; i<board_values.length;i++) {
 			average_board+=board_values[i];
 		}
+		average_board/=3;
+
 		int average_dark = 0; 
 		for (int i=0; i<dark_values.length;i++) {
 			average_dark+=dark_values[i];
 		}
+		average_dark /= 3;
 
 		middle_cutoff = (average_dark + average_board)/2;
 		light_cutoff = (average_board + average_light)/2;
+		System.out.println(middle_cutoff);
+		System.out.println(light_cutoff);
+	}
+
+	public void calibrate(int[][] check_locations) {
+		int[] check_values = new int[] {0,0,0};
+		for (int[] check_location : check_locations) {
+			this.examineLocation(check_location);
+
+			for (int i = 0; i<3; i++) {
+				if (check_values[i]==0) {
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					check_values[i]=this.lightSensor.getNormalizedLightValue();
+					break;
+				}
+			}
+		}
+		Arrays.sort(check_values);
+		middle_cutoff = (check_values[0]+check_values[1])/2;
+		light_cutoff = (check_values[1]+check_values[2])/2;
+		System.out.println(middle_cutoff);
+		System.out.println(light_cutoff);
 	}
 }
