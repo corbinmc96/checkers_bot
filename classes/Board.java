@@ -10,11 +10,14 @@ public class Board {
 	public static final double MAX_BOARD_VALUE = 36;
 
 	public Board (Player[] players) {
+		if (players[0].getIsOnZeroSide() == players[1].getIsOnZeroSide()) {
+			throw new IllegalArgumentException("Players are on the same side of the board.");
+		}
 		this.piecesOnBoard = new ArrayList<Piece>();
 		for (int i=0; i<3; i++) {
 			for (int j=0; j<4; j++) {
-				this.piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[0], this));
-				this.piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[1], this));
+				this.piecesOnBoard.add(new Piece(new int[] {(2*j+(i%2)), i}, players[players[1].getIsOnZeroSide() ? 1 : 0], this));
+				this.piecesOnBoard.add(new Piece(new int[] {7 - 2*j-(i%2), 7-i}, players[players[0].getIsOnZeroSide() ? 1 : 0], this));
 			}
 		}
 	}
@@ -28,6 +31,9 @@ public class Board {
 	}
 
 	public Board(Player[] players, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings) {
+		if (players[0].getIsOnZeroSide() == players[1].getIsOnZeroSide()) {
+			throw new IllegalArgumentException("Players are on the same side of the board.");
+		}
 		this.piecesOnBoard = new ArrayList<Piece>();
 		for (int[] location : p1Locations) {
 			this.piecesOnBoard.add(new Piece(location, players[0], this));

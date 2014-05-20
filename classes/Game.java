@@ -73,7 +73,7 @@ public class Game {
 		double newTime;
 		double lastTime = System.currentTimeMillis();
 
-		while (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+		while (player1.getAllMoves(this).length>0 && !this.isDraw()) {
 			System.out.println(this.movesSinceEvent);
 			this.gameBoard.printBoard();
 
@@ -96,7 +96,7 @@ public class Game {
 			System.out.println(newTime - lastTime);
 			lastTime = newTime;
 
-			if (player1.getAllMoves(this).length>0 && player2.getAllMoves(this).length>0 && !this.isDraw()) {
+			if (player2.getAllMoves(this).length>0 && !this.isDraw()) {
 				System.out.println(this.movesSinceEvent);
 				this.gameBoard.printBoard();
 
