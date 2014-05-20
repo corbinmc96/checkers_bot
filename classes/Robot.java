@@ -391,24 +391,32 @@ public class Robot {
 	}
 
 	public void calibrate() {
-		int[] check_values = new int[] {0,0,0};
-		for (int[] check_location : new int[][] {new int[] {0,0},new int[] {0,4},new int[] {0,6}}) {
-			this.examineLocation(check_location);
+		int[] light_values = new int[3];
+		int[] board_values = new int[3];
+		int[] dark_values = new int[3];
+		int[][] light_locations = new int [][] {new int[]{0,0}, new int[]{3,1}, new int[]{6,2}};
+		int[][] board_locations = new int[][] {new int[]{5,3}, new int[]{3,3}, new int[]{0,4}};
+		int[][] dark_locations = new int[][] {new int[]{1,5}, new int[]{4,6}, new int[]{7,7}};
 
-			for (int i = 0; i<3; i++) {
-				if (check_values[i]==0) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					check_values[i]=this.lightSensor.getNormalizedLightValue();
-					break;
-				}
-			}
+		for (int i=0; i<3; i++) {
+			this.examineLocation(light_locations[i]);
+			light_values[i]= this.lightSensor.getNormalizedLightValue();
 		}
-		Arrays.sort(check_values);
-		middle_cutoff = (check_values[0]+check_values[1])/2;
-		light_cutoff = (check_values[1]+check_values[2])/2;
+
+		for (int i=0; i<3; i++) {
+			this.examineLocation(board_locations[i]);
+			board_values[i]= this.lightSensor.getNormalizedLightValue();
+		}
+		for (int i=0; i<3; i++) {
+			this.examineLocation(dark_locations[i]);
+			dark_values[i]= this.lightSensor.getNormalizedLightValue();
+		}
+		
+		average_light = IntStream.of(light_values).sum()/light_values.length;
+		average_board = IntStream.of(board_values).sum()/board_values.length;
+		average_dark = IntStream.of(dark_values).sum()/dark_values.length;
+
+		middle_cutoff = (average_dark + average_board)/2;
+		light_cutoff = (average_board + average_light)/2;
 	}
 }
