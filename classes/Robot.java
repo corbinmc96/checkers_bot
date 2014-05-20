@@ -38,7 +38,7 @@ public class Robot {
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
-	public static final String CART_BRICK_ADDRESS = "001653058C81";
+	public static final String CART_BRICK_ADDRESS = "001653058875";
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
 	// all lengths are in same units
@@ -196,6 +196,8 @@ public class Robot {
 		if (!this.connected) {
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
+			System.out.println("Connecting...");
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			while (!this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
 				System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
@@ -216,7 +218,7 @@ public class Robot {
 				}
 			}
 
-			while ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()==0) {
+			while ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()<2) {
 				System.out.println("Bad connection. Starting over...");
 				try {
 					this.cartConnector.close();

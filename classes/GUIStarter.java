@@ -158,9 +158,12 @@ public class GUIStarter extends JFrame {
 	private class ProcessPanel extends JPanel {
 		private JButton _resetButton;
 		private JPanel _textPanel;
+		private JTextField _inputField;
 
 		private Process _subProcess;
 		private Thread _readerThread;
+
+		private BufferedWriter _processWriter;
 
 		public ProcessPanel() {
 			super();
@@ -170,6 +173,31 @@ public class GUIStarter extends JFrame {
 
 			this._textPanel = new JPanel();
 			this.add(this._textPanel);
+
+			JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+			this._inputField = new JTextField(20);
+			ActionListener fieldListener = new ActionListener() {
+				public void actionPerformed(ActionEvent ae_) {
+					if (_subProcess != null && _processWriter != null) {
+						try {
+							_processWriter.write(_inputField.getText() + "\n", 0, _inputField.getText().length()+1);
+							_processWriter.flush();
+						} catch (IOException e) {
+							System.err.println("Exception writing to subprocess");
+							e.printStackTrace();
+						}
+						_inputField.setText("");
+					}
+			
+				}
+			};
+			this._inputField.addActionListener(fieldListener);
+			inputPanel.add(this._inputField);
+			JButton enterButton = new JButton("ENTER");
+			enterButton.addActionListener(fieldListener);
+			inputPanel.add(enterButton);
+
+			this.add(inputPanel);
 
 			JPanel resetPanel = new JPanel();
 			resetPanel.setBorder(new CompoundBorder(new LineBorder(Color.white), new EmptyBorder(1, 2, 1, 2)));
@@ -227,6 +255,8 @@ public class GUIStarter extends JFrame {
 				}
 			};
 			this._readerThread.start();
+
+			this._processWriter = new BufferedWriter(new OutputStreamWriter(this._subProcess.getOutputStream()));
 		}
 
 		public void close() {
@@ -234,11 +264,14 @@ public class GUIStarter extends JFrame {
 				this._subProcess.destroy();
 				try {
 					this._subProcess.waitFor();
+					System.out.println("Subprocess completed successfully");
 				} catch (InterruptedException e) {
 					System.err.println("InterruptedException waiting for subprocess");
 					e.printStackTrace();
 				}
 			}
+			this._subProcess = null;
+			this._processWriter = null;
 			((CardLayout) this.getRootPane().getContentPane().getLayout()).next(this.getRootPane().getContentPane());
 		}
 	}
