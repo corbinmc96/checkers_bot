@@ -412,9 +412,18 @@ public class Robot {
 			dark_values[i]= this.lightSensor.getNormalizedLightValue();
 		}
 		
-		average_light = IntStream.of(light_values).sum()/light_values.length;
-		average_board = IntStream.of(board_values).sum()/board_values.length;
-		average_dark = IntStream.of(dark_values).sum()/dark_values.length;
+		int average_light = 0;
+		for (int i=0; i<light_values.length;i++) {
+			average_light+=light_values[i];
+		}
+		int average_board = 0;
+		for (int i=0; i<board_values.length;i++) {
+			average_board+=board_values[i];
+		}
+		int average_dark = 0; 
+		for (int i=0; i<dark_values.length;i++) {
+			average_dark+=dark_values[i];
+		}
 
 		middle_cutoff = (average_dark + average_board)/2;
 		light_cutoff = (average_board + average_light)/2;
