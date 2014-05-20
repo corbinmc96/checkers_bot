@@ -17,6 +17,7 @@ if [ "$1" = "tui" ]; then
 		TUIStarter 2> charva.log
 elif [ "$1" = "gui" ]; then
 	nxjpcc Starter.java && \
+	nxjpcc MidgameStarter.java && \
 	javac GUIStarter.java && \
 	java GUIStarter
 else
