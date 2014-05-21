@@ -7,6 +7,10 @@ import java.util.Arrays;
 public class Human extends Player {
 	//stores the Scanner object for taking input
 	private Scanner in;
+
+	//scanning priority constants -- higher number denotes higher priority
+	private final double OPPORTUNE_PRIORITY = 1;
+     	private final double DISTANCE_PRIORITY = 1;
 	
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
@@ -40,129 +44,58 @@ public class Human extends Player {
 				}
 			};
 			t.start();
-
-			//creates pair of lists to hold scanned values
-			ArrayList<int[]> scannedLocations = new ArrayList<int[]>();
-			ArrayList<String> locationValues = new ArrayList<String>();
-			//gets list of moves from best to worst
-			Move[] possibleMoves = this.getBrain().rankBestMove(this.getAllMoves(g), g, this, 3);
-			
-			//waits for button thread to finish
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			//iterates over all possible moves
-			for (Move m : possibleMoves) {
-				System.out.print("\n");
-				//gets all waypoints of the move
-				int[][] waypoints = m.getWaypoints();
-				//declares pointColor variable
-				String pointColor;
-				
-				//sets origin waypoint of piece
-				int[] waypoint = waypoints[0];
-				System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-				if (scannedLocations.contains(waypoint)) {
-					//sets pointColor to the previously stored value
-					System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
-					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
-				} else {
-					//scans the board to get pointColor
-					pointColor = this.getRobot().examineLocation(waypoint);
-					System.out.println("Color found: "+pointColor+"\n");
-					//stores the color in the pair of arrays holding the scanned locations and values
-					scannedLocations.add(waypoint);
-					locationValues.add(pointColor);
-				}
-				//breaks and continues to the next move if the square is not empty
-				if (!pointColor.equals(Robot.BOARD_COLOR)) {
-					System.out.println("The piece was NOT moved. Moving on to next move\n");
-					continue;
-				}
-
-				System.out.println("Piece WAS moved. Checking potential endpoint");
-				
-				//sets last waypoint
-				waypoint = waypoints[waypoints.length-1];
-				//checks the color of the last waypoint
-				System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-				if (scannedLocations.contains(waypoint)) {
-					//sets pointColor to the previously stored value
-					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
-					System.out.println("Already know color: "+pointColor+"\n");
-				} else {
-					//scans the board to get pointColor
-					pointColor = r.examineLocation(waypoint);
-					System.out.println("Color found: "+pointColor+"\n");
-					//stores the color in the pair of arrays holding the scanned locations and values
-					scannedLocations.add(waypoint);
-					locationValues.add(pointColor);
-				}
-				//returns the move if the final square matches the color of this player's pieces
-				if (pointColor.equals(this.getColor())) {
-					if (waypoints.length!=2) {
-						int[][] original_waypoints = m.getWaypoints();
-						Integer[] first_waypoint = Human.convert(original_waypoints[0]);
-						Integer[] last_waypoint = Human.convert(original_waypoints[original_waypoints.length-1]);
-
-						for (Move possible_m : possibleMoves) {
-							boolean is_correct = true;
-							int[][] possible_m_waypoints = possible_m.getWaypoints();
-							Integer[] first_possible_m = Human.convert(possible_m_waypoints[0]);
-							Integer[] last_possible_m = Human.convert(possible_m_waypoints[possible_m_waypoints.length - 1]);
-
-							if (Arrays.deepEquals(first_waypoint, first_possible_m) && Arrays.deepEquals(last_waypoint, last_possible_m)) {
-								for (Piece jumped_piece : possible_m.calculatePiecesToJump()) {
-									String piece_color;
-									waypoint = jumped_piece.getLocation();
-									System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-									if (scannedLocations.contains(waypoint)) {
-										//sets pointColor to the previously stored value
-										piece_color = locationValues.get(scannedLocations.indexOf(waypoint));
-										System.out.println("Already know color: "+piece_color+"\n");
-									} else {
-										//scans the board to get pointColor
-										piece_color = r.examineLocation(waypoint);
-										System.out.println("Color found: "+piece_color+"\n");
-										//stores the color in the pair of arrays holding the scanned locations and values
-										scannedLocations.add(waypoint);
-										locationValues.add(piece_color);
-									}
-						
-									if (!piece_color.equals(Robot.BOARD_COLOR)) {
-										is_correct = false;
-										break;
-									}
-								}
-								if (is_correct) {
-									return possible_m;
-								}
-							}
-						}
-						System.out.println("Start and end points were correct, but no moves matched.");
-						System.out.println("Please fix the board.  You might have made an illegal move, or a piece might not be centered.");
-						System.out.println("Press the sensor when the board is fixed.");
-						r.resetPosition();
-						r.waitForSensorPress();
-						return this.inputMove(g);
-					} else {
-						return m;
-					}
-				} else {
-					System.out.println("Endpoint is not the Human's color. Checking next move...\n");
-				}
-			}
-
-			//failed to find the right move
-			System.out.println("Please fix the board.  You might have made an illegal move, or a piece might not be centered.");
-			System.out.println("Press the sensor when the board is fixed.");
-			r.resetPosition();
-			r.waitForSensorPress();
-			return this.inputMove(g);
 		
+			ArrayList<Move> all_moves = new ArrayList<Move>(Arrays.asList(this.getAllMoves()));
+			ArrayList<int[]> scanned_locations = new ArrayList<int[]>();
+			ArrayList<String> scanned_values = new ArrayList<String>();
+			int[] current_location = new int[] {0,0}
+
+			while (all_moves.size()>1) {
+
+				ArrayList<int[]> critical_points = new ArrayList<int[]>();
+				for (Move m : all_moves) {
+					for (int[] critical_point : m.getCriticalPoints()) {
+						critical_points.add(critical_point);	
+					}
+				}
+				double[] point_scan_value = new double[critical_points.size()];
+
+				double[] point_scan_value = new Array(critical_points.size());
+				for (int i=0; i<critical_points.length; i++) {
+					int[] point = critical_points[i];
+
+					int occurrences = 0;
+					double percent_occurence;
+					ArrayList<double> move_values = new ArrayList<double>();
+					double average_move_value;
+					double distance;
+
+					for (Move m : all_moves) {
+						double move_value = this.getBrain().valueOfMoves(Game(g, m), p, 3, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
+						move_values.add(move_value);
+						if (Arrays.asList(m.getCriticalPoints()).contains(point)) {
+							occurrences+=1;
+						}
+					}
+					percent_occurence = occurrences/all_moves;
+
+					double sum = 0;
+					for (int j=0; j<move_values.size(); j++) {
+						sum += move_values[j];
+					}
+					average_move_value = sum/move_values.size();
+
+					distance = Math.pow(Math.pow(), .5) // WORKING HERE
+
+					point_scan_value[i] = Math.pow(average_move_value, OPPORTUNE_PRIORITY) / Math.pow(distance, DISTANCE_PRIORITY) / percent_occurence;
+
+				}
+
+
+			}
+				
+
+
 		} else {
 			// super.getBoard().printBoard();
 			

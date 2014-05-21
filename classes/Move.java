@@ -103,4 +103,21 @@ public class Move {
 		System.out.println(result.toString());
 		return result.toString();
 	}
+	public int[][] getCriticalPoints() {
+		ArrayList<int[]> critical_points = new ArrayList<int[]>();
+		int[] waypoints = this.getWaypoints();
+		if (!critical_points.contains(waypoints[0])) {
+			critical_points.add(waypoints[0]);
+		}
+		if (!critical_points.contains(waypoints[waypoints.length-1])) {
+			critical_points.add(waypoints[waypoints.length-1]);
+		}
+		for (Piece p : this.calculatePiecesToJump()) {
+			int[] p_location = p.getLocation();
+			if (!critical_points.contains(p_location)) {
+				critical_points.add(p_location);
+			}
+		}
+		return Arrays.toArray(critical_points);
+	}
 }
