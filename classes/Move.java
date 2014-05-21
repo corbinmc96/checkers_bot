@@ -118,6 +118,8 @@ public class Move {
 				critical_points.add(p_location);
 			}
 		}
-		return ArrayList.toArray(critical_points);
+		int[][] critical_points_array = new int[critical_points.size()][];
+		critical_points.toArray(critical_points_array);
+		return critical_points_array;
 	}
 }

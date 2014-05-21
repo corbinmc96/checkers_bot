@@ -68,12 +68,12 @@ public class Human extends Player {
 
 					int occurrences = 0;
 					double percent_occurence;
-					ArrayList<double> move_values = new ArrayList<double>();
+					ArrayList<Double> move_values = new ArrayList<>();
 					double average_move_value;
 					double distance;
 
 					for (Move m : all_moves) {
-						double move_value = this.getBrain().valueOfMoves(Game(g, m), this, 3, true, -(4)*Board.MAX_BOARD_VALUE);
+						double move_value = this.getBrain().valueOfMoves(new Game(g, m), this, 3, true, -(4)*Board.MAX_BOARD_VALUE);
 						move_values.add(move_value);
 						if (Arrays.asList(m.getCriticalPoints()).contains(point)) {
 							occurrences+=1;
@@ -92,8 +92,13 @@ public class Human extends Player {
 					point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
 				}
 				
-				double max_value = Collections.max(point_scan_values);
-				int[] best_scan_location = critical_points.indexOf(max_value);
+				double max_value = 0;
+				for (double value : point_scan_values) {
+					if (value > max_value) {
+						max_value = value;
+					}
+				}
+				int[] best_scan_location = critical_points.get(critical_points.indexOf(max_value));
 			
 				String point_color = r.examineLocation(best_scan_location);
 				
@@ -113,7 +118,7 @@ public class Human extends Player {
 					else {
 						boolean isValidMove = true;
 						for (Piece p : m.calculatePiecesToJump()) {
-							if (p.getLocation() == best_scan_location) {
+							if (Arrays.equals(p.getLocation(), best_scan_location)) {
 								isValidMove = false;
 								break;
 							}
