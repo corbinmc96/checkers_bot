@@ -105,7 +105,7 @@ public class Move {
 	}
 	public int[][] getCriticalPoints() {
 		ArrayList<int[]> critical_points = new ArrayList<int[]>();
-		int[] waypoints = this.getWaypoints();
+		int[][] waypoints = this.getWaypoints();
 		if (!critical_points.contains(waypoints[0])) {
 			critical_points.add(waypoints[0]);
 		}
@@ -118,6 +118,6 @@ public class Move {
 				critical_points.add(p_location);
 			}
 		}
-		return Arrays.toArray(critical_points);
+		return ArrayList.toArray(critical_points);
 	}
 }

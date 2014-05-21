@@ -3,15 +3,17 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Human extends Player {
 	//stores the Scanner object for taking input
 	private Scanner in;
 
 	//scanning priority constants -- higher number denotes higher priority
-	private final double OPPORTUNE_PRIORITY = 1;
-     	private final double DISTANCE_PRIORITY = 1;
-	
+	private static final double OPPORTUNE_PRIORITY = 1;
+     	private static final double DISTANCE_PRIORITY = 1;
+     	private static final double SPLIT_PRIORITY = 1;
+
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
 		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
@@ -45,10 +47,10 @@ public class Human extends Player {
 			};
 			t.start();
 		
-			ArrayList<Move> all_moves = new ArrayList<Move>(Arrays.asList(this.getAllMoves()));
+			ArrayList<Move> all_moves = new ArrayList<Move>(Arrays.asList(this.getAllMoves(g)));
 			ArrayList<int[]> scanned_locations = new ArrayList<int[]>();
 			ArrayList<String> scanned_values = new ArrayList<String>();
-			int[] current_location = new int[] {0,0}
+			int[] current_location = new int[] {0,0};
 
 			while (all_moves.size()>1) {
 
@@ -58,11 +60,11 @@ public class Human extends Player {
 						critical_points.add(critical_point);	
 					}
 				}
-				double[] point_scan_value = new double[critical_points.size()];
 
-				double[] point_scan_value = new Array(critical_points.size());
-				for (int i=0; i<critical_points.length; i++) {
-					int[] point = critical_points[i];
+				double[] point_scan_values = new double[critical_points.size()];
+
+				for (int i=0; i<critical_points.size(); i++) {
+					int[] point = critical_points.get(i);
 
 					int occurrences = 0;
 					double percent_occurence;
@@ -71,30 +73,71 @@ public class Human extends Player {
 					double distance;
 
 					for (Move m : all_moves) {
-						double move_value = this.getBrain().valueOfMoves(Game(g, m), p, 3, true, -(recursionDepth+1)*Board.MAX_BOARD_VALUE);
+						double move_value = this.getBrain().valueOfMoves(Game(g, m), this, 3, true, -(4)*Board.MAX_BOARD_VALUE);
 						move_values.add(move_value);
 						if (Arrays.asList(m.getCriticalPoints()).contains(point)) {
 							occurrences+=1;
 						}
 					}
-					percent_occurence = occurrences/all_moves;
+					percent_occurence = occurrences/all_moves.size();
 
 					double sum = 0;
 					for (int j=0; j<move_values.size(); j++) {
-						sum += move_values[j];
+						sum += move_values.get(j);
 					}
 					average_move_value = sum/move_values.size();
 
-					distance = Math.pow(Math.pow(), .5) // WORKING HERE
+					distance = Math.pow(Math.pow(current_location[0]-point[0], 2) + Math.pow(current_location[1] - point[1], 2), .5);
 
-					point_scan_value[i] = Math.pow(average_move_value, OPPORTUNE_PRIORITY) / Math.pow(distance, DISTANCE_PRIORITY) / percent_occurence;
-
+					point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
 				}
-
-
-			}
 				
+				double max_value = Collections.max(point_scan_values);
+				int[] best_scan_location = critical_points.indexOf(max_value);
+			
+				String point_color = r.examineLocation(best_scan_location);
+				
+				ArrayList<Move> impossible_moves = new ArrayList<Move>();
+				for (Move m : all_moves) {
+					int[][] m_waypoints = m.getWaypoints();
+					if (point_color==this.getColor()) {
+						if (m_waypoints[m_waypoints.length-1] != best_scan_location) {
+							impossible_moves.add(m);
+						}
+					}
+					else if (point_color==Robot.BOARD_COLOR) {
+						if (m_waypoints[0] != best_scan_location) {
+							impossible_moves.add(m);
+						}
+					}
+					else {
+						boolean isValidMove = true;
+						for (Piece p : m.calculatePiecesToJump()) {
+							if (p.getLocation() == best_scan_location) {
+								isValidMove = false;
+								break;
+							}
+						}
+						if (!isValidMove) {
+							impossible_moves.add(m);
+						}
+					}
+				}
+				for (Move m : impossible_moves) {
+					boolean successful = all_moves.remove(m);
+					if (!successful) {
+						System.out.println("move does not exist to be removes");
+					}
+				}
+			}
 
+			if (all_moves.size()==0) {
+				System.out.println("An error/mistake occurred. no correct moves could be found.");
+				r.waitForSensorPress();
+				return this.inputMove(g);
+			}
+
+			return all_moves.get(0);
 
 		} else {
 			// super.getBoard().printBoard();
