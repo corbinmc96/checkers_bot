@@ -186,11 +186,6 @@ public class PseudoRobot extends Robot{
 
 			for (int i = 0; i<3; i++) {
 				if (check_values[i]==0) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
 					check_values[i]=sc.nextInt();
 					break;
 				}

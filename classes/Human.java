@@ -26,7 +26,7 @@ public class Human extends Player {
 		this.in = new Scanner(System.in);
 	}
 
-	public Move takeTurn(Game g) {
+	public Move takeTurn(Game g) throws InterruptedException {
 		//gets the last move made by the human player
 		Move m = this.inputMove(g);
 		//performs the move on the game board
@@ -35,17 +35,11 @@ public class Human extends Player {
 		return m;
 	}
 
-	public Move inputMove(Game g) {
+	public Move inputMove(Game g) throws InterruptedException {
 		// THIS DOES NOT APPEAR TO DIFFERENTIATE BETWEEN DIFFERENT MOVES WITH SAME START AND ENDPOINTS
 		if (this.getRobot()!=null) {
-			final Robot r = this.getRobot();
-			//starts concurrent thread waiting for button press
-			Thread t = new Thread() {
-				public void run() {
-					r.waitForSensorPress();
-				}
-			};
-			t.start();
+			Robot r = this.getRobot();
+			r.waitForSensorPress();
 		
 			ArrayList<Move> all_moves = new ArrayList<Move>(Arrays.asList(this.getAllMoves(g)));
 			ArrayList<int[]> scanned_locations = new ArrayList<int[]>();

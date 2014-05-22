@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class MidgameStarter {
-	public static void main(String[] args) {
-
-		Robot r = new Robot();
-		r.connect();
+	public static void main(String[] args) throws InterruptedException {
 
 		if (!args[0].equals("robot") && !args[0].equals("human")) {
 			System.err.println("Illegal first argument to determine turn");
@@ -49,7 +46,11 @@ public class MidgameStarter {
 			p2Kings[i] = new int[] {Integer.parseInt(args[4].substring(2+2*i, 3+2*i)), Integer.parseInt(args[4].substring(3+2*i, 4+2*i))};
 		}
 
+		Robot r = new Robot();
+
 		try {
+			r.connect();
+
 			Game theGame;
 			if (args[0].equals("robot")) {
 				theGame = new Game(new SimPlayer(args.length>6 ? args[6] : "x", true, r, new MultithreadedAI()),
@@ -89,18 +90,25 @@ public class MidgameStarter {
 					}
 				}
 			}
+
 			r.calibrate(squaresToCalibrate);
 			r.resetPosition();
 
 			Player winner = theGame.play();
+
 			if (winner == null) {
 				System.out.println("TIE");
 			} else {
 				System.out.println("WINNER:  " + (winner.getXO().equals(" ") ? winner.getColor() : winner.getXO()));
 			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		} finally {
+			System.err.println("DISCONNECT");
 			try {
 				r.disconnect();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

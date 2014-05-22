@@ -67,7 +67,7 @@ public class Game {
 		}
 	}
 
-	public Player play() {
+	public Player play() throws InterruptedException {
 		int[][] lastMove;
 
 		double newTime;
@@ -121,14 +121,6 @@ public class Game {
 
 			} else {
 				break;
-			}
-		}
-
-		if (this.gameRobot != null) {
-			try {
-				this.gameRobot.disconnect();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 

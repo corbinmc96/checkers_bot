@@ -252,7 +252,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._listenerThread.join();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Thread.currentThread().interrupt();
 					}
 				}
 				if (this._readerThread != null) {
@@ -260,7 +260,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._readerThread.join();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Thread.currentThread().interrupt();
 					}
 				}
 				if (this._subProcess != null) {
@@ -268,7 +268,7 @@ public class TUIStarter extends JFrame implements ActionListener {
 					try {
 						this._subProcess.waitFor();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Thread.currentThread().interrupt();
 					}
 				}
 				this.hide();

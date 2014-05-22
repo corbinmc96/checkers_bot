@@ -67,7 +67,7 @@ public abstract class Player {
 		return this.brain;
 	}
 
-	public Move calculateBestMove (Game g, int recursionDepth) {
+	public Move calculateBestMove (Game g, int recursionDepth) throws InterruptedException {
 		return this.brain.rankBestMove(this.getAllMoves(g), g, this, recursionDepth)[0];
 	}
 
@@ -135,5 +135,5 @@ public abstract class Player {
 		return result.toArray(new Move[result.size()]);
 	}
 
-	public abstract Move takeTurn(Game g);
+	public abstract Move takeTurn(Game g) throws InterruptedException;
 }
