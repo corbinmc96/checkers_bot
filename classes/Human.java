@@ -63,7 +63,7 @@ public class Human extends Player {
 
 					int occurrences = 0;
 					double percent_occurence;
-					ArrayList<Double> move_values = new ArrayList<>();
+					ArrayList<Double> move_values = new ArrayList<Double>();
 					double average_move_value;
 					double distance;
 
@@ -87,7 +87,7 @@ public class Human extends Player {
 					point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
 				}
 				
-				double max_value = 0;
+				double max_value = -(Board.MAX_BOARD_VALUE);
 				for (double value : point_scan_values) {
 					if (value > max_value) {
 						max_value = value;
