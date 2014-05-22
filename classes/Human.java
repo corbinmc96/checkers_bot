@@ -94,7 +94,7 @@ public class Human extends Player {
 						System.out.println(max_value);
 					}
 				}
-				int[] best_scan_location = critical_points.get(critical_points.indexOf(max_value));
+				int[] best_scan_location = critical_points.get(point_scan_values.indexOf(max_value));
 			
 				String point_color = r.examineLocation(best_scan_location);
 				
