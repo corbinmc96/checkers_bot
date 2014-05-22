@@ -29,6 +29,8 @@ public class Robot {
 	public int middle_cutoff;
 	public int light_cutoff;
 
+	private int[] deadLocation;
+
 	// CLASS VARIABLES
 	public static String darkColor = "black";
 	public static String middleColor = "green";
@@ -36,7 +38,6 @@ public class Robot {
 	
 	public static final String BOARD_COLOR = "green";
 
-	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
 	public static final String CART_BRICK_ADDRESS = "001653058875";
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
@@ -281,6 +282,8 @@ public class Robot {
 			this.xMotor.resetTachoCount();
 			this.magnetMotor.resetTachoCount();
 
+			this.deadLocation = new int[] {0, -1};
+
 			this.connected = true;
 		}
 	}
@@ -299,11 +302,24 @@ public class Robot {
 		this.xBumper = null;
 
 		this.isHoldingPiece = false;
+
+		this.deadLocation = null;
 		
 		this.connected = false;
 		
 		this.hook.join();
 		this.hook = null;
+	}
+
+	public int[] getDeadLocation() {
+		if (this.deadLocation[0]>7) {
+			this.deadLocation[0] = 0;
+			this.deadLocation[1]--;
+		}
+		if (this.deadLocation[1]<-3) {
+			this.deadLocation[1] = -1;
+		}
+		return new int[] {this.deadLocation[0]++, this.deadLocation[1]};
 	}
 
 	public boolean getIsHoldingPiece() {
