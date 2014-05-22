@@ -91,6 +91,7 @@ public class Human extends Player {
 				for (double value : point_scan_values) {
 					if (value > max_value) {
 						max_value = value;
+						System.out.println(max_value);
 					}
 				}
 				int[] best_scan_location = critical_points.get(critical_points.indexOf(max_value));
