@@ -87,7 +87,7 @@ public class Human extends Player {
 					point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
 				}
 				
-				double max_value = -(Board.MAX_BOARD_VALUE);
+				double max_value = -(Board.MAX_BOARD_VALUE)*100;
 				for (double value : point_scan_values) {
 					if (value > max_value) {
 						max_value = value;
