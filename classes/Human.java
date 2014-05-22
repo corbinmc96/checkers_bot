@@ -88,13 +88,16 @@ public class Human extends Player {
 				}
 				
 				double max_value = -(Board.MAX_BOARD_VALUE)*100;
-				for (double value : point_scan_values) {
+				int max_value_index = -1;
+				for (int i=0; i<point_scan_values.length; i++) {
+					double value = point_scan_values[i];
 					if (value > max_value) {
 						max_value = value;
+						max_value_index = i;
 						System.out.println(max_value);
 					}
 				}
-				int[] best_scan_location = critical_points.get(point_scan_values.indexOf(max_value));
+				int[] best_scan_location = critical_points.get(max_value_index);
 			
 				String point_color = r.examineLocation(best_scan_location);
 				
