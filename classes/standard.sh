@@ -18,8 +18,8 @@ if [ "$1" = "tui" ]; then
 elif [ "$1" = "gui" ]; then
 	nxjpcc Starter.java && \
 	nxjpcc MidgameStarter.java && \
-	javac GUIStarter.java && \
-	java GUIStarter
+	nxjpcc GUIStarter.java && \
+	nxjpc GUIStarter
 else
 	nxjpcc Starter.java && \
 	nxjpc Starter ${1} ${2} ${3}
