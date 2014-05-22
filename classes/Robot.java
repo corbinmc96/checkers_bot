@@ -58,40 +58,9 @@ public class Robot {
 		this.connected = false;
 		this.cartConnector = new NXTConnector();
 		this.archConnector = new NXTConnector();
-
-		this.hook = new Thread() {
-			public void run() {
-				try {
-					(new Thread() {
-						public void run() {
-							xMotor.stop();
-							yMotor2.stop();
-							magnetMotor.stop();
-						}
-					}).start();
-
-					(new Thread() {
-						public void run() {
-							yMotor1.stop();
-						}
-					}).start();
-
-					Thread.sleep(2000);
-					cartConnector.close();
-					archConnector.close();
-
-				} catch (IOException e) {
-					System.err.println("Exception disconnecting robot");
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					System.err.println("Interrupted during disconnect of robot");
-					e.printStackTrace();
-				}
-			}
-		};
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Robot r = new Robot();
 		System.out.println("constructor finished");
 		r.connect();
@@ -192,8 +161,45 @@ public class Robot {
 		}
 	}
 
-	public void connect() {
+	public void connect() throws InterruptedException {
 		if (!this.connected) {
+			this.hook = new Thread() {
+				public void run() {
+					(new Thread() {
+						public void run() {
+							xMotor.stop();
+							yMotor2.stop();
+							magnetMotor.stop();
+						}
+					}).start();
+
+					(new Thread() {
+						public void run() {
+							yMotor1.stop();
+						}
+					}).start();
+					
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						//do nothing, thread is finishing anyway
+					} finally {
+						try {
+							cartConnector.close();
+						} catch (IOException e) {
+							System.err.println("Exception disconnecting cart");
+							e.printStackTrace();
+						}
+						try {
+							archConnector.close();
+						} catch (IOException e) {
+							System.err.println("Exception disconnecting arch");
+							e.printStackTrace();
+						}
+					}
+				}
+			};
+
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
 			System.out.println("Connecting...");
@@ -207,18 +213,28 @@ public class Robot {
 					System.out.println("Unable to connect to the NXT brick mounted on the cart.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
 					try {
 						br.readLine();
+					} catch (InterruptedIOException e) {
+						throw new InterruptedException("Interrupted waiting to connect");
 					} catch (IOException e) {
 						System.err.println("IOException reading line while connecting");
 						e.printStackTrace();
+					}
+					if (Thread.interrupted()) {
+						throw new InterruptedException("Interrupted trying to connect to robot");
 					}
 				}
 				while (!this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.ALL_PROTOCOLS, NXTComm.LCP)) {
 					System.out.println("Unable to connect to the NXT brick mounted on the arch.  Please make sure all cables are plugged in correctly and the brick is turned on.  Press enter to try again.");
 					try {
 						br.readLine();
+					} catch (InterruptedIOException e) {
+						throw new InterruptedException("Interrupted waiting to connect");
 					} catch (IOException e) {
 						System.err.println("IOException reading line while connecting");
 						e.printStackTrace();
+					}
+					if (Thread.interrupted()) {
+						throw new InterruptedException("Interrupted trying to connect to robot");
 					}
 				}
 				successful = true;
@@ -269,31 +285,25 @@ public class Robot {
 		}
 	}
 
-	public void disconnect() throws IOException {
-		if (this.connected) {
+	public void disconnect() throws IOException, InterruptedException {
+		this.hook.start();
+		Runtime.getRuntime().removeShutdownHook(this.hook);
 
-			this.hook.start();
-			try {
-				this.hook.join();
-			} catch (InterruptedException e) {
-				System.err.println("Interrupted waiting for disconnect thread to run");
-				e.printStackTrace();
-			}
-			Runtime.getRuntime().removeShutdownHook(this.hook);
+		this.xMotor = null;
+		this.yMotor1 = null;
+		this.yMotor2 = null;
+		this.magnetMotor = null;
 
-			this.xMotor = null;
-			this.yMotor1 = null;
-			this.yMotor2 = null;
-			this.magnetMotor = null;
+		this.lightSensor = null;
+		this.touchSensor = null;
+		this.xBumper = null;
 
-			this.lightSensor = null;
-			this.touchSensor = null;
-			this.xBumper = null;
-
-			this.isHoldingPiece = false;
-
-			this.connected = false;
-		}
+		this.isHoldingPiece = false;
+		
+		this.connected = false;
+		
+		this.hook.join();
+		this.hook = null;
 	}
 
 	public boolean getIsHoldingPiece() {
@@ -314,15 +324,7 @@ public class Robot {
 		this.yMotor1.rotateTo(180, true);
 		this.yMotor2.rotateTo(180, true);
 		this.xMotor.rotateTo(0);
-		// this.xMotor.backward();
-		// while (!this.xBumper.isPressed());
-		// 	//do nothing
-		// try {
-		// 	Thread.sleep(50);
-		// } catch (InterruptedException e) {
-		// 	e.printStackTrace();
-		// }
-		// this.xMotor.stop();
+
 		while (this.yMotor1.isMoving());
 		while (this.yMotor2.isMoving());
 			//do nothing
@@ -371,11 +373,17 @@ public class Robot {
 		}
 	}
 
-	public void waitForSensorPress() {
-		while (!this.touchSensor.isPressed());
-			//wait for sensor to be pressed
-		while (this.touchSensor.isPressed());
-			//wait for sensor to be released
+	public void waitForSensorPress() throws InterruptedException {
+		while (!this.touchSensor.isPressed()) {
+			if (Thread.interrupted()) {
+				throw new InterruptedException();
+			}
+		}
+		while (this.touchSensor.isPressed()) {
+			if (Thread.interrupted()) {
+				throw new InterruptedException();
+			}
+		}
 	}
 
 	public void calibrate() {
@@ -424,7 +432,7 @@ public class Robot {
 		System.out.println(light_cutoff);
 	}
 
-	public void calibrate(int[][] check_locations) {
+	public void calibrate(int[][] check_locations) throws InterruptedException {
 		int[] check_values = new int[] {0,0,0};
 		for (int[] check_location : check_locations) {
 			this.examineLocation(check_location);
@@ -434,7 +442,8 @@ public class Robot {
 					try {
 						Thread.sleep(200);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						this.resetPosition();
+						throw e;
 					}
 					check_values[i]=this.lightSensor.getNormalizedLightValue();
 					break;
