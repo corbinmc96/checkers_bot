@@ -11,8 +11,9 @@ public class Human extends Player {
 
 	//scanning priority constants -- higher number denotes higher priority
 	private static final double OPPORTUNE_PRIORITY = 1;
-     	private static final double DISTANCE_PRIORITY = 1;
-     	private static final double SPLIT_PRIORITY = 1;
+     	private static final double DISTANCE_PRIORITY = 2;
+     	private static final double SPLIT_PRIORITY = 2;
+	private static final int SCANNING_RECURSION_DEPTH = 3;
 
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
@@ -73,10 +74,10 @@ public class Human extends Player {
 					double distance;
 
 					for (Move m : all_moves) {
-						double move_value = this.getBrain().valueOfMoves(new Game(g, m), this, 3, true, -(4)*Board.MAX_BOARD_VALUE);
-						move_values.add(move_value);
 						if (Arrays.asList(m.getCriticalPoints()).contains(point)) {
 							occurrences+=1;
+							double move_value = this.getBrain().valueOfMoves(new Game(g, m), this, Human.SCANNING_RECURSION_DEPTH, true, -(Human.SCANNING_RECURSION_DEPTH)*Board.MAX_BOARD_VALUE);
+							move_values.add(move_value);
 						}
 					}
 					percent_occurence = occurrences/all_moves.size();
