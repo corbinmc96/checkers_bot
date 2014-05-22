@@ -8,6 +8,8 @@ import javax.swing.event.*;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 public class GUIStarter extends JFrame {
 
@@ -23,7 +25,7 @@ public class GUIStarter extends JFrame {
 	private JList<String> _difficultyBox;
 	private JList<String> _rulesBox;
 
-	private ProcessPanel _resetPanel;
+	private ExecPanel _execPanel;
 	private PiecesPanel _piecesPanel;
 
 	public GUIStarter() {
@@ -112,17 +114,21 @@ public class GUIStarter extends JFrame {
 		JButton playButton = new JButton("PLAY NEW GAME");
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae_) {
-				if (_resetPanel == null) {
-					_resetPanel = new ProcessPanel();
-					getContentPane().add(_resetPanel);
+				if (_execPanel == null) {
+					_execPanel = new ExecPanel();
+					getContentPane().add(_execPanel);
 				}
-				_resetPanel.startProcess(new String[] {"nxjpc",
-													   "Starter",
-													   _humanColorTable.getSelectedValue(),
-													   _robotColorTable.getSelectedValue(),
-													   _difficultyBox.getSelectedValue(),
-													   _rulesBox.getSelectedValue()
-				});
+				try {
+					_execPanel.runMainThread(Starter.class,
+											 new String[] {_humanColorTable.getSelectedValue(),
+														   _robotColorTable.getSelectedValue(),
+														   _difficultyBox.getSelectedValue(),
+														   _rulesBox.getSelectedValue()
+											 }
+					);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
 				((CardLayout) getContentPane().getLayout()).last(getContentPane());
 			}
 		});
@@ -145,7 +151,7 @@ public class GUIStarter extends JFrame {
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 		contentPane.add(mainPanel);
 
-		this.setMinimumSize(new Dimension(480, 480));
+		this.setMinimumSize(new Dimension(480, 580));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.validate();
 	}
@@ -155,17 +161,31 @@ public class GUIStarter extends JFrame {
 		test.setVisible(true);
 	}
 
-	private class ProcessPanel extends JPanel {
+	private class CustomOutputStream extends OutputStream {
+		private JTextArea textArea;
+
+		public CustomOutputStream(JTextArea textArea) {
+			this.textArea = textArea;
+		}
+
+		public void write(int b) throws IOException {
+			// redirects data to the text area
+			textArea.append(String.valueOf((char)b));
+			// scrolls the text area to the end of data
+			textArea.setCaretPosition(textArea.getDocument().getLength());
+		}
+	}
+
+	private class ExecPanel extends JPanel {
 		private JButton _resetButton;
 		private JPanel _textPanel;
 		private JTextField _inputField;
 
-		private Process _subProcess;
-		private Thread _readerThread;
+		private Thread _mainThread;
 
-		private BufferedWriter _processWriter;
+		private BufferedOutputStream _processOutputStream;
 
-		public ProcessPanel() {
+		public ExecPanel() {
 			super();
 
 			// SETS UP NEW UI ELEMENTS
@@ -178,10 +198,10 @@ public class GUIStarter extends JFrame {
 			this._inputField = new JTextField(20);
 			ActionListener fieldListener = new ActionListener() {
 				public void actionPerformed(ActionEvent ae_) {
-					if (_subProcess != null && _processWriter != null) {
+					if (_mainThread != null && _processOutputStream != null) {
 						try {
-							_processWriter.write(_inputField.getText() + "\n", 0, _inputField.getText().length()+1);
-							_processWriter.flush();
+							_processOutputStream.write((_inputField.getText() + "\n").getBytes(), 0, _inputField.getText().length()+1);
+							_processOutputStream.flush();
 						} catch (IOException e) {
 							System.err.println("Exception writing to subprocess");
 							e.printStackTrace();
@@ -211,22 +231,18 @@ public class GUIStarter extends JFrame {
 			this.add(resetPanel);
 		}
 
-		public void startProcess(String[] params) {
-			JOptionPane.showMessageDialog(this, "Make sure the robot is as far back\nand to the human's right as\npossible before pressing 'OK'.", "Message", JOptionPane.WARNING_MESSAGE);
-
+		public void runMainThread(final Class<?> mainClass, final String[] params) throws NoSuchMethodException {
+			final Method mainMethod;
 			try {
-				// CREATES STARTER SUBPROCESS
-				ProcessBuilder pb = new ProcessBuilder(params);
-				pb.redirectErrorStream(true);
-				this._subProcess = pb.start();
-			} catch (IOException e) {
-				System.err.println("Subprocess creation failed with IOException");
-				e.printStackTrace();
-				return;
+				mainMethod = mainClass.getMethod("main", String[].class);
+			} catch (NoSuchMethodException e) {
+				throw new NoSuchMethodException("Class argument does not have main method");
 			}
 
-			// STARTS DISPLAY THREAD
-			final JTextArea textArea = new JTextArea(20, 30);
+			JOptionPane.showMessageDialog(this, "Make sure the robot is as far back\nand to the human's right as\npossible before pressing 'OK'.", "Message", JOptionPane.WARNING_MESSAGE);
+
+
+			final JTextArea textArea = new JTextArea(20, 37);
 			textArea.setEditable(false);
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
@@ -240,38 +256,59 @@ public class GUIStarter extends JFrame {
 				}
 			}
 
-			this._readerThread = new Thread() {
+			PipedInputStream inPipe = new PipedInputStream();
+			PipedOutputStream outPipe = new PipedOutputStream();
+			try {
+				inPipe.connect(outPipe);
+			} catch (IOException e) {
+				System.err.println("Exception creating pipes");
+				e.printStackTrace();
+			}
+			this._processOutputStream = new BufferedOutputStream(outPipe);
+
+			final InputStream stdin = System.in;
+			final PrintStream stdout = System.out;
+
+			// CREATES STARTER THREAD
+			this._mainThread = new Thread() {
 				public void run() {
-					InputStream input = _subProcess.getInputStream();
-					BufferedReader br = new BufferedReader(new InputStreamReader(input));
 					try {
-						for (String line; (line = br.readLine()) != null && !this.interrupted();) {
-							textArea.append(line + "\n");
-						}
-					} catch (IOException e) {
-						System.err.println("Exception reading stdout from process");
+						mainMethod.invoke(mainClass, (Object) params);
+					} catch (IllegalAccessException e) {
 						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					} finally {
+						System.err.println("Resetting stdin/stdout...");
+						System.setIn(stdin);
+						System.setOut(stdout);
+						System.err.println("stdin/stdout reset successfully");
 					}
 				}
 			};
-			this._readerThread.start();
 
-			this._processWriter = new BufferedWriter(new OutputStreamWriter(this._subProcess.getOutputStream()));
+			System.setIn(new SequenceInputStream(new BufferedInputStream(inPipe), System.in));
+			System.setOut(new PrintStream(new CustomOutputStream(textArea)));
+
+			this._mainThread.start();
 		}
 
 		public void close() {
-			if (this._subProcess != null) {
-				this._subProcess.destroy();
+			System.err.println("Closing ExecPanel...");
+			if (this._mainThread != null) {
+				this._mainThread.interrupt();
 				try {
-					this._subProcess.waitFor();
-					System.out.println("Subprocess completed successfully");
+					System.err.println("Waiting for main thread...");
+					this._mainThread.join();
+					System.err.println("Thread completed successfully");
 				} catch (InterruptedException e) {
-					System.err.println("InterruptedException waiting for subprocess");
+					System.err.println("InterruptedException waiting for main thread");
 					e.printStackTrace();
+					Thread.currentThread().interrupt();
 				}
+				this._mainThread = null;
 			}
-			this._subProcess = null;
-			this._processWriter = null;
+			this._processOutputStream = null;
 			((CardLayout) this.getRootPane().getContentPane().getLayout()).next(this.getRootPane().getContentPane());
 		}
 	}
@@ -359,9 +396,9 @@ public class GUIStarter extends JFrame {
 			JButton playButton = new JButton("PLAY GAME");
 			playButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae_) {
-					if (_resetPanel == null) {
-						_resetPanel = new ProcessPanel();
-						getContentPane().add(_resetPanel);
+					if (_execPanel == null) {
+						_execPanel = new ExecPanel();
+						getContentPane().add(_execPanel);
 					}
 
 					ArrayList<String> usedLocations = new ArrayList<String>();
@@ -452,19 +489,22 @@ public class GUIStarter extends JFrame {
 						p1KBuilder = p2KBuilder;
 						p2KBuilder = holder;
 					}
-
-					_resetPanel.startProcess(new String[] {"nxjpc",
-														   "MidgameStarter",
-														   playerBox.getSelectedValue(),
-														   p1LBuilder.toString(),
-														   p2LBuilder.toString(),
-														   p1KBuilder.toString(),
-														   p2KBuilder.toString(),
-														   _humanColorTable.getSelectedValue(),
-														   _robotColorTable.getSelectedValue(),
-														   _difficultyBox.getSelectedValue(),
-														   _rulesBox.getSelectedValue()
-					});
+					try {
+						_execPanel.runMainThread(MidgameStarter.class, 
+												 new String[] {playerBox.getSelectedValue(),
+															   p1LBuilder.toString(),
+															   p2LBuilder.toString(),
+															   p1KBuilder.toString(),
+															   p2KBuilder.toString(),
+															   _humanColorTable.getSelectedValue(),
+															   _robotColorTable.getSelectedValue(),
+															   _difficultyBox.getSelectedValue(),
+															   _rulesBox.getSelectedValue()
+												 }
+						);
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					}
 					((CardLayout) getContentPane().getLayout()).last(getContentPane());
 				}
 			});
