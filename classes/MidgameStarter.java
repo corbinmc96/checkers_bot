@@ -53,8 +53,8 @@ public class MidgameStarter {
 
 			Game theGame;
 			if (args[0].equals("robot")) {
-				theGame = new Game(new SimPlayer(args.length>6 ? args[6] : "x", true, r, new MultithreadedAI()),
-								   new Human(args.length>5 ? args[5] : "o", false, r, new MultithreadedAI()),
+				theGame = new Game(new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
+								   new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -63,8 +63,8 @@ public class MidgameStarter {
 								   r
 				);
 			} else {
-				theGame = new Game(new Human(args.length>5 ? args[5] : "o", false, r, new MultithreadedAI()),
-								   new SimPlayer(args.length>6 ? args[6] : "x", true, r, new MultithreadedAI()),
+				theGame = new Game(new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
+								   new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,

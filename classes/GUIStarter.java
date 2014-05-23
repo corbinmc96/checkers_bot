@@ -120,8 +120,8 @@ public class GUIStarter extends JFrame {
 				}
 				try {
 					_execPanel.runMainThread(Starter.class,
-											 new String[] {_humanColorTable.getSelectedValue(),
-														   _robotColorTable.getSelectedValue(),
+											 new String[] {_robotColorTable.getSelectedValue(),
+														   _humanColorTable.getSelectedValue(),
 														   _difficultyBox.getSelectedValue(),
 														   _rulesBox.getSelectedValue()
 											 }
@@ -496,8 +496,8 @@ public class GUIStarter extends JFrame {
 															   p2LBuilder.toString(),
 															   p1KBuilder.toString(),
 															   p2KBuilder.toString(),
-															   _humanColorTable.getSelectedValue(),
 															   _robotColorTable.getSelectedValue(),
+															   _humanColorTable.getSelectedValue(),
 															   _difficultyBox.getSelectedValue(),
 															   _rulesBox.getSelectedValue()
 												 }

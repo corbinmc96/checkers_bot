@@ -15,6 +15,8 @@ public class PseudoRobot extends Robot{
 	public int middle_cutoff;
 	public int light_cutoff;
 
+	public int[] deadLocation;
+
 	// CLASS VARIABLES
 	public static String darkColor = "black";
 	public static String middleColor = "green";
@@ -22,7 +24,6 @@ public class PseudoRobot extends Robot{
 	
 	public static final String BOARD_COLOR = "green";
 
-	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
 	public static void main(String[] args) {
 		PseudoRobot r = new PseudoRobot();
@@ -127,7 +128,20 @@ public class PseudoRobot extends Robot{
 
 	public void connect() {
 		this.connected = true;
+		this.deadLocation = new int[] {0, -1};
 	}
+
+	public int[] getDeadLocation() {
+		if (this.deadLocation[0]>7) {
+			this.deadLocation[0] = 0;
+			this.deadLocation[1]--;
+		}
+		if (this.deadLocation[1]<-3) {
+			this.deadLocation[1] = -1;
+		}
+		return new int[] {this.deadLocation[0]++, this.deadLocation[1]};
+	}
+
 
 	public void disconnect() throws IOException {
 		this.connected = false;
