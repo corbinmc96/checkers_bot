@@ -11,19 +11,19 @@ public class MidgameStarter {
 			return;
 		}
 
-		if (!args[1].matches("p\\{([0-7][0-7])*\\}")) {
+		if (!args[1].matches("p1\\=([0-7][0-7])*")) {
 			System.err.println("Illegal p1 list");
 			return;
 		}
-		if (!args[2].matches("p\\{([0-7][0-7])*\\}")) {
+		if (!args[2].matches("p2\\=([0-7][0-7])*")) {
 			System.err.println("Illegal p2 list");
 			return;
 		}
-		if (!args[3].matches("k\\{([0-7][0-7])*\\}")) {
+		if (!args[3].matches("k1\\=([0-7][0-7])*")) {
 			System.err.println("Illegal p1 kings list");
 			return;
 		}
-		if (!args[4].matches("k\\{([0-7][0-7])*\\}")) {
+		if (!args[4].matches("k2\\=([0-7][0-7])*")) {
 			System.err.println("Illegal p2 kings list");
 			return;
 		}
@@ -34,16 +34,16 @@ public class MidgameStarter {
 		int[][] p2Kings = new int[(args[4].length()-3)/2][];
 
 		for (int i=0; i<p1Locations.length; i++) {
-			p1Locations[i] = new int[] {Integer.parseInt(args[1].substring(2+2*i, 3+2*i)), Integer.parseInt(args[1].substring(3+2*i, 4+2*i))};
+			p1Locations[i] = new int[] {Integer.parseInt(args[1].substring(3+2*i, 4+2*i)), Integer.parseInt(args[1].substring(4+2*i, 5+2*i))};
 		}
 		for (int i=0; i<p2Locations.length; i++) {
-			p2Locations[i] = new int[] {Integer.parseInt(args[2].substring(2+2*i, 3+2*i)), Integer.parseInt(args[2].substring(3+2*i, 4+2*i))};
+			p2Locations[i] = new int[] {Integer.parseInt(args[2].substring(3+2*i, 4+2*i)), Integer.parseInt(args[2].substring(4+2*i, 5+2*i))};
 		}
 		for (int i=0; i<p1Kings.length; i++) {
-			p1Kings[i] = new int[] {Integer.parseInt(args[3].substring(2+2*i, 3+2*i)), Integer.parseInt(args[3].substring(3+2*i, 4+2*i))};
+			p1Kings[i] = new int[] {Integer.parseInt(args[3].substring(3+2*i, 4+2*i)), Integer.parseInt(args[3].substring(4+2*i, 5+2*i))};
 		}
 		for (int i=0; i<p2Kings.length; i++) {
-			p2Kings[i] = new int[] {Integer.parseInt(args[4].substring(2+2*i, 3+2*i)), Integer.parseInt(args[4].substring(3+2*i, 4+2*i))};
+			p2Kings[i] = new int[] {Integer.parseInt(args[4].substring(3+2*i, 4+2*i)), Integer.parseInt(args[4].substring(4+2*i, 5+2*i))};
 		}
 
 		Robot r = new Robot();

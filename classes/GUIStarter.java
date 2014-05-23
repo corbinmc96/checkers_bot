@@ -403,7 +403,7 @@ public class GUIStarter extends JFrame {
 
 					ArrayList<String> usedLocations = new ArrayList<String>();
 
-					StringBuilder p1LBuilder = new StringBuilder("p{");
+					StringBuilder p1LBuilder = new StringBuilder("=");
 					for (String line : ta1.getText().split("\n")) {
 						if (line.trim().isEmpty()) {
 							continue;
@@ -421,8 +421,7 @@ public class GUIStarter extends JFrame {
 							return;
 						}
 					}
-					p1LBuilder.append("}");
-					StringBuilder p2LBuilder = new StringBuilder("p{");
+					StringBuilder p2LBuilder = new StringBuilder("=");
 					for (String line : ta2.getText().split("\n")) {
 						if (line.trim().isEmpty()) {
 							continue;
@@ -440,8 +439,7 @@ public class GUIStarter extends JFrame {
 							return;
 						}
 					}
-					p2LBuilder.append("}");
-					StringBuilder p1KBuilder = new StringBuilder("k{");
+					StringBuilder p1KBuilder = new StringBuilder("=");
 					for (String line : ta3.getText().split("\n")) {
 						if (line.trim().isEmpty()) {
 							continue;
@@ -459,8 +457,7 @@ public class GUIStarter extends JFrame {
 							return;
 						}
 					}
-					p1KBuilder.append("}");
-					StringBuilder p2KBuilder = new StringBuilder("k{");
+					StringBuilder p2KBuilder = new StringBuilder("=");
 					for (String line : ta4.getText().split("\n")) {
 						if (line.trim().isEmpty()) {
 							continue;
@@ -478,7 +475,6 @@ public class GUIStarter extends JFrame {
 							return;
 						}
 					}
-					p2KBuilder.append("}");
 
 					if (playerBox.getSelectedIndex()!=0) {
 						StringBuilder holder = p1LBuilder;
@@ -492,10 +488,10 @@ public class GUIStarter extends JFrame {
 					try {
 						_execPanel.runMainThread(MidgameStarter.class, 
 												 new String[] {playerBox.getSelectedValue(),
-															   p1LBuilder.toString(),
-															   p2LBuilder.toString(),
-															   p1KBuilder.toString(),
-															   p2KBuilder.toString(),
+															   "p1" + p1LBuilder.toString(),
+															   "p2" + p2LBuilder.toString(),
+															   "k1" + p1KBuilder.toString(),
+															   "k2" + p2KBuilder.toString(),
 															   _robotColorTable.getSelectedValue(),
 															   _humanColorTable.getSelectedValue(),
 															   _difficultyBox.getSelectedValue(),
