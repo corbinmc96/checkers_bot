@@ -37,7 +37,6 @@ public class Human extends Player {
 	}
 
 	public Move inputMove(Game g) throws InterruptedException {
-		// THIS DOES NOT APPEAR TO DIFFERENTIATE BETWEEN DIFFERENT MOVES WITH SAME START AND ENDPOINTS
 		if (this.getRobot()!=null) {
 			Robot r = this.getRobot();
 			r.waitForSensorPress();
@@ -97,40 +96,41 @@ public class Human extends Player {
 						System.out.println(max_value);
 					}
 				}
-				int[] best_scan_location = critical_points.get(max_value_index);
+				int[] scan_location = critical_points.get(max_value_index);
 			
-				String point_color = r.examineLocation(best_scan_location);
+				String point_color = r.examineLocation(scan_location);
 				
-				ArrayList<Move> impossible_moves = new ArrayList<Move>();
-				for (Move m : all_moves) {
-					int[][] m_waypoints = m.getWaypoints();
+				ArrayList<Integer> impossible_moves = new ArrayList<Integer>();
+				for (int i=0; i<all_moves.size(); i++) {
+					int[][] waypoints = all_moves.get(i).getWaypoints();
 					if (point_color==this.getColor()) {
-						if (m_waypoints[m_waypoints.length-1] != best_scan_location) {
-							impossible_moves.add(m);
+						if (!Arrays.equals(waypoints[waypoints.length-1], scan_location)) {
+							impossible_moves.add(i);
 						}
 					}
 					else if (point_color==Robot.BOARD_COLOR) {
-						if (m_waypoints[0] != best_scan_location) {
-							impossible_moves.add(m);
+						if (!Arrays.equals(waypoints[0], scan_location)) {
+							impossible_moves.add(i);
 						}
 					}
 					else {
 						boolean isValidMove = true;
-						for (Piece p : m.calculatePiecesToJump()) {
-							if (Arrays.equals(p.getLocation(), best_scan_location)) {
+						for (Piece p : all_moves.get(i).calculatePiecesToJump()) {
+							if (Arrays.equals(p.getLocation(), scan_location)) {
 								isValidMove = false;
 								break;
 							}
 						}
 						if (!isValidMove) {
-							impossible_moves.add(m);
+							impossible_moves.add(i);
 						}
 					}
 				}
-				for (Move m : impossible_moves) {
-					boolean successful = all_moves.remove(m);
-					if (!successful) {
-						System.out.println("move does not exist to be removes");
+				for (int i : impossible_moves) {
+					try {
+						all_moves.remove(i);
+					} catch (IndexOutOfBoundsException e) {
+						e.getMessage();
 					}
 				}
 			}
@@ -143,9 +143,8 @@ public class Human extends Player {
 
 			return all_moves.get(0);
 
+		// Command line input
 		} else {
-			// super.getBoard().printBoard();
-			
 			boolean moveEntered = false;
 			Move inputtedMove = null;
 			while (!moveEntered) {
