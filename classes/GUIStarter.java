@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import javax.imageio.ImageIO;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.lang.reflect.Method;
@@ -17,9 +19,9 @@ public class GUIStarter extends JFrame {
 	public static final String COLOR_TWO = "gray";
 	public static final int MAX_DIFFICULTY = 10;
 
-	private static final Object LOCK = new Object();
+	private static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
-	private JPanel _centerPanel;
+	private Box _centerPanel;
 	private JList<String> _humanColorTable;
 	private JList<String> _robotColorTable;
 	private JList<String> _difficultyBox;
@@ -42,13 +44,12 @@ public class GUIStarter extends JFrame {
 		mainPanel.setLayout(new BorderLayout());
 
 		// GET CENTER PANEL AND SET UP LAYOUT
-		this._centerPanel = new JPanel();
-		this._centerPanel.setLayout(new GridLayout(3, 1));
+		this._centerPanel = new Box(BoxLayout.Y_AXIS);
 
 		// CREATES COLOR OPTION BOX
 		JPanel colorsPanel = new JPanel();
 		colorsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 1));
-		colorsPanel.setBorder(new CompoundBorder(new TitledBorder("Choose your Color"), new EmptyBorder(10, 40, 10, 40)));
+		colorsPanel.setBorder(new TitledBorder("Choose your Color"));
 
 
 		JPanel humanColorBox = new JPanel();
@@ -98,14 +99,19 @@ public class GUIStarter extends JFrame {
 		this._centerPanel.add(difficultyPanel);
 
 		// CREATES RULE TYPE OPTION 
-		JPanel rulesPanel = new JPanel();
-		rulesPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		Box rulesPanel = new Box(BoxLayout.Y_AXIS);
 		rulesPanel.setBorder(new CompoundBorder(new TitledBorder("Choose the Rule Type"), new EmptyBorder(10, 20, 10, 20)));
 		this._rulesBox = new JList<String>(new String[] {"official", "unofficial"});
 		this._rulesBox.setSelectedIndex(1);
 		this._rulesBox.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		this._rulesBox.setVisibleRowCount(1);
 		rulesPanel.add(this._rulesBox);
+		JTextArea rulesExplanation = new JTextArea("The official rules require jumps to be taken whenever possible.  The unofficial rules do not have this requirement.", 2, 18);
+		rulesExplanation.setEditable(false);
+		rulesExplanation.setLineWrap(true);
+		rulesExplanation.setWrapStyleWord(true);
+		rulesPanel.add(Box.createVerticalStrut(10));
+		rulesPanel.add(rulesExplanation);
 		this._centerPanel.add(rulesPanel);
 
 		// CREATES BUTTONS
@@ -130,6 +136,7 @@ public class GUIStarter extends JFrame {
 					e.printStackTrace();
 				}
 				((CardLayout) getContentPane().getLayout()).last(getContentPane());
+				GUIStarter.this.setMinimumSize(new Dimension(480, 240));
 			}
 		});
 		buttonPanel.add(playButton, BorderLayout.CENTER);
@@ -138,10 +145,20 @@ public class GUIStarter extends JFrame {
 		inputPiecesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae_) {
 				if (_piecesPanel == null) {
-					_piecesPanel = new PiecesPanel();
+					do {
+						try {
+							_piecesPanel = new PiecesPanel();
+						} catch (IOException e) {
+							e.printStackTrace();
+							if (JOptionPane.showConfirmDialog(GUIStarter.this, "Problem opening image files.\nPress OK to try again,\nor CANCEL to exit.", "", JOptionPane.OK_CANCEL_OPTION)!=JOptionPane.OK_OPTION) {
+								System.exit(1);
+							}
+						}
+					} while (_piecesPanel==null);
 					getContentPane().add(_piecesPanel, 1);
 				}
 				((CardLayout) getContentPane().getLayout()).next(getContentPane());
+				GUIStarter.this.setMinimumSize(new Dimension(480, 600));
 			}
 		});
 		buttonPanel.add(inputPiecesButton, BorderLayout.EAST);
@@ -151,8 +168,8 @@ public class GUIStarter extends JFrame {
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 		contentPane.add(mainPanel);
 
-		this.setMinimumSize(new Dimension(480, 580));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setMinimumSize(new Dimension(380, 480));
 		this.validate();
 	}
 
@@ -178,12 +195,12 @@ public class GUIStarter extends JFrame {
 
 	private class ExecPanel extends JPanel {
 		private JButton _resetButton;
-		private JPanel _textPanel;
+		private JTextArea _textArea;
 		private JTextField _inputField;
 
 		private Thread _mainThread;
 
-		private BufferedOutputStream _processOutputStream;
+		private PrintWriter _processWriter;
 
 		public ExecPanel() {
 			super();
@@ -191,24 +208,22 @@ public class GUIStarter extends JFrame {
 			// SETS UP NEW UI ELEMENTS
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-			this._textPanel = new JPanel();
-			this.add(this._textPanel);
+			this._textArea = new JTextArea(20, 20);
+			this._textArea.setEditable(false);
+			this._textArea.setLineWrap(true);
+			this._textArea.setWrapStyleWord(true);
+			JScrollPane scrollPane = new JScrollPane(this._textArea);
+			scrollPane.setViewportBorder(new LineBorder(Color.white));
+			this.add(scrollPane);
 
 			JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			this._inputField = new JTextField(20);
 			ActionListener fieldListener = new ActionListener() {
 				public void actionPerformed(ActionEvent ae_) {
-					if (_mainThread != null && _processOutputStream != null) {
-						try {
-							_processOutputStream.write((_inputField.getText() + "\n").getBytes(), 0, _inputField.getText().length()+1);
-							_processOutputStream.flush();
-						} catch (IOException e) {
-							System.err.println("Exception writing to subprocess");
-							e.printStackTrace();
-						}
+					if (_mainThread != null && _processWriter != null) {
+						_processWriter.println(_inputField.getText());
 						_inputField.setText("");
 					}
-			
 				}
 			};
 			this._inputField.addActionListener(fieldListener);
@@ -241,20 +256,7 @@ public class GUIStarter extends JFrame {
 
 			JOptionPane.showMessageDialog(this, "Make sure the robot is as far back\nand to the human's right as\npossible before pressing 'OK'.", "Message", JOptionPane.WARNING_MESSAGE);
 
-
-			final JTextArea textArea = new JTextArea(20, 37);
-			textArea.setEditable(false);
-			textArea.setLineWrap(true);
-			textArea.setWrapStyleWord(true);
-			JScrollPane scrollPane = new JScrollPane(textArea);
-			scrollPane.setViewportBorder(new LineBorder(Color.white));
-
-			this._textPanel.add(scrollPane);
-			if (this._textPanel.getComponentCount()>1) {
-				for (int i = 0; i < this._textPanel.getComponentCount()-1; i++) {
-					this._textPanel.remove(this._textPanel.getComponent(i));
-				}
-			}
+			this._textArea.setText("");
 
 			PipedInputStream inPipe = new PipedInputStream();
 			PipedOutputStream outPipe = new PipedOutputStream();
@@ -264,7 +266,7 @@ public class GUIStarter extends JFrame {
 				System.err.println("Exception creating pipes");
 				e.printStackTrace();
 			}
-			this._processOutputStream = new BufferedOutputStream(outPipe);
+			this._processWriter = new PrintWriter(outPipe, true);
 
 			final InputStream stdin = System.in;
 			final PrintStream stdout = System.out;
@@ -288,7 +290,7 @@ public class GUIStarter extends JFrame {
 			};
 
 			System.setIn(new SequenceInputStream(new BufferedInputStream(inPipe), System.in));
-			System.setOut(new PrintStream(new CustomOutputStream(textArea)));
+			System.setOut(new PrintStream(new CustomOutputStream(this._textArea)));
 
 			this._mainThread.start();
 		}
@@ -308,13 +310,17 @@ public class GUIStarter extends JFrame {
 				}
 				this._mainThread = null;
 			}
-			this._processOutputStream = null;
+			this._processWriter = null;
 			((CardLayout) this.getRootPane().getContentPane().getLayout()).next(this.getRootPane().getContentPane());
+			GUIStarter.this.setMinimumSize(new Dimension(380, 480));
 		}
 	}
 
 	private class PiecesPanel extends JPanel {
-		public PiecesPanel() {
+		ImageIcon _emptyIcon;
+		ImageIcon[] _icons;
+
+		public PiecesPanel() throws IOException {
 			super();
 
 			this.setLayout(new BorderLayout());
@@ -329,59 +335,55 @@ public class GUIStarter extends JFrame {
 			playerPanel.add(playerBox);
 			this.add(playerPanel, BorderLayout.NORTH);
 
-			JPanel listPanel = new JPanel();
+			try {
+				String imageDirectory = new File(System.getProperty("user.dir")).getParent() + FILE_SEPARATOR + "images" + FILE_SEPARATOR;
+				this._emptyIcon = new ImageIcon(ImageIO.read(new File(imageDirectory + "empty.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH));
+				this._icons = new ImageIcon[] {
+					new ImageIcon(ImageIO.read(new File(imageDirectory + "green.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
+					new ImageIcon(ImageIO.read(new File(imageDirectory + "gray.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
+					new ImageIcon(ImageIO.read(new File(imageDirectory + "black.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
+					new ImageIcon(ImageIO.read(new File(imageDirectory + "gray-king.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
+					new ImageIcon(ImageIO.read(new File(imageDirectory + "black-king.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH))
+				};
+			} catch (IOException e) {
+				System.err.println("Unable to create images from file.");
+				throw e;
+			}
 
-			JPanel tp1 = new JPanel(new BorderLayout());
-			JPanel tp2 = new JPanel(new BorderLayout());
-			JPanel tp3 = new JPanel(new BorderLayout());
-			JPanel tp4 = new JPanel(new BorderLayout());
-
-			final JTextArea ta1 = new JTextArea(10, 7);
-			final JTextArea ta2 = new JTextArea(10, 7);
-			final JTextArea ta3 = new JTextArea(10, 7);
-			final JTextArea ta4 = new JTextArea(10, 7);
-
-			ta1.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			ta2.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			ta3.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			ta4.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-
-			JScrollPane sp1 = new JScrollPane(ta1);
-			JScrollPane sp2 = new JScrollPane(ta2);
-			JScrollPane sp3 = new JScrollPane(ta3);
-			JScrollPane sp4 = new JScrollPane(ta4);
-
-			JTextArea titleArea1 = new JTextArea("Robot\nPieces");
-			JTextArea titleArea2 = new JTextArea("Player\nPieces");
-			JTextArea titleArea3 = new JTextArea("Robot\nKings");
-			JTextArea titleArea4 = new JTextArea("Player\nKings");
-
-			titleArea1.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			titleArea2.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			titleArea3.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-			titleArea4.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-
-			titleArea1.setEditable(false);
-			titleArea2.setEditable(false);
-			titleArea3.setEditable(false);
-			titleArea4.setEditable(false);
-
-			tp1.add(titleArea1, BorderLayout.NORTH);
-			tp2.add(titleArea2, BorderLayout.NORTH);
-			tp3.add(titleArea3, BorderLayout.NORTH);
-			tp4.add(titleArea4, BorderLayout.NORTH);
-
-			tp1.add(sp1, BorderLayout.CENTER);
-			tp2.add(sp2, BorderLayout.CENTER);
-			tp3.add(sp3, BorderLayout.CENTER);
-			tp4.add(sp4, BorderLayout.CENTER);
-
-			listPanel.add(tp1);
-			listPanel.add(tp2);
-			listPanel.add(tp3);
-			listPanel.add(tp4);
-
-			this.add(listPanel, BorderLayout.CENTER);
+			JPanel boardWrapperPanel = new JPanel();
+			JPanel boardPanel = new JPanel(new GridLayout(8, 8));
+			final JLabel[][] labels = new JLabel[8][];
+			for (int row = 0; row<8; row++) {
+				labels[row] = new JLabel[8];
+				for (int column = 7; column>=0; column--) {
+					if ((row+column)%2==0) {
+						final JLabel label = new JLabel(this._icons[0]);
+						label.addMouseListener(new MouseListener() {
+							public void mouseClicked(MouseEvent e) {
+								for (int currentIconIndex = 0; currentIconIndex<PiecesPanel.this._icons.length; currentIconIndex++) {
+									if (PiecesPanel.this._icons[currentIconIndex] == label.getIcon()) {
+										currentIconIndex = ++currentIconIndex%PiecesPanel.this._icons.length;
+										label.setIcon(PiecesPanel.this._icons[currentIconIndex]);
+										return;
+									}
+								}
+							}
+							public void mouseEntered(MouseEvent e) {}
+							public void mouseExited(MouseEvent e) {}
+							public void mousePressed(MouseEvent e) {}
+							public void mouseReleased(MouseEvent e) {}
+						});
+						boardPanel.add(label);
+						labels[row][column] = label;
+					} else {
+						JLabel label = new JLabel(this._emptyIcon);
+						boardPanel.add(label);
+						labels[row][column] = label;
+					}
+				}
+			}
+			boardWrapperPanel.add(boardPanel);
+			this.add(boardWrapperPanel, BorderLayout.CENTER);
 
 			JPanel buttonPanel = new JPanel(new BorderLayout());
 
@@ -389,6 +391,7 @@ public class GUIStarter extends JFrame {
 			returnButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae_) {
 					((CardLayout) getContentPane().getLayout()).first(getContentPane());
+					GUIStarter.this.setMinimumSize(new Dimension(380, 480));
 				}
 			});
 			buttonPanel.add(returnButton, BorderLayout.WEST);
@@ -401,97 +404,43 @@ public class GUIStarter extends JFrame {
 						getContentPane().add(_execPanel);
 					}
 
-					ArrayList<String> usedLocations = new ArrayList<String>();
+					StringBuilder color1PBuilder = new StringBuilder("=");
+					StringBuilder color2PBuilder = new StringBuilder("=");
+					StringBuilder color1KBuilder = new StringBuilder("=");
+					StringBuilder color2KBuilder = new StringBuilder("=");
 
-					StringBuilder p1LBuilder = new StringBuilder("=");
-					for (String line : ta1.getText().split("\n")) {
-						if (line.trim().isEmpty()) {
-							continue;
-						}
-						if (line.matches(" *[0-7] *[0-7] *") && (Integer.parseInt(new String(new char[] {line.trim().charAt(0)}))+Integer.parseInt(new String(new char[] {line.trim().charAt(line.trim().length()-1)})))%2==0) {
-							if (usedLocations.contains(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}))) {
-								JOptionPane.showMessageDialog(PiecesPanel.this, "Duplicate location used.", "", JOptionPane.ERROR_MESSAGE);
-								return;
+					for (int row = 0; row<8; row++) {
+						for (int column = 0; column<8; column++) {
+							if (_icons[1]==labels[row][column].getIcon()) {
+								color1PBuilder.append(10*row + column);
 							}
-							usedLocations.add(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}));
-							p1LBuilder.append(line.trim().charAt(0));
-							p1LBuilder.append(line.trim().charAt(line.trim().length()-1));
-						} else {
-							JOptionPane.showMessageDialog(PiecesPanel.this, "Something isn't formatted correctly in the\nrobot pieces list.  Check if you have a wrong\nnumber somewhere in there.", "", JOptionPane.ERROR_MESSAGE);
-							return;
+							if (_icons[2]==labels[row][column].getIcon()) {
+								color2PBuilder.append(10*row + column);
+							}
+							if (_icons[3]==labels[row][column].getIcon()) {
+								color1KBuilder.append(10*row + column);
+							}
+							if (_icons[4]==labels[row][column].getIcon()) {
+								color2KBuilder.append(10*row + column);
+							}
 						}
 					}
-					StringBuilder p2LBuilder = new StringBuilder("=");
-					for (String line : ta2.getText().split("\n")) {
-						if (line.trim().isEmpty()) {
-							continue;
-						}
-						if (line.matches(" *[0-7] *[0-7] *") && (Integer.parseInt(new String(new char[] {line.trim().charAt(0)}))+Integer.parseInt(new String(new char[] {line.trim().charAt(line.trim().length()-1)})))%2==0) {
-							if (usedLocations.contains(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}))) {
-								JOptionPane.showMessageDialog(PiecesPanel.this, "Duplicate location used.", "", JOptionPane.ERROR_MESSAGE);
-								return;
-							}
-							usedLocations.add(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}));
-							p2LBuilder.append(line.trim().charAt(0));
-							p2LBuilder.append(line.trim().charAt(line.trim().length()-1));
-						} else {
-							JOptionPane.showMessageDialog(PiecesPanel.this, "Something isn't formatted correctly in the\nplayer pieces list.  Check if you have a wrong\nnumber somewhere in there.", "", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-					}
-					StringBuilder p1KBuilder = new StringBuilder("=");
-					for (String line : ta3.getText().split("\n")) {
-						if (line.trim().isEmpty()) {
-							continue;
-						}
-						if (line.matches(" *[0-7] *[0-7] *") && (Integer.parseInt(new String(new char[] {line.trim().charAt(0)}))+Integer.parseInt(new String(new char[] {line.trim().charAt(line.trim().length()-1)})))%2==0) {
-							if (usedLocations.contains(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}))) {
-								JOptionPane.showMessageDialog(PiecesPanel.this, "Duplicate location used.", "", JOptionPane.ERROR_MESSAGE);
-								return;
-							}
-							usedLocations.add(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}));
-							p1KBuilder.append(line.trim().charAt(0));
-							p1KBuilder.append(line.trim().charAt(line.trim().length()-1));
-						} else {
-							JOptionPane.showMessageDialog(PiecesPanel.this, "Something isn't formatted correctly in the\nrobot kings list.  Check if you have a wrong\nnumber somewhere in there.", "", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-					}
-					StringBuilder p2KBuilder = new StringBuilder("=");
-					for (String line : ta4.getText().split("\n")) {
-						if (line.trim().isEmpty()) {
-							continue;
-						}
-						if (line.matches(" *[0-7] *[0-7] *") && (Integer.parseInt(new String(new char[] {line.trim().charAt(0)}))+Integer.parseInt(new String(new char[] {line.trim().charAt(line.trim().length()-1)})))%2==0) {
-							if (usedLocations.contains(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}))) {
-								JOptionPane.showMessageDialog(PiecesPanel.this, "Duplicate location used.", "", JOptionPane.ERROR_MESSAGE);
-								return;
-							}
-							usedLocations.add(new String(new char[] {line.trim().charAt(0), line.trim().charAt(line.trim().length()-1)}));
-							p2KBuilder.append(line.trim().charAt(0));
-							p2KBuilder.append(line.trim().charAt(line.trim().length()-1));
-						} else {
-							JOptionPane.showMessageDialog(PiecesPanel.this, "Something isn't formatted correctly in the\nplayer kings list.  Check if you have a wrong\nnumber somewhere in there.", "", JOptionPane.ERROR_MESSAGE);
-							return;
-						}
-					}
-
-					if (playerBox.getSelectedIndex()!=0) {
-						StringBuilder holder = p1LBuilder;
-						p1LBuilder = p2LBuilder;
-						p2LBuilder = holder;
+					if (playerBox.getSelectedIndex() + _humanColorTable.getSelectedIndex() == 1) {
+						StringBuilder holder = color1PBuilder;
+						color1PBuilder = color2PBuilder;
+						color2PBuilder = holder;
 						
-						holder = p1KBuilder;
-						p1KBuilder = p2KBuilder;
-						p2KBuilder = holder;
+						holder = color1KBuilder;
+						color1KBuilder = color2KBuilder;
+						color2KBuilder = holder;
 					}
 					try {
 						_execPanel.runMainThread(MidgameStarter.class, 
 												 new String[] {playerBox.getSelectedValue(),
-															   "p1" + p1LBuilder.toString(),
-															   "p2" + p2LBuilder.toString(),
-															   "k1" + p1KBuilder.toString(),
-															   "k2" + p2KBuilder.toString(),
+															   "p1" + color1PBuilder.toString(),
+															   "p2" + color2PBuilder.toString(),
+															   "k1" + color1KBuilder.toString(),
+															   "k2" + color2KBuilder.toString(),
 															   _robotColorTable.getSelectedValue(),
 															   _humanColorTable.getSelectedValue(),
 															   _difficultyBox.getSelectedValue(),
@@ -502,6 +451,7 @@ public class GUIStarter extends JFrame {
 						e.printStackTrace();
 					}
 					((CardLayout) getContentPane().getLayout()).last(getContentPane());
+					GUIStarter.this.setMinimumSize(new Dimension(480, 240));
 				}
 			});
 			buttonPanel.add(playButton, BorderLayout.CENTER);

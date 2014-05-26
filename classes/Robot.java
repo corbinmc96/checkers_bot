@@ -245,17 +245,23 @@ public class Robot {
 					Motor.B.resetTachoCount();
 					Motor.B.rotate(53);
 				} catch (Exception e) {
-					// successful = false;
-				}
-				if ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()<2 || Math.abs(Motor.B.getTachoCount()-53)>15/* || !successful*/) {
 					successful = false;
-					System.out.println("Bad connection. Starting over...");
+				}
+				if ((new LightSensor(SensorPort.S1)).getNormalizedLightValue()<2 || Math.abs(Motor.B.getTachoCount()-53)>15 || !successful) {
+					successful = false;
+					System.out.println("Bad connection. Unplug both cables connecting the robot to the computer, and plug them in again.  Press enter to try again when finished.");
 					try {
 						this.cartConnector.close();
 						this.archConnector.close();
+						br.readLine();
+					} catch (InterruptedIOException e) {
+						throw new InterruptedException("Interrupted waiting to connect");
 					} catch (IOException e) {
-						System.err.println("IOException closing NXTConnectors after bad sensor");
+						System.err.println("IOException reading line while connecting");
 						e.printStackTrace();
+					}
+					if (Thread.interrupted()) {
+						throw new InterruptedException("Interrupted trying to connect to robot");
 					}
 				}
 			} while (!successful);
@@ -292,6 +298,8 @@ public class Robot {
 		this.hook.start();
 		Runtime.getRuntime().removeShutdownHook(this.hook);
 
+		this.hook.join();
+
 		this.xMotor = null;
 		this.yMotor1 = null;
 		this.yMotor2 = null;
@@ -305,10 +313,9 @@ public class Robot {
 
 		this.deadLocation = null;
 		
-		this.connected = false;
-		
-		this.hook.join();
 		this.hook = null;
+		
+		this.connected = false;
 	}
 
 	public int[] getDeadLocation() {
@@ -316,7 +323,7 @@ public class Robot {
 			this.deadLocation[0] = 0;
 			this.deadLocation[1]--;
 		}
-		if (this.deadLocation[1]<-3) {
+		if (this.deadLocation[1]<-2) {
 			this.deadLocation[1] = -1;
 		}
 		return new int[] {this.deadLocation[0]++, this.deadLocation[1]};
