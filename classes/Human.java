@@ -43,7 +43,6 @@ public class Human extends Player {
 		
 			ArrayList<Move> all_moves = new ArrayList<Move>(Arrays.asList(this.getAllMoves(g)));
 			ArrayList<int[]> scanned_locations = new ArrayList<int[]>();
-			ArrayList<String> scanned_values = new ArrayList<String>();
 			int[] current_location = new int[] {0,0};
 
 			while (all_moves.size()>1) {
@@ -51,7 +50,16 @@ public class Human extends Player {
 				ArrayList<int[]> critical_points = new ArrayList<int[]>();
 				for (Move m : all_moves) {
 					for (int[] critical_point : m.getCriticalPoints()) {
-						critical_points.add(critical_point);	
+						boolean already_used = false;
+						for (int[] previous_point : scanned_locations) {
+							if (!Arrays.equals(previous_point, critical_point)) {
+								already_used = true;
+								break;
+							}
+						}
+						if (!already_used) {
+							critical_points.add(critical_point);	
+						}
 					}
 				}
 
@@ -83,7 +91,11 @@ public class Human extends Player {
 
 					distance = Math.pow(Math.pow(current_location[0]-point[0], 2) + Math.pow(current_location[1] - point[1], 2), .5);
 
-					point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
+					try {
+						point_scan_values[i] = Math.pow(average_move_value, Human.OPPORTUNE_PRIORITY) / Math.pow(distance, Human.DISTANCE_PRIORITY) / Math.pow(Math.abs(percent_occurence-0.5), Human.SPLIT_PRIORITY);
+					} catch (ArithmeticException e) {
+						point_scan_values[i] = Double.MAX_VALUE; 
+					}
 				}
 				
 				double max_value = -(Board.MAX_BOARD_VALUE)*100;
@@ -99,16 +111,17 @@ public class Human extends Player {
 				int[] scan_location = critical_points.get(max_value_index);
 			
 				String point_color = r.examineLocation(scan_location);
+				scanned_locations.add(scan_location);
 				
 				ArrayList<Integer> impossible_moves = new ArrayList<Integer>();
 				for (int i=0; i<all_moves.size(); i++) {
 					int[][] waypoints = all_moves.get(i).getWaypoints();
-					if (point_color==this.getColor()) {
+					if (point_color.equals(this.getColor())) {
 						if (!Arrays.equals(waypoints[waypoints.length-1], scan_location)) {
 							impossible_moves.add(i);
 						}
 					}
-					else if (point_color==Robot.BOARD_COLOR) {
+					else if (point_color.equals(Robot.BOARD_COLOR)) {
 						if (!Arrays.equals(waypoints[0], scan_location)) {
 							impossible_moves.add(i);
 						}
