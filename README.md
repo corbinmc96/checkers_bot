@@ -9,8 +9,8 @@ More information on the [Project Website](http://corbinmc96.github.io/checkers_b
 
 Video coming soon.
 
-Developers
-*James Dingwall
-*Michael Grey
-*Corbin McNeill
-*Aaron Miller
+Developers:
+* James Dingwall
+* Michael Grey
+* Corbin McNeill
+* Aaron Miller
