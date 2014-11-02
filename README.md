@@ -8,3 +8,9 @@ At the time of completion, the robot was able to play a game of checkers against
 More information on the [Project Website](http://corbinmc96.github.io/checkers_bot/). (currently under construction)
 
 Video coming soon.
+
+Developers
+*James Dingwall
+*Michael Grey
+*Corbin McNeill
+*Aaron Miller
