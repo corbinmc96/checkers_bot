@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public abstract class Player {
 
 	private Board myBoard;
-	private Robot gameRobot;
 	//true if the player is located on the side of the board marked with index 0
 	private boolean isOnZeroSide;
 	//contains the piece color
@@ -15,12 +14,6 @@ public abstract class Player {
 	private String xo;
 	private AIEngine brain;
 
-	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
-		this.color = startColor;
-		this.isOnZeroSide = startsOnZeroSide;
-		this.gameRobot = startGameRobot;
-		this.brain = startBrain;
-	}
 
 	public Player(String startXO, boolean startsOnZeroSide, AIEngine startBrain) {
 		this.xo = startXO;
@@ -37,9 +30,6 @@ public abstract class Player {
 		return this.isOnZeroSide;
 	}
 
-	public Robot getRobot() {
-		return this.gameRobot;
-	}
 
 	public String getColor() {
 		return this.color;
@@ -67,7 +57,7 @@ public abstract class Player {
 		return this.brain;
 	}
 
-	public Move calculateBestMove (Game g, int recursionDepth) throws InterruptedException {
+	public Move calculateBestMove (Game g, int recursionDepth) {
 		return this.brain.rankBestMove(this.getAllMoves(g), g, this, recursionDepth)[0];
 	}
 
@@ -135,5 +125,5 @@ public abstract class Player {
 		return result.toArray(new Move[result.size()]);
 	}
 
-	public abstract Move takeTurn(Game g) throws InterruptedException;
+	public abstract Move takeTurn(Game g);
 }

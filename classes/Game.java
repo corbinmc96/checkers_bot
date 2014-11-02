@@ -6,7 +6,6 @@ import java.io.IOException;
 public class Game {
 
 	private Board gameBoard;
-	private Robot gameRobot;
 	private Player player1;
 	private Player player2;
 	private ArrayList<int[][]> lastFewMoves;
@@ -26,11 +25,6 @@ public class Game {
 		this.isOfficialVersion = isOfficial;
 	}
 	
-	public Game (Player p1, Player p2, boolean isOfficial, Robot startGameRobot) {
-		this(p1,p2,isOfficial);
-		this.gameRobot = startGameRobot;
-	}
-
 	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial) {
 		this(p1, p2, isOfficial);
 		this.gameBoard = new Board(new Player[]{p1, p2}, p1Locations, p2Locations, p1kings, p2kings);
@@ -38,11 +32,6 @@ public class Game {
 		this.player2.setBoard(this.gameBoard);
 	}
 
-	public Game(Player p1, Player p2, int[][] p1Locations, int[][] p2Locations, int[][] p1kings, int[][] p2kings, boolean isOfficial, Robot startGameRobot) {
-		this(p1, p2, p1Locations, p2Locations, p1kings, p2kings, isOfficial);
-		this.gameRobot = startGameRobot;
-	}
-	
 	public Game (Game oldG, Move m) {
 		this.player1 = oldG.getPlayers()[0];
 		this.player2 = oldG.getPlayers()[1];
@@ -67,7 +56,7 @@ public class Game {
 		}
 	}
 
-	public Player play() throws InterruptedException {
+	public Player play() {
 		int[][] lastMove;
 
 		double newTime;

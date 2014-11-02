@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Callable;
 
 public class MultithreadedAI extends AIEngine {
-	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) throws InterruptedException {
+	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
 
@@ -36,7 +36,6 @@ public class MultithreadedAI extends AIEngine {
 					boardValues[i] = valueFutures[i].get();
 				} catch (InterruptedException e) {
 					service.shutdownNow();
-					throw e;
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
@@ -75,7 +74,7 @@ public class MultithreadedAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	public double valueOfMoves (Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) throws InterruptedException {
+	public double valueOfMoves (Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
 
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
@@ -157,7 +156,6 @@ public class MultithreadedAI extends AIEngine {
 					boardValues[i] = valueFutures[i].get();
 				} catch (InterruptedException e) {
 					service.shutdownNow();
-					throw e;
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
@@ -207,15 +205,11 @@ public class MultithreadedAI extends AIEngine {
 			}
 		}
 		
-		public Double call() throws InterruptedException {
+		public Double call() {
 			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves, this.startAB);
 		}
 		
-		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double ab) throws InterruptedException {
-			if (Thread.interrupted()) {
-				throw new InterruptedException();
-			}
-
+		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double ab) {
 			if (g.isDraw()) {
 				// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 				// System.out.println("Detected possible draw");
