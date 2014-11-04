@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CorbinAI extends AIEngine {
+public class CorbinAI implements AIEngine {
 
 	public Move[] rankBestMove (Move[] unsortedMoves, Game g, Player p, int recursionDepth) {
 		Game[] ga = new Game[unsortedMoves.length];

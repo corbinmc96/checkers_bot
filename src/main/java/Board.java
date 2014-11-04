@@ -8,6 +8,15 @@ public class Board {
 	private ArrayList<Piece> piecesOnBoard;
 
 	public static final double MAX_BOARD_VALUE = 36;
+	public static final int[][] PLAYABLE_LOCATIONS = {new int[] {0,0}, new int[] {0,2}, new int[] {0,4}, new int[] {0,6}, 
+	                                                  new int[] {1,1}, new int[] {1,3}, new int[] {1,5}, new int[] {1,7}, 
+									  new int[] {2,0}, new int[] {2,2}, new int[] {2,4}, new int[] {2,6}, 
+	                                                  new int[] {3,1}, new int[] {3,3}, new int[] {3,5}, new int[] {3,7}, 
+	                                                  new int[] {4,0}, new int[] {4,2}, new int[] {4,4}, new int[] {4,6}, 
+	                                                  new int[] {5,1}, new int[] {5,3}, new int[] {5,5}, new int[] {5,7}, 
+									  new int[] {6,0}, new int[] {6,2}, new int[] {6,4}, new int[] {6,6}, 
+	                                                  new int[] {7,1}, new int[] {7,3}, new int[] {7,5}, new int[] {7,7}};
+
 
 	public Board (Player[] players) {
 		if (players[0].getIsOnZeroSide() == players[1].getIsOnZeroSide()) {

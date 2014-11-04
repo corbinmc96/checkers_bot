@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Callable;
 
-public class MultithreadedAI extends AIEngine {
+public class MultithreadedAI implements AIEngine {
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
