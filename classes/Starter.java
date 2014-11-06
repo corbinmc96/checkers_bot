@@ -5,13 +5,19 @@ import java.io.IOException;
 public class Starter {
 
 	public static void main(String[] args) {
-
-		Robot r = new Robot();
+		Robot r = null;
+		if (args.length>2 && args[2].equals("robot=yes")) {
+			r = new Robot();
+		} else if (args.length>2 && args[2].equals("robot=pseudo")) {
+			r = new PseudoRobot();
+		}
 
 		try {
-			r.connect();
-			r.calibrate();
-			r.resetPosition();
+			if (r!=null) {
+				r.connect();
+				r.calibrate();
+				r.resetPosition();
+			}
 		
 			Game theGame = new Game(new SimPlayer(args.length>0 ? args[0] : "x", true, r, new MultithreadedAI()),
 									new Human(args.length>1 ? args[1] : "o", false, r, new MultithreadedAI()),
@@ -27,13 +33,14 @@ public class Starter {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
-			System.err.println("DISCONNECT");
-			try {
-				r.disconnect();
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (r!=null) {
+				System.err.print("Disconnecting robot...");
+				try {
+					r.disconnect();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+				System.err.println("DONE");
 			}
 		}
 	}

@@ -154,11 +154,7 @@ public class Robot {
 				}
 			}
 		} finally {
-			try {
-				r.disconnect();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			r.disconnect();
 		}
 	}
 
@@ -168,15 +164,23 @@ public class Robot {
 				public void run() {
 					(new Thread() {
 						public void run() {
-							xMotor.stop();
-							yMotor2.stop();
-							magnetMotor.stop();
+							if (xMotor != null) {
+								xMotor.stop();
+							}
+							if (yMotor2 != null) {
+								yMotor2.stop();
+							}
+							if (magnetMotor != null) {
+								magnetMotor.stop();
+							}
 						}
 					}).start();
 
 					(new Thread() {
 						public void run() {
-							yMotor1.stop();
+							if (yMotor1 != null) {
+								yMotor1.stop();
+							}
 						}
 					}).start();
 					
@@ -203,7 +207,7 @@ public class Robot {
 
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
-			System.out.println("Connecting...");
+			System.err.println("Connecting to robot...");
 
 			boolean successful = false;
 
@@ -294,7 +298,7 @@ public class Robot {
 		}
 	}
 
-	public void disconnect() throws IOException, InterruptedException {
+	public void disconnect() throws InterruptedException {
 		this.hook.start();
 		Runtime.getRuntime().removeShutdownHook(this.hook);
 

@@ -118,11 +118,7 @@ public class PseudoRobot extends Robot{
 				}
 			}
 		} finally {
-			try {
-				r.disconnect();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			r.disconnect();
 		}
 	}
 
@@ -143,7 +139,7 @@ public class PseudoRobot extends Robot{
 	}
 
 
-	public void disconnect() throws IOException {
+	public void disconnect() {
 		this.connected = false;
 	}
 
