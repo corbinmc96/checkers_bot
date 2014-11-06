@@ -93,6 +93,7 @@ public class MultithreadedAI extends AIEngine {
 			moves = p.getAllMoves(g);
 		}
 
+		//tests for win, only necessary if no remaining moves returns a draw
 		if (g.getGameBoard().totalPiecesLeft(testOpponentMoves ? g.getOtherPlayer(p) : p)==0) {
 			if (testOpponentMoves) {
 				//result is an opponent loss, or a positive value

@@ -7,12 +7,12 @@ import java.util.Collections;
 
 public class Human extends Player {
 	//stores the Scanner object for taking input
-	private Scanner in;
+	private Scanner in = new Scanner(System.in);
 
 	//scanning priority constants -- higher number denotes higher priority
 	private static final double OPPORTUNE_PRIORITY = 1;
-     	private static final double DISTANCE_PRIORITY = 2;
-     	private static final double SPLIT_PRIORITY = 2;
+	private static final double DISTANCE_PRIORITY = 2;
+	private static final double SPLIT_PRIORITY = 2;
 	private static final int SCANNING_RECURSION_DEPTH = 3;
 
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
@@ -23,8 +23,6 @@ public class Human extends Player {
 	public Human (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
 		super(startXO, startOnZeroSide, startBrain);
-		//creates a Scanner object to take input from the command line
-		this.in = new Scanner(System.in);
 	}
 
 	public Move takeTurn(Game g) throws InterruptedException {
@@ -58,7 +56,7 @@ public class Human extends Player {
 							}
 						}
 						if (!already_used) {
-							critical_points.add(critical_point);	
+							critical_points.add(critical_point);
 						}
 					}
 				}

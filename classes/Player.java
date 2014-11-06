@@ -17,12 +17,14 @@ public abstract class Player {
 
 	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		this.color = startColor;
+		this.xo = startColor;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.gameRobot = startGameRobot;
 		this.brain = startBrain;
 	}
 
 	public Player(String startXO, boolean startsOnZeroSide, AIEngine startBrain) {
+		this.color = startXO;
 		this.xo = startXO;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.brain = startBrain;

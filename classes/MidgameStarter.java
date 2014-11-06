@@ -104,14 +104,13 @@ public class MidgameStarter {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
-			System.err.println("DISCONNECT");
+			System.err.print("Disconnecting robot...");
 			try {
 				r.disconnect();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+			System.err.println("DONE");
 		}
 	}
 }
