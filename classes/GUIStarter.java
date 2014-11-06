@@ -5,6 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.NavigationFilter;
+import javax.swing.text.Position;
 
 import javax.imageio.ImageIO;
 
@@ -20,6 +23,10 @@ public class GUIStarter extends JFrame {
 	public static final int MAX_DIFFICULTY = 10;
 
 	private static final String FILE_SEPARATOR = System.getProperty("file.separator");
+	private static final Dimension MAIN_SIZE = new Dimension(380, 420);
+	private static final Dimension CHOOSER_SIZE = new Dimension(480, 600);
+	private static final Dimension PLAY_SIZE = new Dimension(480, 240);
+
 
 	private Box _centerPanel;
 	private JList<String> _humanColorTable;
@@ -50,7 +57,6 @@ public class GUIStarter extends JFrame {
 		JPanel colorsPanel = new JPanel();
 		colorsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 1));
 		colorsPanel.setBorder(new TitledBorder("Choose your Color"));
-
 
 		JPanel humanColorBox = new JPanel();
 		humanColorBox.setBorder(new TitledBorder("Human Color"));
@@ -117,29 +123,6 @@ public class GUIStarter extends JFrame {
 		// CREATES BUTTONS
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BorderLayout());
-		JButton playButton = new JButton("PLAY NEW GAME");
-		playButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae_) {
-				if (_execPanel == null) {
-					_execPanel = new ExecPanel();
-					getContentPane().add(_execPanel);
-				}
-				try {
-					_execPanel.runMainThread(Starter.class,
-											 new String[] {_robotColorTable.getSelectedValue(),
-														   _humanColorTable.getSelectedValue(),
-														   _difficultyBox.getSelectedValue(),
-														   _rulesBox.getSelectedValue()
-											 }
-					);
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
-				((CardLayout) getContentPane().getLayout()).last(getContentPane());
-				GUIStarter.this.setMinimumSize(new Dimension(480, 240));
-			}
-		});
-		buttonPanel.add(playButton, BorderLayout.CENTER);
 
 		JButton inputPiecesButton = new JButton("CHOOSE STARTING POSITIONS");
 		inputPiecesButton.addActionListener(new ActionListener() {
@@ -158,10 +141,39 @@ public class GUIStarter extends JFrame {
 					getContentPane().add(_piecesPanel, 1);
 				}
 				((CardLayout) getContentPane().getLayout()).next(getContentPane());
-				GUIStarter.this.setMinimumSize(new Dimension(480, 600));
+				GUIStarter.this.setResizable(false);
+				GUIStarter.this.setMinimumSize(GUIStarter.CHOOSER_SIZE);
+				GUIStarter.this.setSize(GUIStarter.CHOOSER_SIZE);
 			}
 		});
-		buttonPanel.add(inputPiecesButton, BorderLayout.EAST);
+		buttonPanel.add(inputPiecesButton, BorderLayout.WEST);
+
+		JButton playButton = new JButton("PLAY NEW GAME");
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae_) {
+				if (_execPanel == null) {
+					_execPanel = new ExecPanel();
+					getContentPane().add(_execPanel);
+				}
+				try {
+					_execPanel.runMainThread(Starter.class,
+											 new String[] {_robotColorTable.getSelectedValue(),
+														   _humanColorTable.getSelectedValue(),
+														   "robot=yes",
+														   _difficultyBox.getSelectedValue(),
+														   _rulesBox.getSelectedValue()
+											 }
+					);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				}
+				((CardLayout) getContentPane().getLayout()).last(getContentPane());
+				GUIStarter.this.setResizable(true);
+				GUIStarter.this.setMinimumSize(GUIStarter.PLAY_SIZE);
+				GUIStarter.this.setSize(GUIStarter.CHOOSER_SIZE);
+			}
+		});
+		buttonPanel.add(playButton, BorderLayout.CENTER);
 
 		// FINISHES UP
 		mainPanel.add(this._centerPanel, BorderLayout.CENTER);
@@ -169,71 +181,99 @@ public class GUIStarter extends JFrame {
 		contentPane.add(mainPanel);
 
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setMinimumSize(new Dimension(380, 480));
+		this.setTitle("CheckerBot");
+		this.setResizable(false);
+		this.setMinimumSize(GUIStarter.MAIN_SIZE);
+		this.setSize(GUIStarter.MAIN_SIZE);
 		this.validate();
 	}
 
 	public static void main(String[] args) {
-		GUIStarter test = new GUIStarter();
-		test.setVisible(true);
-	}
-
-	private class CustomOutputStream extends OutputStream {
-		private JTextArea textArea;
-
-		public CustomOutputStream(JTextArea textArea) {
-			this.textArea = textArea;
-		}
-
-		public void write(int b) throws IOException {
-			// redirects data to the text area
-			textArea.append(String.valueOf((char)b));
-			// scrolls the text area to the end of data
-			textArea.setCaretPosition(textArea.getDocument().getLength());
-		}
+		Runnable runner = new Runnable() {
+			public void run() {
+				GUIStarter test = new GUIStarter();
+				test.setVisible(true);
+			}
+		};
+		EventQueue.invokeLater(runner);
 	}
 
 	private class ExecPanel extends JPanel {
 		private JButton _resetButton;
 		private JTextArea _textArea;
-		private JTextField _inputField;
 
 		private Thread _mainThread;
 
+		private int _currentTerminalLength;
+		private StringBuilder _currentInputStringB;
 		private PrintWriter _processWriter;
 
 		public ExecPanel() {
 			super();
 
 			// SETS UP NEW UI ELEMENTS
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			this.setLayout(new BorderLayout());
 
+			// SETS UP TERMINAL AREA
 			this._textArea = new JTextArea(20, 20);
-			this._textArea.setEditable(false);
+			this._textArea.setEditable(true);
 			this._textArea.setLineWrap(true);
 			this._textArea.setWrapStyleWord(true);
 			JScrollPane scrollPane = new JScrollPane(this._textArea);
 			scrollPane.setViewportBorder(new LineBorder(Color.white));
-			this.add(scrollPane);
+			this.add(scrollPane, BorderLayout.CENTER);
 
-			JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			this._inputField = new JTextField(20);
-			ActionListener fieldListener = new ActionListener() {
-				public void actionPerformed(ActionEvent ae_) {
-					if (_mainThread != null && _processWriter != null) {
-						_processWriter.println(_inputField.getText());
-						_inputField.setText("");
+			NavigationFilter navFilter = new NavigationFilter() {
+				public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+					if (dot == ExecPanel.this._currentTerminalLength) {
+						fb.setDot(dot, bias);
+					}
+				}
+
+				public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
+					if (dot == ExecPanel.this._currentTerminalLength) {
+						fb.setDot(dot, bias);
 					}
 				}
 			};
-			this._inputField.addActionListener(fieldListener);
-			inputPanel.add(this._inputField);
-			JButton enterButton = new JButton("ENTER");
-			enterButton.addActionListener(fieldListener);
-			inputPanel.add(enterButton);
+			this._textArea.setNavigationFilter(navFilter);
 
-			this.add(inputPanel);
+			this._currentTerminalLength = this._textArea.getDocument().getLength();
+			this._currentInputStringB = new StringBuilder();
+			DocumentListener terminalListener = new DocumentListener() {
+				public void changedUpdate(DocumentEvent e_) {
 
+				}
+
+				public void insertUpdate(DocumentEvent e_) {
+					if (ExecPanel.this._textArea.getDocument().getLength() > ExecPanel.this._currentTerminalLength) {
+						try {
+							String insertedText = ExecPanel.this._textArea.getDocument().getText(e_.getOffset(), e_.getLength());
+							if (insertedText.indexOf('\n') != -1) {
+								String[] lines = (ExecPanel.this._currentInputStringB + insertedText).toString().split("\\n", -1);
+								for (int line = 0; line < lines.length-1; line++) {
+									if (ExecPanel.this._mainThread != null && ExecPanel.this._processWriter != null) {
+										ExecPanel.this._processWriter.println(lines[line]);
+									}
+								}
+								ExecPanel.this._currentInputStringB = new StringBuilder(lines[lines.length-1]);
+							} else {
+								ExecPanel.this._currentInputStringB.append(insertedText);
+							}
+						} catch (BadLocationException e) {
+							e.printStackTrace();
+						}
+						ExecPanel.this._currentTerminalLength = ExecPanel.this._textArea.getDocument().getLength();
+					}
+				}
+
+				public void removeUpdate(DocumentEvent e_) {
+					ExecPanel.this._currentTerminalLength = ExecPanel.this._textArea.getDocument().getLength();
+				}
+			};
+			this._textArea.getDocument().addDocumentListener(terminalListener);
+
+			// reset button
 			JPanel resetPanel = new JPanel();
 			resetPanel.setBorder(new CompoundBorder(new LineBorder(Color.white), new EmptyBorder(1, 2, 1, 2)));
 			this._resetButton = new JButton("RESET GAME");
@@ -242,8 +282,9 @@ public class GUIStarter extends JFrame {
 					close();
 				}
 			});
-			resetPanel.add(this._resetButton, BorderLayout.CENTER);
-			this.add(resetPanel);
+			resetPanel.add(this._resetButton);
+
+			this.add(resetPanel, BorderLayout.SOUTH);
 		}
 
 		public void runMainThread(final Class<?> mainClass, final String[] params) throws NoSuchMethodException {
@@ -281,16 +322,25 @@ public class GUIStarter extends JFrame {
 					} catch (InvocationTargetException e) {
 						e.printStackTrace();
 					} finally {
-						System.err.println("Resetting stdin/stdout...");
+						System.err.print("Resetting stdin/stdout...");
 						System.setIn(stdin);
 						System.setOut(stdout);
-						System.err.println("stdin/stdout reset successfully");
+						System.err.println("DONE");
 					}
 				}
 			};
 
 			System.setIn(new SequenceInputStream(new BufferedInputStream(inPipe), System.in));
-			System.setOut(new PrintStream(new CustomOutputStream(this._textArea)));
+			System.setOut(new PrintStream(new OutputStream() {
+				public void write(int b) throws IOException {
+					//updates output string
+					ExecPanel.this._currentTerminalLength++;
+					// redirects data to the text area
+					ExecPanel.this._textArea.append(String.valueOf((char)b));
+					// scrolls the text area to the end of data
+					ExecPanel.this._textArea.setCaretPosition(ExecPanel.this._textArea.getDocument().getLength());
+				}
+			}));
 
 			this._mainThread.start();
 		}
@@ -312,7 +362,9 @@ public class GUIStarter extends JFrame {
 			}
 			this._processWriter = null;
 			((CardLayout) this.getRootPane().getContentPane().getLayout()).next(this.getRootPane().getContentPane());
-			GUIStarter.this.setMinimumSize(new Dimension(380, 480));
+			GUIStarter.this.setResizable(false);
+			GUIStarter.this.setMinimumSize(GUIStarter.MAIN_SIZE);
+			GUIStarter.this.setSize(GUIStarter.MAIN_SIZE);
 		}
 	}
 
@@ -391,7 +443,9 @@ public class GUIStarter extends JFrame {
 			returnButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae_) {
 					((CardLayout) getContentPane().getLayout()).first(getContentPane());
-					GUIStarter.this.setMinimumSize(new Dimension(380, 480));
+					GUIStarter.this.setResizable(false);
+					GUIStarter.this.setMinimumSize(GUIStarter.MAIN_SIZE);
+					GUIStarter.this.setSize(GUIStarter.MAIN_SIZE);
 				}
 			});
 			buttonPanel.add(returnButton, BorderLayout.WEST);
@@ -451,7 +505,9 @@ public class GUIStarter extends JFrame {
 						e.printStackTrace();
 					}
 					((CardLayout) getContentPane().getLayout()).last(getContentPane());
-					GUIStarter.this.setMinimumSize(new Dimension(480, 240));
+					GUIStarter.this.setResizable(true);
+					GUIStarter.this.setMinimumSize(GUIStarter.PLAY_SIZE);
+					GUIStarter.this.setSize(GUIStarter.CHOOSER_SIZE);
 				}
 			});
 			buttonPanel.add(playButton, BorderLayout.CENTER);
