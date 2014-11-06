@@ -1,17 +1,44 @@
 // ALL CORBIN
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class StoringAI implements AIEngine {
+
+	private final String PATH_TO_SAVE_FILE = "";
+
+	private String[] boardSaves;
+
+	public StoringAI () {
+		System.out.println("File Not Found.");
+		try {
+			FileReader fileReader = new FileReader(PATH_TO_SAVE_FILE);
+			BufferedReader buffReader = new BufferedReader(fileReader);
+			List<String> lines = new ArrayList<String>();
+			String line = null;
+			while ((line = buffReader.readLine()) != null) {
+				lines.add(line);
+			}
+			buffReader.close();
+			boardSaves = lines.toArray(new String[lines.size()]);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 	public Move[] rankBestMove (Move[] unsortedMoves, Game g, Player p, int recursionDepth) {
 		Game[] ga = new Game[unsortedMoves.length];
 		double[] va = new double[unsortedMoves.length];
 		for (int i=0;i<unsortedMoves.length;i++) {
 			ga[i] = new Game(g,unsortedMoves[i]);
-			// hashing algorithm will go here
-			
+			String newBoardString = generateBoardString(g.getGameBoard(), p);
+
 			va[i] = this.valueOfMoves(ga[i],p,recursionDepth-1,true,0);
 		}
 		Double[] sortedva = new Double[unsortedMoves.length];
@@ -23,8 +50,6 @@ public class StoringAI implements AIEngine {
 		Arrays.sort(sortedva, Collections.reverseOrder());
 		
 		for (int i=0;i<unsortedMoves.length;i++) {
-			//logs sorted move values
-
 			int index = ArraysHelper.find(va,sortedva[i]);
 			va[index] = 1000000;
 			result[i] = unsortedMoves[index];
@@ -96,5 +121,9 @@ public class StoringAI implements AIEngine {
 			}
 		}
 		return boardString;
+	}
+
+	public void close () {
+		//code to close any open files
 	}
 }
