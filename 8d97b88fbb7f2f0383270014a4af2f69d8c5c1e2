@@ -1,0 +1,3 @@
+Moved source files from classes to src
+Moved shell scripts from classes to bin
+Moved miscellaneous files from classes to project root directory
