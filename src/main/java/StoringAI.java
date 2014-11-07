@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.IOException;
 
 public class StoringAI implements AIEngine {
@@ -16,7 +17,6 @@ public class StoringAI implements AIEngine {
 	private String[] boardSaves;
 
 	public StoringAI () {
-		System.out.println("File Not Found.");
 		try {
 			FileReader fileReader = new FileReader(PATH_TO_SAVE_FILE);
 			BufferedReader buffReader = new BufferedReader(fileReader);
@@ -29,6 +29,12 @@ public class StoringAI implements AIEngine {
 			boardSaves = lines.toArray(new String[lines.size()]);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+		try {
+			FileWriter fileWriter = new FileWriter(PATH_TO_SAVE_FILE, true);
+			BufferedWriter buffWriter = new BufferedWriter(fileWriter);
+			PrintWriter file_out = new PrintWriter(buffWriter);
 		}
 	}
 
@@ -38,8 +44,12 @@ public class StoringAI implements AIEngine {
 		for (int i=0;i<unsortedMoves.length;i++) {
 			ga[i] = new Game(g,unsortedMoves[i]);
 			String newBoardString = generateBoardString(g.getGameBoard(), p);
+			if (/*add test condition*/) {
 
-			va[i] = this.valueOfMoves(ga[i],p,recursionDepth-1,true,0);
+			} else {
+				va[i] = this.valueOfMoves(ga[i],p,recursionDepth-1,true,0);
+				//write learned info to file
+			}
 		}
 		Double[] sortedva = new Double[unsortedMoves.length];
 		for (int i=0;i<unsortedMoves.length;i++) {
