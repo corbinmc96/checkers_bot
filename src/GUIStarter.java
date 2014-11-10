@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
+@SuppressWarnings("serial")
 public class GUIStarter extends JFrame {
 
 	public static final String COLOR_ONE = "black";
@@ -198,6 +199,7 @@ public class GUIStarter extends JFrame {
 		EventQueue.invokeLater(runner);
 	}
 
+	@SuppressWarnings("serial")
 	private class ExecPanel extends JPanel {
 		private JButton _resetButton;
 		private JTextArea _textArea;
@@ -368,6 +370,7 @@ public class GUIStarter extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private class PiecesPanel extends JPanel {
 		ImageIcon _emptyIcon;
 		ImageIcon[] _icons;
