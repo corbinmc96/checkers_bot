@@ -52,7 +52,7 @@ public class AaronAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	public double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
+	public double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double alphaBeta) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
@@ -106,7 +106,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(p);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
+				if ((testOpponentMoves && boardValues[i]<=alphaBeta) || (!testOpponentMoves && boardValues[i]>=alphaBeta)) {
 					return boardValues[i];
 				}
 			}
@@ -124,7 +124,7 @@ public class AaronAI extends AIEngine {
 			for (int i = 0; i<moves.length; i++) {
 				boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), p, recursionDepth-1, !testOpponentMoves, newAB);
 				//returns if this portion of the tree can be eliminated by alpha-beta pruning
-				if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
+				if ((testOpponentMoves && boardValues[i]<=alphaBeta) || (!testOpponentMoves && boardValues[i]>=alphaBeta)) {
 					return boardValues[i];
 				}
 

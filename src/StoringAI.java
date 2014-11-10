@@ -72,7 +72,7 @@ public class StoringAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	private double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
+	public double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
 			// System.out.println("Detected possible draw");
@@ -197,7 +197,7 @@ public class StoringAI extends AIEngine {
 
 	public String createStringRepresentation(Game g, Player p) {
 		StringBuilder result = new StringBuilder();
-		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		ArrayList<String> allPieces = new ArrayList<String>(g.getGameBoard().getPiecesOnBoard().length);
 		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
 			allPieces.add(piece.makeString(p));
 		}
@@ -213,7 +213,7 @@ public class StoringAI extends AIEngine {
 
 	public String createStringRepresentation(Game g, Player p, Move m) {
 		StringBuilder result = new StringBuilder();
-		ArrayList<String> allPieces = new ArrayList(g.getGameBoard().getPiecesOnBoard().length);
+		ArrayList<String> allPieces = new ArrayList<String>(g.getGameBoard().getPiecesOnBoard().length);
 		for (Piece piece : g.getGameBoard().getPiecesOnBoard()) {
 			allPieces.add(piece.makeString(p));
 		}

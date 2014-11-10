@@ -1,5 +1,6 @@
 // ALL AARON
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,17 +24,16 @@ public class MultithreadedAI extends AIEngine {
 		} else {
 			ExecutorService service = Executors.newFixedThreadPool(8);
 			
-			@SuppressWarnings({"unchecked"})
-			Future<Double>[] valueFutures = new Future[moves.length];
+			ArrayList<Future<Double>> valueFutures = new ArrayList<Future<Double>>(moves.length);
 			
 			for (int i = 0; i<moves.length; i++) {
-				valueFutures[i] = service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, p));
+				valueFutures.add(service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, p)));
 			}
 			
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				try {
-					boardValues[i] = valueFutures[i].get();
+					boardValues[i] = valueFutures.get(i).get();
 				} catch (InterruptedException e) {
 					service.shutdownNow();
 					throw e;
@@ -75,7 +75,7 @@ public class MultithreadedAI extends AIEngine {
 		return sortedMoves;
 	}
 
-	public double valueOfMoves (Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) throws InterruptedException {
+	public double valueOfMoves (Game g, Player p, int recursionDepth, boolean testOpponentMoves, double alphaBeta) throws InterruptedException {
 
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
@@ -145,17 +145,16 @@ public class MultithreadedAI extends AIEngine {
 		} else {
 			ExecutorService service = Executors.newFixedThreadPool(8);
 			
-			@SuppressWarnings({"unchecked"})
-			Future<Double>[] valueFutures = new Future[moves.length];
+			ArrayList<Future<Double>> valueFutures = new ArrayList<Future<Double>>(moves.length);
 			
 			for (int i = 0; i<moves.length; i++) {
-				valueFutures[i] = service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, p));
+				valueFutures.add(service.submit(new ValueCalculator(new Game(g, moves[i]), recursionDepth-1, true, p)));
 			}
 			
 			//iterates over all moves and calculates value based on best opponent move
 			for (int i = 0; i<moves.length; i++) {
 				try {
-					boardValues[i] = valueFutures[i].get();
+					boardValues[i] = valueFutures.get(i).get();
 				} catch (InterruptedException e) {
 					service.shutdownNow();
 					throw e;
@@ -212,7 +211,7 @@ public class MultithreadedAI extends AIEngine {
 			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves, this.startAB);
 		}
 		
-		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double ab) throws InterruptedException {
+		private double valueOfMoves(Game g, int recursionDepth, boolean testOpponentMoves, double alphaBeta) throws InterruptedException {
 			if (Thread.interrupted()) {
 				throw new InterruptedException();
 			}
@@ -279,7 +278,7 @@ public class MultithreadedAI extends AIEngine {
 				for (int i = 0; i<moves.length; i++) {
 					boardValues[i] = (new Board(g.getGameBoard(), moves[i])).calculateValue(this.player);
 					//returns if this portion of the tree can be eliminated by alpha-beta pruning
-					if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
+					if ((testOpponentMoves && boardValues[i]<=alphaBeta) || (!testOpponentMoves && boardValues[i]>=alphaBeta)) {
 						return boardValues[i];
 					}
 				}
@@ -297,7 +296,7 @@ public class MultithreadedAI extends AIEngine {
 				for (int i = 0; i<moves.length; i++) {
 					boardValues[i] = this.valueOfMoves(new Game(g, moves[i]), recursionDepth-1, !testOpponentMoves, newAB);
 					//returns if this portion of the tree can be eliminated by alpha-beta pruning
-					if ((testOpponentMoves && boardValues[i]<=ab) || (!testOpponentMoves && boardValues[i]>=ab)) {
+					if ((testOpponentMoves && boardValues[i]<=alphaBeta) || (!testOpponentMoves && boardValues[i]>=alphaBeta)) {
 						return boardValues[i];
 					}
 

@@ -29,7 +29,7 @@ public class Human extends Player {
 		//gets the last move made by the human player
 		Move m = this.inputMove(g);
 		//performs the move on the game board
-		super.performMove(m, g.getGameBoard());
+		Player.performMove(m, g.getGameBoard());
 		//returns the move that was made
 		return m;
 	}

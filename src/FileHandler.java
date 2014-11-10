@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class FileHandler {
 
 	private String filePath;
-	private ArrayList<String> fileContents = new ArrayList();
+	private ArrayList<String> fileContents = new ArrayList<String>();
 	private BufferedReader br;
 	private BufferedWriter bw;
 
