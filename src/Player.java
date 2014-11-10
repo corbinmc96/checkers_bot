@@ -1,7 +1,7 @@
 // ALL AARON, EXCEPT CORBIN WROTE XO CODE AND getAllMoves
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Player {
 

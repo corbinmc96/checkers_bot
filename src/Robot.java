@@ -1,10 +1,20 @@
 // AARON WROTE CONSTRUCTOR, main, connect, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
 
-import lejos.pc.comm.*;
-import lejos.nxt.*;
-import lejos.nxt.remote.*;
+import lejos.nxt.LightSensor;
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
+import lejos.nxt.remote.NXTCommand;
+import lejos.nxt.remote.RemoteMotor;
+import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommFactory;
+import lejos.pc.comm.NXTCommandConnector;
+import lejos.pc.comm.NXTConnector;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.util.Arrays;
 
 public class Robot {

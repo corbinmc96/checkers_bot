@@ -2,11 +2,11 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 public class MultithreadedAI extends AIEngine {
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) throws InterruptedException {

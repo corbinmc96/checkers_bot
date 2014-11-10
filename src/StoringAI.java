@@ -1,7 +1,7 @@
 // ALL CORBIN
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StoringAI extends AIEngine {
 
