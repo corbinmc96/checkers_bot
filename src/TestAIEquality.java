@@ -1,7 +1,7 @@
 // ALL AARON
 
 public class TestAIEquality {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		AIEngine AI1 = new AaronAI();
 		AIEngine AI2 = new MultithreadedAI();
 		Player randPlayer1 = new SimPlayer("x", true, new RandomAI()/*the AI doesn't actually matter here*/);

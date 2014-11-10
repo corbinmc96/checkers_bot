@@ -9,7 +9,7 @@ public class RandomAI extends MultithreadedAI {
 		this.random = new Random();
 	}
 
-	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
+	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) throws InterruptedException {
 		Move[] sortedMoves = super.rankBestMove(moves, g, p, recursionDepth);
 
 		if (this.random.nextInt(Math.min(2, moves.length))==1) {

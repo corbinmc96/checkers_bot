@@ -1,7 +1,7 @@
 // ALL AARON
 
 public class SimulationStarter {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Player orig = new SimPlayer("x", true, new MultithreadedAI());
 		Player test = new SimPlayer("x", true, new AaronAI());
 		Player rand = new SimPlayer("o", false, new RandomAI());
