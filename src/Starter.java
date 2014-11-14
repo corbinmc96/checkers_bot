@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Starter {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Robot r = null;
 		if (args.length>2 && args[2].equals("robot=yes")) {
 			r = new Robot();

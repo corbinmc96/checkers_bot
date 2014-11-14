@@ -165,16 +165,7 @@ public class GUIStarter extends JFrame {
 		inputPiecesButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae_) {
 				if (_piecesPanel == null) {
-					do {
-						try {
-							_piecesPanel = new PiecesPanel();
-						} catch (IOException e) {
-							e.printStackTrace();
-							if (JOptionPane.showConfirmDialog(GUIStarter.this, "Problem opening image files.\nPress OK to try again,\nor CANCEL to exit.", "", JOptionPane.OK_CANCEL_OPTION)!=JOptionPane.OK_OPTION) {
-								System.exit(1);
-							}
-						}
-					} while (_piecesPanel==null);
+					_piecesPanel = new PiecesPanel();
 					getContentPane().add(_piecesPanel, 1);
 				}
 				((CardLayout) getContentPane().getLayout()).next(getContentPane());
@@ -411,7 +402,7 @@ public class GUIStarter extends JFrame {
 		ImageIcon _emptyIcon;
 		ImageIcon[] _icons;
 
-		public PiecesPanel() throws IOException {
+		public PiecesPanel() {
 			super();
 
 			this.setLayout(new BorderLayout());
@@ -426,19 +417,42 @@ public class GUIStarter extends JFrame {
 			playerPanel.add(playerBox);
 			this.add(playerPanel, BorderLayout.NORTH);
 
-			try {
-				String imageDirectory = new File(System.getProperty("user.dir")).getParent() + FILE_SEPARATOR + "images" + FILE_SEPARATOR;
-				this._emptyIcon = new ImageIcon(ImageIO.read(new File(imageDirectory + "empty.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH));
-				this._icons = new ImageIcon[] {
-					new ImageIcon(ImageIO.read(new File(imageDirectory + "green.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
-					new ImageIcon(ImageIO.read(new File(imageDirectory + "gray.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
-					new ImageIcon(ImageIO.read(new File(imageDirectory + "black.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
-					new ImageIcon(ImageIO.read(new File(imageDirectory + "gray-king.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH)),
-					new ImageIcon(ImageIO.read(new File(imageDirectory + "black-king.png")).getScaledInstance(52, 52, Image.SCALE_SMOOTH))
-				};
-			} catch (IOException e) {
-				System.err.println("Unable to create images from file.");
-				throw e;
+			 while (true) {
+				try {
+					InputStream[] resourceStreams = new InputStream[] {
+						PiecesPanel.class.getResourceAsStream("images/empty.png"),
+						PiecesPanel.class.getResourceAsStream("images/green.png"),
+						PiecesPanel.class.getResourceAsStream("images/gray.png"),
+						PiecesPanel.class.getResourceAsStream("images/black.png"),
+						PiecesPanel.class.getResourceAsStream("images/gray-king.png"),
+						PiecesPanel.class.getResourceAsStream("images/black-king.png")
+					};
+
+					this._emptyIcon = new ImageIcon(
+						ImageIO.read(resourceStreams[0]).getScaledInstance(52, 52, Image.SCALE_SMOOTH)
+					);
+
+					this._icons = new ImageIcon[5];
+					for (int i = 0; i < 5; i++) {
+						this._icons[i] = new ImageIcon(
+							ImageIO.read(resourceStreams[i + 1]).getScaledInstance(52, 52, Image.SCALE_SMOOTH)
+						);
+					}
+					break;
+				} catch (IOException | IllegalArgumentException e) {
+					System.err.println("Unable to create images from file.");
+
+					int dialogResult = JOptionPane.showConfirmDialog(
+						GUIStarter.this,
+						"Problem opening image files.\nPress OK to try again,\nor CANCEL to exit.",
+						"",
+						JOptionPane.OK_CANCEL_OPTION
+					);
+
+					if (dialogResult != JOptionPane.OK_OPTION) {
+						System.exit(1);
+					}
+				}
 			}
 
 			JPanel boardWrapperPanel = new JPanel();
@@ -541,6 +555,7 @@ public class GUIStarter extends JFrame {
 												 }
 						);
 					} catch (NoSuchMethodException e) {
+						//this should never happen
 						e.printStackTrace();
 					}
 					((CardLayout) getContentPane().getLayout()).last(getContentPane());

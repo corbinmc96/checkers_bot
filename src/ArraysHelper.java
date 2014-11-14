@@ -67,6 +67,15 @@ public class ArraysHelper {
 		return result;
 	}
 
+	public static String[] copyOfRange(String[] original, int startIndex, int endIndex) {
+		String[] result = new String[endIndex-startIndex];
+
+		for (int i = 0; i<endIndex-startIndex; i++) {
+			result[i] = original[startIndex+i];
+		}
+		return result;
+	}
+
 	public static int find(double[] a, double n) {
 		for (int i = 0; i<a.length; i++) {
 			if (a[i]==n) {
