@@ -1,30 +1,11 @@
 <project name="CheckersBot" default="main">
 	<description>
     	CheckersBot build file
-    </description>
+      </description>
 
 	<!-- set properties for this build -->
-	<property environment="env" />
 	<property file="build.properties" />
 
-	<!-- check whether nxj.home is correct -->
-	<available file="${nxj.home}/lib/pc" property="lejos.pc.exists" />
-	<available file="${nxj.home}/lib/nxt" property="lejos.nxt.exists" />
-	<fail unless="lejos.pc.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/pc does not exist" />
-	<fail unless="lejos.nxt.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/nxt does not exist" />
-
-	<!-- define the search paths -->
-	<path id="lejos.pc">
-		<fileset dir="${nxj.home}/lib/pc">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	<path id="lejos.nxt">
-		<fileset dir="${nxj.home}/lib/nxt">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
 	<condition property="d32Flag" value="-d32" else="-Dblank.dummy.arg=">
 		<and>
 			<os family="mac" />
@@ -50,8 +31,8 @@
 			includeAntRuntime="false"
 			includeJavaRuntime="false"
 			verbose="false"
+			classpath="${source.cp}"
 		>
-			<classpath refid="lejos.pc" />
 			<!-- enable warnings -->
 			<compilerarg value="-Xlint:${source.warn}" />
 		</javac>

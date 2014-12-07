@@ -6,3 +6,4 @@
 *.log
 *.tags
 *.tag
+./build/*
