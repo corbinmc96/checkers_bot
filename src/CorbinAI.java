@@ -1,8 +1,10 @@
-// ALL CORBIN
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+/**
+ * @author Corbin McNeill
+ */
 
 public class CorbinAI extends AIEngine {
 

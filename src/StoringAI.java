@@ -1,7 +1,9 @@
-// ALL CORBIN
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * @author Corbin McNeill
+ */
 
 public class StoringAI extends AIEngine {
 

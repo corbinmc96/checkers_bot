@@ -1,10 +1,12 @@
-//ALL AARON
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Scanner;
+
+/**
+ * @author Aaron Miller
+ */
 
 public class PseudoRobot extends Robot{
 

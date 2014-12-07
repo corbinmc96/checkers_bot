@@ -1,5 +1,3 @@
-// AARON WROTE CONSTRUCTOR, main, connect, and disconnect, JAMES WROTE MOST OF THE REST OF EVERYTHING ELSE
-
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -16,6 +14,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.util.Arrays;
+
+/**
+ * @author James Dingwall
+ * @author Aaron Miller
+ */
 
 public class Robot {
 

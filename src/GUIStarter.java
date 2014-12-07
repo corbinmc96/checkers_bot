@@ -1,5 +1,3 @@
-// ALL AARON
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -51,6 +49,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.NavigationFilter;
 import javax.swing.text.Position;
+
+/**
+ * @author Aaron Miller
+ */
 
 @SuppressWarnings("serial")
 public class GUIStarter extends JFrame {

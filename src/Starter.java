@@ -1,6 +1,9 @@
-// COLLABORATION BETWEEN CORBIN AND AARON
-
 import java.io.IOException;
+
+/**
+ * @author Corbin McNeill
+ * @author Aaron Miller
+ */
 
 public class Starter {
 

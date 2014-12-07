@@ -1,6 +1,8 @@
-// ALL CORBIN
-
 import java.util.Arrays;
+
+/**
+ * @author Corbin McNeill
+ */
 
 public class SimPlayer extends Player {
 

@@ -1,7 +1,9 @@
-// ALL AARON
-
 import java.io.IOException;
 import java.util.ArrayList;
+
+/**
+ * @author Aaron Miller
+ */
 
 public class Game {
 

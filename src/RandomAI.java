@@ -1,6 +1,8 @@
-// ALL AARON
-
 import java.util.Random;
+
+/**
+ * @author Aaron Miller
+ */
 
 public class RandomAI extends MultithreadedAI {
 	private Random random;

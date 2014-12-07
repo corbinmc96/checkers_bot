@@ -1,9 +1,12 @@
-// ALL CORBIN, AARON CONTRIBUTED TO inputMove
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
+
+/**
+ * @author Corbin McNeill
+ * @author Aaron Miller
+ */
 
 public class Human extends Player {
 	//stores the Scanner object for taking input

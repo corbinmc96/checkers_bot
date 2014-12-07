@@ -1,6 +1,9 @@
-// ALL CORBIN, EXCEPT THAT AARON WROTE copyToBoard
-
 import java.util.ArrayList;
+
+/**
+ * @author Corbin McNeill
+ * @author Aaron Miller
+ */
 
 public class Piece {
 

@@ -1,7 +1,10 @@
-// ALL AARON, EXCEPT CORBIN WROTE XO CODE AND getAllMoves
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * @author Aaron Miller
+ * @author Corbin McNeill
+ */
 
 public abstract class Player {
 

@@ -1,5 +1,8 @@
-// ALL AARON
 import java.util.Arrays;
+
+/**
+ * @author Aaron Miller
+ */
 
 public class AaronAI extends AIEngine {
 

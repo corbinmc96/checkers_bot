@@ -1,4 +1,6 @@
-//ALL AARON
+/**
+ * @author Aaron Miller
+ */
 
 import java.io.IOException;
 import java.util.Arrays;

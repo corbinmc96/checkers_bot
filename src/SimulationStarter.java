@@ -1,4 +1,6 @@
-// ALL AARON
+/**
+ * @author Aaron Miller
+ */
 
 public class SimulationStarter {
 	public static void main(String[] args) throws InterruptedException {

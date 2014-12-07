@@ -1,7 +1,10 @@
-// ALL CORBIN, AARON CONTRIBUTED SOME TO calculateIsValid
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * @author Corbin McNeill
+ * @author Aaron Miller
+ */
 
 public class Move {
 
