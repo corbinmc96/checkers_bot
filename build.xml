@@ -6,6 +6,10 @@
 	<!-- set properties for this build -->
 	<property file="build.properties" />
 
+	<path id="jars">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+
 	<condition property="d32Flag" value="-d32" else="-Dblank.dummy.arg=">
 		<and>
 			<os family="mac" />
@@ -32,6 +36,7 @@
 			includeJavaRuntime="false"
 			verbose="false"
 			classpath="${source.cp}"
+			classpathref="jars"
 		>
 			<!-- enable warnings -->
 			<compilerarg value="-Xlint:${source.warn}" />
@@ -46,6 +51,7 @@
         >
         	<fileset dir="${classes.dir}" includes="${jar.includes}" excludes="{jar.excludes}" />
         	<fileset dir="${resources.dir}" includes="${resources.includes}" excludes="${resources.excludes}" />
+		<zipgroupfileset dir="lib" includes="*.jar" />
         	
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
@@ -68,8 +74,8 @@
 			access="protected"
 			windowtitle="Project documentation"
 			verbose="false"
+			classpathref="jars"
 		>
-			<classpath refid="lejos.pc" />
 			<!--
 				Without this, there are some JDK jars in the classpath.
 				Set verbose=true to check that the classpath is really clean.
