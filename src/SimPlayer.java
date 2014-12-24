@@ -16,6 +16,7 @@ public class SimPlayer extends Player {
 		super(startXO, startOnZeroSide, startBrain);
 	}
 
+	@Override
 	public Move takeTurn(Game g) throws InterruptedException {
 		//calculates the best move to make the specified number of plies ahead
 		Move m = this.calculateBestMove(g, 10);

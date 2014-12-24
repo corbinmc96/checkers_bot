@@ -11,6 +11,7 @@ public class RandomAI extends MultithreadedAI {
 		this.random = new Random();
 	}
 
+	@Override
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) throws InterruptedException {
 		Move[] sortedMoves = super.rankBestMove(moves, g, p, recursionDepth);
 

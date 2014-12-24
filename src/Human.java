@@ -28,6 +28,7 @@ public class Human extends Player {
 		super(startXO, startOnZeroSide, startBrain);
 	}
 
+	@Override
 	public Move takeTurn(Game g) throws InterruptedException {
 		//gets the last move made by the human player
 		Move m = this.inputMove(g);
@@ -37,7 +38,7 @@ public class Human extends Player {
 		return m;
 	}
 
-	public Move inputMove(Game g) throws InterruptedException {
+	private Move inputMove(Game g) throws InterruptedException {
 		if (this.getRobot()!=null) {
 			Robot r = this.getRobot();
 			r.waitForSensorPress();
@@ -189,7 +190,7 @@ public class Human extends Player {
 		}
 	}
 
-	public static Integer[] convert(int[] old) {
+	private static Integer[] convert(int[] old) {
 		Integer[] result = new Integer[old.length];
 		for (int i = 0; i<old.length; i++) {
 			result[i] = Integer.valueOf(old[i]);

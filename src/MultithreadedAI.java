@@ -11,6 +11,8 @@ import java.util.concurrent.Future;
  */
 
 public class MultithreadedAI extends AIEngine {
+	
+	@Override
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) throws InterruptedException {
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
@@ -77,6 +79,7 @@ public class MultithreadedAI extends AIEngine {
 		return sortedMoves;
 	}
 
+	@Override
 	public double valueOfMoves (Game g, Player p, int recursionDepth, boolean testOpponentMoves, double alphaBeta) throws InterruptedException {
 
 		if (g.isDraw()) {
@@ -209,6 +212,7 @@ public class MultithreadedAI extends AIEngine {
 			}
 		}
 		
+		@Override
 		public Double call() throws InterruptedException {
 			return this.valueOfMoves(this.origGame, this.startRecursionDepth, this.startTestOpponentMoves, this.startAB);
 		}

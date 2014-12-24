@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author Aaron Miller
  */
 
-public class PseudoRobot extends Robot{
+public class PseudoRobot extends Robot {
 
 	// INSTANCE VARIABLES
 	private boolean isHoldingPiece;
@@ -124,11 +124,13 @@ public class PseudoRobot extends Robot{
 		}
 	}
 
+	@Override
 	public void connect() {
 		this.connected = true;
 		this.deadLocation = new int[] {0, -1};
 	}
 
+	@Override
 	public int[] getDeadLocation() {
 		if (this.deadLocation[0]>7) {
 			this.deadLocation[0] = 0;
@@ -141,21 +143,26 @@ public class PseudoRobot extends Robot{
 	}
 
 
+	@Override
 	public void disconnect() {
 		this.connected = false;
 	}
 
+	@Override
 	public boolean getIsHoldingPiece() {
 		return this.isHoldingPiece;
 	}
 	
+	@Override
 	public void moveToXY(int[] newXY) {
 	}
 	
+	@Override
 	public void resetPosition() {
 		System.out.println("entering resetPosition");
 	}
 	
+	@Override
 	public String examineLocation(int[] location) {
 		Scanner sc = new Scanner(System.in);
 		int lightValue = 0;
@@ -176,20 +183,24 @@ public class PseudoRobot extends Robot{
 		}
 	}
 
+	@Override
 	public void pickUpPiece() {
 		this.isHoldingPiece = true;
 	}
 
+	@Override
 	public void dropPiece() {
 		this.isHoldingPiece = false;
 	}
 
+	@Override
 	public void waitForSensorPress() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Waiting for enter to be pressed...");
 		sc.next();
 	}
 
+	@Override
 	public void calibrate() {
 		int[] check_values = new int[] {0,0,0};
 		Scanner sc = new Scanner(System.in);

@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 public class AaronAI extends AIEngine {
 
+	@Override
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		//creates array to hold values of boards
 		double[] boardValues = new double[moves.length];
@@ -55,6 +56,7 @@ public class AaronAI extends AIEngine {
 		return sortedMoves;
 	}
 
+	@Override
 	public double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double alphaBeta) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));

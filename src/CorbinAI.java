@@ -8,6 +8,7 @@ import java.util.Collections;
 
 public class CorbinAI extends AIEngine {
 
+	@Override
 	public Move[] rankBestMove (Move[] unsortedMoves, Game g, Player p, int recursionDepth) {
 		Game[] ga = new Game[unsortedMoves.length];
 		double[] va = new double[unsortedMoves.length];
@@ -34,6 +35,7 @@ public class CorbinAI extends AIEngine {
 		return result;
 	}
 
+	@Override
 	private double minimax(Game g, int recursionDepth, boolean isOpponentNode, Player p) {
 	
 		if (recursionDepth == 0) {

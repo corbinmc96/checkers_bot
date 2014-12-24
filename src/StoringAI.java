@@ -9,6 +9,7 @@ public class StoringAI extends AIEngine {
 
 	private final FileHandler fileManager = new FileHandler("./values.savedata");
 
+	@Override
 	public Move[] rankBestMove (Move[] moves, Game g, Player p, int recursionDepth) {
 		String currentScenario = createStringRepresentation(g,p);
 		for (String storedScenario : fileManager.getAllLines()) {
@@ -74,6 +75,7 @@ public class StoringAI extends AIEngine {
 		return sortedMoves;
 	}
 
+	@Override
 	public double valueOfMoves(Game g, Player p, int recursionDepth, boolean testOpponentMoves, double ab) {
 		if (g.isDraw()) {
 			// System.out.println(Arrays.deepToString(g.getLastFewMoves()));
