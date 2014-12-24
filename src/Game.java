@@ -76,7 +76,7 @@ public class Game {
 		double lastTime = System.currentTimeMillis();
 
 		while (player1.getAllMoves(this).length>0 && !this.isDraw()) {
-			System.out.println(this.movesSinceEvent);
+			//System.out.println(this.movesSinceEvent);
 			this.gameBoard.printBoard();
 
 			this.lastFewMoves.add(this.player1.takeTurn(this).getWaypoints());
@@ -95,12 +95,12 @@ public class Game {
 			}
 
 			newTime = System.currentTimeMillis();
-			System.out.println(newTime - lastTime);
+			//System.out.println(newTime - lastTime);
 			lastTime = newTime;
 
 			if (player2.getAllMoves(this).length>0 && !this.isDraw()) {
-				System.out.println(this.movesSinceEvent);
-				this.gameBoard.printBoard();
+				//System.out.println(this.movesSinceEvent);
+				//this.gameBoard.printBoard();
 
 				this.lastFewMoves.add(this.player2.takeTurn(this).getWaypoints());
 				if (this.lastFewMoves.size()>8) {
@@ -118,7 +118,7 @@ public class Game {
 				}
 				
 				newTime = System.currentTimeMillis();
-				System.out.println(newTime - lastTime);
+				//System.out.println(newTime - lastTime);
 				lastTime = newTime;
 
 			} else {

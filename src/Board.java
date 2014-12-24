@@ -222,11 +222,21 @@ public class Board {
 					theLine[x] = "-";
 				}
 			}
+			String string_y = Integer.toString(y);
+			System.out.print(Colors.ANSI_YELLOW + string_y + " " + Colors.ANSI_RESET);
 			for (String s : theLine) {
-				System.out.print(s+" ");
+				String pieceColor = Colors.ANSI_RESET;
+				if (s.equals("x") || s.equals("X")) {
+					pieceColor = Colors.ANSI_RED;
+				} else if (s.equals("o") || s.equals("O")) {
+					pieceColor = Colors.ANSI_GREEN;
+				}
+				System.out.print(pieceColor + s + " " + Colors.ANSI_RESET);
 			}
+			System.out.print(Colors.ANSI_YELLOW + string_y + Colors.ANSI_RESET);
 			System.out.println();
 		}
+		System.out.println(Colors.ANSI_YELLOW + "  0 1 2 3 4 5 6 7" + Colors.ANSI_RESET);
 		System.out.println();
 	}
 

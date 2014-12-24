@@ -18,6 +18,7 @@ public class SimPlayer extends Player {
 
 	@Override
 	public Move takeTurn(Game g) throws InterruptedException {
+		System.out.println(Colors.ANSI_RED + "\n" + "... Opponent is thinking ..." + Colors.ANSI_RESET);
 		//calculates the best move to make the specified number of plies ahead
 		Move m = this.calculateBestMove(g, 10);
 		//performs the move on the stored (and the physical) board

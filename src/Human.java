@@ -17,6 +17,8 @@ public class Human extends Player {
 	private static final double DISTANCE_PRIORITY = 2;
 	private static final double SPLIT_PRIORITY = 2;
 	private static final int SCANNING_RECURSION_DEPTH = 3;
+	private static final String INSTRUCTIONS_PROMPTS[] = {"instructions", "instruction", "help"};
+	private static final String INSTRUCTIONS = "these are instructions.";
 
 	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
@@ -163,13 +165,21 @@ public class Human extends Player {
 			boolean moveEntered = false;
 			Move inputtedMove = null;
 			while (!moveEntered) {
-				System.out.println("Enter Move:");
+				System.out.println(Colors.ANSI_GREEN + "Enter Move:" + Colors.ANSI_RESET);
 				String inputLine = this.in.nextLine();
+				if (Arrays.asList(INSTRUCTIONS_PROMPTS).contains(inputLine)) {
+					System.out.println("\n" + INSTRUCTIONS + "\n");
+					continue;
+				}
+				if (inputLine.equals("exit")) {
+					System.out.println("\n" + "Goodbye!" + "\n");
+					System.exit(0);
+				}
 				if ((inputLine.length()+1)%3==0) {
 					inputLine = inputLine + " ";
 				}
-				if (inputLine.length()%3==0 && inputLine.length()>=5) {
 
+				try {
 					int numberOfWaypoints = inputLine.length()/3;
 					String[] waypointStrings = new String[numberOfWaypoints];
 					int[][] allWaypoints = new int[numberOfWaypoints][];
@@ -183,8 +193,14 @@ public class Human extends Player {
 					inputtedMove = new Move(this.getBoard().getPieceAtLocation(allWaypoints[0]), allWaypoints);
 					if (inputtedMove.getMovePiece()!=null && inputtedMove.getMovePiece().getPlayer()==this && inputtedMove.calculateIsValid(g)) {
 						moveEntered = true;
+						break;
 					}
-				}
+				} 
+				//These exceptions will be triggered by incorrectly formatted input. They are expected and not handled.
+				catch (NumberFormatException expected) {}
+				catch (ArrayIndexOutOfBoundsException expected) {}
+
+				System.out.println("Sorry. That does not appear to be a valid move!");
 			}
 			return inputtedMove;
 		}
