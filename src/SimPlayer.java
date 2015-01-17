@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 public class SimPlayer extends Player {
 
+	static final int RECURSION_DEPTH = 7;
+
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
 		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
@@ -20,7 +22,7 @@ public class SimPlayer extends Player {
 	public Move takeTurn(Game g) throws InterruptedException {
 		System.out.println(Colors.ANSI_RED + "\n" + "... Opponent is thinking ..." + Colors.ANSI_RESET);
 		//calculates the best move to make the specified number of plies ahead
-		Move m = this.calculateBestMove(g, 10);
+		Move m = this.calculateBestMove(g, RECURSION_DEPTH);
 		//performs the move on the stored (and the physical) board
 		this.performMove(m);
 		// System.out.println(Arrays.deepToString(m.getWaypoints()));
