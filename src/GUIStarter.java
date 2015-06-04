@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,10 +20,6 @@ import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.SequenceInputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -104,6 +99,7 @@ public class GUIStarter extends JFrame {
 
 	public static void main(String[] args) {
 		Runnable runner = new Runnable() {
+			@Override
 			public void run() {
 				GUIStarter test = new GUIStarter();
 				test.setVisible(true);
@@ -112,7 +108,6 @@ public class GUIStarter extends JFrame {
 		EventQueue.invokeLater(runner);
 	}
 
-	@SuppressWarnings("serial")
 	private class MainPanel extends JPanel {
 		public MainPanel() {
 			// SET UP LAYOUT
@@ -154,6 +149,7 @@ public class GUIStarter extends JFrame {
 			final JList<String> humanCL = GUIStarter.this.humanColorList;
 			final JList<String> robotCL = GUIStarter.this.robotColorList;
 			GUIStarter.this.humanColorList.addListSelectionListener(new ListSelectionListener() {
+				@Override
 				public void valueChanged(ListSelectionEvent event) {
 					robotCL.setSelectedIndex((humanCL.getSelectedIndex()+1)%2);
 				}
@@ -196,6 +192,7 @@ public class GUIStarter extends JFrame {
 
 			JButton inputPiecesButton = new JButton("CHOOSE STARTING POSITIONS");
 			inputPiecesButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					GUIStarter.this.mainLayout.next(getContentPane());
 					GUIStarter.this.setResizable(false);
@@ -207,6 +204,7 @@ public class GUIStarter extends JFrame {
 
 			JButton playButton = new JButton("PLAY NEW GAME");
 			playButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					GUIStarter.this.execPanel.runMainThread(
 						Starter.class,
@@ -259,12 +257,14 @@ public class GUIStarter extends JFrame {
 			this.add(scrollPane, BorderLayout.CENTER);
 
 			NavigationFilter navFilter = new NavigationFilter() {
+				@Override
 				public void setDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
 					if (dot == ExecPanel.this.currentTerminalLength) {
 						fb.setDot(dot, bias);
 					}
 				}
 
+				@Override
 				public void moveDot(NavigationFilter.FilterBypass fb, int dot, Position.Bias bias) {
 					if (dot == ExecPanel.this.currentTerminalLength) {
 						fb.setDot(dot, bias);
@@ -276,9 +276,11 @@ public class GUIStarter extends JFrame {
 			this.currentTerminalLength = this.textArea.getDocument().getLength();
 			this.currentInputStringB = new StringBuilder();
 			DocumentListener terminalListener = new DocumentListener() {
+				@Override
 				public void changedUpdate(DocumentEvent event) {
 				}
 
+				@Override
 				public void insertUpdate(DocumentEvent event) {
 					if (ExecPanel.this.textArea.getDocument().getLength() > ExecPanel.this.currentTerminalLength) {
 						try {
@@ -301,6 +303,7 @@ public class GUIStarter extends JFrame {
 					}
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent event) {
 					ExecPanel.this.currentTerminalLength = ExecPanel.this.textArea.getDocument().getLength();
 				}
@@ -312,6 +315,7 @@ public class GUIStarter extends JFrame {
 			resetPanel.setBorder(new CompoundBorder(new LineBorder(Color.white), new EmptyBorder(1, 2, 1, 2)));
 			this.resetButton = new JButton("RESET GAME");
 			this.resetButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					close();
 				}
@@ -346,6 +350,7 @@ public class GUIStarter extends JFrame {
 
 			// CREATES STARTER THREAD
 			this.mainThread = new Thread() {
+				@Override
 				public void run() {
 					try {
 						ExecPanel.this.runMainThreadHelper(params);
@@ -363,6 +368,7 @@ public class GUIStarter extends JFrame {
 
 			System.setIn(new SequenceInputStream(new BufferedInputStream(inPipe), System.in));
 			System.setOut(new PrintStream(new OutputStream() {
+				@Override
 				public void write(int b) throws IOException {
 					//updates output string
 					ExecPanel.this.currentTerminalLength++;
@@ -377,7 +383,7 @@ public class GUIStarter extends JFrame {
 		}
 
 		private <T extends Starter> void runMainThreadHelper(String[] params) throws InterruptedException {
-			T.main(params);
+			Starter.main(params);
 		}
 
 		public void close() {
@@ -460,6 +466,7 @@ public class GUIStarter extends JFrame {
 
 			JButton returnButton = new JButton("RETURN TO MENU");
 			returnButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					GUIStarter.this.mainLayout.first(getContentPane());
 					GUIStarter.this.setResizable(false);
@@ -471,6 +478,7 @@ public class GUIStarter extends JFrame {
 
 			JButton playButton = new JButton("PLAY GAME");
 			playButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent ae) {
 					PiecesPanel.this.play();
 				}
@@ -546,6 +554,7 @@ public class GUIStarter extends JFrame {
 					if ((row + column) % 2 == 0) {
 						final JLabel label = new JLabel(this.icons[GREEN_ICON]);
 						label.addMouseListener(new MouseListener() {
+							@Override
 							public void mouseClicked(MouseEvent e) {
 								for (int currentIconIndex = 0; currentIconIndex < PiecesPanel.this.icons.length; currentIconIndex++) {
 									if (PiecesPanel.this.icons[currentIconIndex] == label.getIcon()) {
@@ -555,9 +564,13 @@ public class GUIStarter extends JFrame {
 									}
 								}
 							}
+							@Override
 							public void mouseEntered(MouseEvent e) {}
+							@Override
 							public void mouseExited(MouseEvent e) {}
+							@Override
 							public void mousePressed(MouseEvent e) {}
+							@Override
 							public void mouseReleased(MouseEvent e) {}
 						});
 						boardPanel.add(label);

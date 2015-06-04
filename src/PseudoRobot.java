@@ -214,6 +214,7 @@ public class PseudoRobot extends Robot {
 				}
 			}
 		}
+		sc.close();
 		Arrays.sort(check_values);
 		middle_cutoff = (check_values[0]+check_values[1])/2;
 		light_cutoff = (check_values[1]+check_values[2])/2;
