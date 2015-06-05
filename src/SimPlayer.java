@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class SimPlayer extends Player {
 
-	static final int RECURSION_DEPTH = 7;
+	static final int RECURSION_DEPTH = 9;
 
 	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments

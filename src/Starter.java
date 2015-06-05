@@ -7,6 +7,12 @@ import java.io.IOException;
 
 public class Starter {
 
+	/**
+	 * Runs the core checkers program with robot control
+	 * 
+	 * @param  args                 Meant to be in the form: {@code [<robotColor> [<humanColor> [robot=<yes|pseudo> [official]]]] }
+	 * @throws InterruptedException thrown if the program is interrupted while executing
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		Robot r = null;
 		if (args.length > 2 && args[2].equals("robot=yes")) {
