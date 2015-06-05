@@ -99,11 +99,9 @@ public class Move {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		for (int i=0; i<waypoints.length; i++) {
-			System.out.print(i);
 			result.append(waypoints[i][0]);
 			result.append(waypoints[i][1]);
 		}
-		System.out.println(result.toString());
 		return result.toString();
 	}
 	public int[][] getCriticalPoints() {
