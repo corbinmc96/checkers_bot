@@ -111,14 +111,13 @@ public class MultithreadedAI extends AIEngine {
 
 		//tests if no moves are available, signaling a loss for one of the players
 		if (moves.length==0) {
-			return 0;
-			// if (testOpponentMoves) {
-			// 	//result is an opponent loss, or a positive value
-			// 	return (recursionDepth+1)*Board.MAX_BOARD_VALUE;
-			// } else {
-			// 	//result is a loss, or a negative value
-			// 	return -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
-			// }
+			if (testOpponentMoves) {
+				//result is an opponent loss, or a positive value
+				return (recursionDepth+1)*Board.MAX_BOARD_VALUE;
+			} else {
+				//result is a loss, or a negative value
+				return -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
+			}
 		}
 
 		//tests if only one move is available, meaning that the return value will be the value of the one move
@@ -250,14 +249,13 @@ public class MultithreadedAI extends AIEngine {
 
 			//tests if no moves are available, signaling a loss for one of the players
 			if (moves.length==0) {
-				return 0;
-				// if (testOpponentMoves) {
-				// 	//result is an opponent loss, or a positive value
-				// 	return (recursionDepth+1)*Board.MAX_BOARD_VALUE;
-				// } else {
-				// 	//result is a loss, or a negative value
-				// 	return -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
-				// }
+				if (testOpponentMoves) {
+					//result is an opponent loss, or a positive value
+					return (recursionDepth+1)*Board.MAX_BOARD_VALUE;
+				} else {
+					//result is a loss, or a negative value
+					return -(recursionDepth+1)*Board.MAX_BOARD_VALUE;
+				}
 			}
 
 			//tests if only one move is available, meaning that the return value will be the value of the one move

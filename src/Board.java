@@ -9,7 +9,7 @@ public class Board {
 
 	private ArrayList<Piece> piecesOnBoard;
 
-	public static final double MAX_BOARD_VALUE = 36;
+	public static final double MAX_BOARD_VALUE = 60;
 
 	public Board (Player[] players) {
 		if (players[0].getIsOnZeroSide() == players[1].getIsOnZeroSide()) {
@@ -195,11 +195,11 @@ public class Board {
 						distance = testDistance;
 					}
 				}
-				if (p1Value > p2Value) {
-					p1Value -= .05*distance;
+				if (winningPlayerPieces == p1Pieces) {
+					p1Value -= 0.001*distance;
 				} 
 				else {
-					p2Value -= .05*distance;
+					p2Value -= 0.001*distance;
 				}
 			}
 		}
