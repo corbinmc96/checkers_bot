@@ -496,4 +496,68 @@ public class Robot {
 		System.out.println(middle_cutoff);
 		System.out.println(light_cutoff);
 	}
+
+	public Move detectLastMove(Game g, Player p) {
+		//wait until player signifies they are done with their move
+		waitForSensorPress();
+
+		Player[] players = new Player[] {p, g.getOtherPlayer(p), null}
+	
+		Move[] possibleMoves = p.getAllMoves(g);
+		ArrayList<int[]> unscannedLocations = new ArrayList<int[]>();
+		for (int i = 0; i<8; i++) {
+			int j = i%2;
+			for (;j<8; j+=2) {
+				unscannedLocations.add(new int[] {i,j});
+			}
+		}
+		int[] currentLocation = new int[] {0,0};
+
+		//keep eliminating possible moves until only one is left
+		while (possibleMoves.size()>1) {
+			double[] ranks = new double[unscannedLocations.length];
+			for (int locationNum = 0; locationNum < unscannedLocations.length; locationNum++) {
+				int[] location = unscannedLocations.get(locationNum);
+				int[] playerOccurences = new int[] {0,0,0};
+				for (Move m : possibleMoves) {
+					Piece pieceAtLocation = (new Game(g, m)).getGameBoard().getPieceAtLocation(location);
+					if (pieceAtLocation == null) {
+						playerOccurences[0] += 1;
+					}
+					else if (pieceAtLocation.getPlayer() == p) {
+						playerOccurences[1] += 1;
+					}
+					else {
+						playerOccurences[2] += 1;
+					}
+				}
+				double average = (playerOccurences[0] + playerOccurences[1] + playerOccurences[2])/3.0;
+				double stdev = Math.pow((Math.pow(playerOccurences[0]-average, 2) +
+				                        Math.pow(playerOccurences[1]-average, 2) +
+				                        Math.pow(playerOccurences[2]-average, 2))/3.0, 0.5);
+				ranks[locationNum] = stdev;
+			}
+
+			double minRank = 0;
+			for (int i = 1; i < ranks.length; i++) {
+				if (ranks[i] < ranks[minRank]) {
+					minRank = i;
+				}
+			}
+		
+			String location_color = this.examineLocation(unscannedLocations[minRank]);
+			currentLocation = unscannedLocations[minRank];
+
+			for (Move m : possibleMoves) {
+				if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation) == null && location_color != middleColor) {
+					possibleMoves.remove(m);
+				}
+				if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation).getPlayer().getColor() != location_color) {
+					possibleMoves.remove(m);
+				}
+			}
+		}
+
+		return possibleMoves[0];
+	}
 }

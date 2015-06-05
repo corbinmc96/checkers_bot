@@ -107,14 +107,9 @@ public class Board {
 		return count;
 	}
 
-	public static boolean locationIsInBounds (int[] testLocation) {
+	public static boolean locationIsPlayable (int[] testLocation) {
 		int[] boardValues = new int[] {0,1,2,3,4,5,6,7};
-		if (ArraysHelper.asArrayList(boardValues).contains(testLocation[0]) && ArraysHelper.asArrayList(boardValues).contains(testLocation[1])) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return ArraysHelper.asArrayList(boardValues).contains(testLocation[0]) && ArraysHelper.asArrayList(boardValues).contains(testLocation[1]) && (testLocation[0] + testLocation[1])%2 == 0;
 	}
 
 	public double calculateValue(Player p) {
