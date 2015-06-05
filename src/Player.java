@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Aaron Miller
@@ -17,6 +19,12 @@ public abstract class Player {
 
 	private String xo;
 	private AIEngine brain;
+
+	private static final Comparator<Move> MOVE_COMPARATOR = new Comparator<Move>() {
+		public final int compare(Move m1, Move m2) {
+			return m1.toString().compareTo(m2.toString());
+		}
+	};
 
 	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
 		this.color = startColor;
@@ -126,6 +134,7 @@ public abstract class Player {
 
 		if (playOfficial && canJump) {
 			ArrayList<Move> filteredResult = new ArrayList<Move>();
+
 			for (Move m : result) {
 				if (m.getJumpsContained()>0) {
 					filteredResult.add(m);
@@ -133,6 +142,16 @@ public abstract class Player {
 					break;
 				}
 			}
+
+			Collections.sort(filteredResult, MOVE_COMPARATOR);
+			for (int i = 0; i < filteredResult.size() - 1;) {
+				if (filteredResult.get(i + 1).toString().contains(filteredResult.get(i).toString())) {
+					filteredResult.remove(i);
+				} else {
+					i++;
+				}
+			}
+
 			return filteredResult.toArray(new Move[filteredResult.size()]);
 		}
 		
