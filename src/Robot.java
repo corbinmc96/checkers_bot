@@ -501,9 +501,7 @@ public class Robot {
 		//wait until player signifies they are done with their move
 		waitForSensorPress();
 
-		Player[] players = new Player[] {p, g.getOtherPlayer(p), null}
-	
-		Move[] possibleMoves = p.getAllMoves(g);
+		ArrayList<Move> possibleMoves = new ArrayList<Move>(Arrays.asList(p.getAllMoves(g)));
 		ArrayList<int[]> unscannedLocations = new ArrayList<int[]>();
 		for (int i = 0; i<8; i++) {
 			int j = i%2;
@@ -515,8 +513,8 @@ public class Robot {
 
 		//keep eliminating possible moves until only one is left
 		while (possibleMoves.size()>1) {
-			double[] ranks = new double[unscannedLocations.length];
-			for (int locationNum = 0; locationNum < unscannedLocations.length; locationNum++) {
+			double[] ranks = new double[unscannedLocations.size()];
+			for (int locationNum = 0; locationNum < unscannedLocations.size(); locationNum++) {
 				int[] location = unscannedLocations.get(locationNum);
 				int[] playerOccurences = new int[] {0,0,0};
 				for (Move m : possibleMoves) {
@@ -545,10 +543,11 @@ public class Robot {
 				}
 			}
 		
-			String location_color = this.examineLocation(unscannedLocations[minRank]);
-			currentLocation = unscannedLocations[minRank];
+			String location_color = this.examineLocation(unscannedLocations.get(minRank));
+			currentLocation = unscannedLocations.get(minRank);
 
-			for (Move m : possibleMoves) {
+			for (int i = possibleMoves.size(); i>=0; i--) {
+				Move m = possibleMoves.get(i);
 				if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation) == null && location_color != middleColor) {
 					possibleMoves.remove(m);
 				}
@@ -558,6 +557,6 @@ public class Robot {
 			}
 		}
 
-		return possibleMoves[0];
+		return possibleMoves.get(0);
 	}
 }
