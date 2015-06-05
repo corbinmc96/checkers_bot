@@ -212,8 +212,8 @@ public class GUIStarter extends JFrame {
 							GUIStarter.this.robotColorList.getSelectedValue(),
 							GUIStarter.this.humanColorList.getSelectedValue(),
 							"robot=yes",
-							GUIStarter.this.difficultyList.getSelectedValue(),
-							GUIStarter.this.rulesList.getSelectedValue()
+							GUIStarter.this.rulesList.getSelectedValue(),
+							GUIStarter.this.difficultyList.getSelectedValue()
 						}
 					);
 					GUIStarter.this.mainLayout.last(getContentPane());
@@ -383,7 +383,7 @@ public class GUIStarter extends JFrame {
 		}
 
 		private <T extends Starter> void runMainThreadHelper(String[] params) throws InterruptedException {
-			Starter.main(params);
+			T.main(params);
 		}
 
 		public void close() {
@@ -635,8 +635,9 @@ public class GUIStarter extends JFrame {
 					"k2" + color2KBuilder.toString(),
 					GUIStarter.this.robotColorList.getSelectedValue(),
 					GUIStarter.this.humanColorList.getSelectedValue(),
-					GUIStarter.this.difficultyList.getSelectedValue(),
-					GUIStarter.this.rulesList.getSelectedValue()
+					"robot=yes",
+					GUIStarter.this.rulesList.getSelectedValue(),
+					GUIStarter.this.difficultyList.getSelectedValue()
 				}
 			);
 			GUIStarter.this.mainLayout.last(getContentPane());

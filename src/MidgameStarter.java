@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class MidgameStarter extends Starter {
+	/**
+	 * Runs the core game from an intermediate starting point
+	 * 
+	 * @param  args                 Meant to be in the form {@code robot|human p1=<firstPlayerPiecesList> p2=<secondPlayerPiecesList> k1=<firstPlayerKingsList> k2=<secondPlayerKingsList> [<robotColor> [<humanColor> [robot=<yes|pseudo> [official]]]]}
+	 * @throws InterruptedException [description]
+	 */
 	public static void main(String[] args) throws InterruptedException {
 
 		if (!args[0].equals("robot") && !args[0].equals("human")) {
@@ -48,15 +54,24 @@ public class MidgameStarter extends Starter {
 			p2Kings[i] = new int[] {Integer.parseInt(args[4].substring(3+2*i, 4+2*i)), Integer.parseInt(args[4].substring(4+2*i, 5+2*i))};
 		}
 
-		Robot r = new Robot();
+		Robot r;
+		if (args.length>7 && args[7].equalsIgnoreCase("robot=pseudo")) {
+			r = new PseudoRobot();
+		} else if (args.length>7 && args[7].equalsIgnoreCase("robot=none")) {
+			r = null;
+		} else {
+			r = new Robot();
+		}
 
 		try {
-			r.connect();
+			if (r != null) {
+				r.connect();
+			}
 
 			Game theGame;
 			if (args[0].equals("robot")) {
-				theGame = new Game(new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
-								   new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
+				theGame = new Game(new SimPlayer(args.length>5 ? args[5] : "x", false, r, new MultithreadedAI()),
+								   new Human(args.length>6 ? args[6] : "o", true, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -65,8 +80,8 @@ public class MidgameStarter extends Starter {
 								   r
 				);
 			} else {
-				theGame = new Game(new Human(args.length>6 ? args[6] : "o", false, r, new MultithreadedAI()),
-								   new SimPlayer(args.length>5 ? args[5] : "x", true, r, new MultithreadedAI()),
+				theGame = new Game(new Human(args.length>6 ? args[6] : "o", true, r, new MultithreadedAI()),
+								   new SimPlayer(args.length>5 ? args[5] : "x", false, r, new MultithreadedAI()),
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -93,8 +108,10 @@ public class MidgameStarter extends Starter {
 				}
 			}
 
-			r.calibrate(squaresToCalibrate);
-			r.resetPosition();
+			if (r != null) {
+				r.calibrate(squaresToCalibrate);
+				r.resetPosition();
+			}
 
 			Player winner = theGame.play();
 
@@ -106,13 +123,15 @@ public class MidgameStarter extends Starter {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
-			System.err.print("Disconnecting robot...");
-			try {
-				r.disconnect();
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
+			if (r != null) {
+				System.err.print("Disconnecting robot...");
+				try {
+					r.disconnect();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+				System.err.println("DONE");
 			}
-			System.err.println("DONE");
 		}
 	}
 }
