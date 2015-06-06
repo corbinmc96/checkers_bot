@@ -69,9 +69,24 @@ public class MidgameStarter extends Starter {
 			}
 
 			Game theGame;
+
+			Player humanPlayer;
+			Player robotPlayer;
+			if (args.length > 6) {
+				humanPlayer = new Human('o', false, new MultithreadedAI(), r, args[6]);
+			} else {
+				humanPlayer = new Human('o', false, new MultithreadedAI(), r, Robot.DARK_COLOR);
+			}
+
+			if (args.length > 5) {
+				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, args[5]);
+			} else {
+				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, Robot.LIGHT_COLOR);
+			}
+
 			if (args[0].equals("robot")) {
-				theGame = new Game(new SimPlayer(args.length>5 ? args[5] : "x", false, r, new MultithreadedAI()),
-								   new Human(args.length>6 ? args[6] : "o", true, r, new MultithreadedAI()),
+				theGame = new Game(robotPlayer,
+								   humanPlayer,
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -80,8 +95,8 @@ public class MidgameStarter extends Starter {
 								   r
 				);
 			} else {
-				theGame = new Game(new Human(args.length>6 ? args[6] : "o", true, r, new MultithreadedAI()),
-								   new SimPlayer(args.length>5 ? args[5] : "x", false, r, new MultithreadedAI()),
+				theGame = new Game(humanPlayer,
+								   robotPlayer,
 								   p1Locations,
 								   p2Locations,
 								   p1Kings,
@@ -118,7 +133,7 @@ public class MidgameStarter extends Starter {
 			if (winner == null) {
 				System.out.println("TIE");
 			} else {
-				System.out.println("WINNER:  " + (winner.getXO().equals(" ") ? winner.getColor() : winner.getXO()));
+				System.out.println("WINNER:  " + winner.getXO());
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();

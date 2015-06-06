@@ -31,13 +31,13 @@ public class Starter {
 			Player humanPlayer;
 			Player robotPlayer;
 			if (args.length > 1) {
-				humanPlayer = new Human('o', false, new MultithreadedAI(), r, args[0]);
+				humanPlayer = new Human('o', false, new MultithreadedAI(), r, args[1]);
 			} else {
 				humanPlayer = new Human('o', false, new MultithreadedAI(), r, Robot.DARK_COLOR);
 			}
 
-			if (args.length > 2) {
-				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, args[1]);
+			if (args.length > 0) {
+				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, args[0]);
 			} else {
 				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, Robot.LIGHT_COLOR);
 			}
