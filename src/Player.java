@@ -17,7 +17,7 @@ public abstract class Player {
 	//contains the piece color
 	private String color;
 
-	private String xo;
+	private char xo;
 	private AIEngine brain;
 
 	private static final Comparator<Move> MOVE_COMPARATOR = new Comparator<Move>() {
@@ -26,22 +26,16 @@ public abstract class Player {
 		}
 	};
 
-	public Player (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
-		this.color = startColor;
-		this.xo = startColor;
-		this.isOnZeroSide = startsOnZeroSide;
-		this.gameRobot = startGameRobot;
-		this.brain = startBrain;
-	}
-
-	public Player(String startXO, boolean startsOnZeroSide, AIEngine startBrain) {
-		this.color = startXO;
+	public Player (char startXO, boolean startsOnZeroSide, AIEngine startBrain, Robot startGameRobot, String startColor) {
 		this.xo = startXO;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.brain = startBrain;
+		this.gameRobot = startGameRobot;
+		this.color = startColor;
 	}
 
-	public Player (boolean startsOnZeroSide, AIEngine startBrain) {
+	public Player(char startXO, boolean startsOnZeroSide, AIEngine startBrain) {
+		this.xo = startXO;
 		this.isOnZeroSide = startsOnZeroSide;
 		this.brain = startBrain;
 	}
@@ -69,10 +63,7 @@ public abstract class Player {
 		return result;
 	}
 
-	public String getXO() {
-		if (this.xo ==null) {
-			return " ";
-		}
+	public char getXO() {
 		return this.xo;
 	}
 	

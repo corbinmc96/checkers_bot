@@ -20,12 +20,12 @@ public class Human extends Player {
 	private static final String INSTRUCTIONS_PROMPTS[] = {"instructions", "instruction", "help"};
 	private static final String INSTRUCTIONS = "these are instructions.";
 
-	public Human (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+	public Human (char startXO, boolean startsOnZeroSide, AIEngine startBrain, Robot startGameRobot, String startColor) {
 		//calls the Player constructor with the same arguments
-		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
+		super(startXO, startsOnZeroSide, startBrain, startGameRobot, startColor);
 	}
 
-	public Human (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+	public Human (char startXO, boolean startOnZeroSide, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
 		super(startXO, startOnZeroSide, startBrain);
 	}
@@ -48,7 +48,7 @@ public class Human extends Player {
 			boolean moveEntered = false;
 			Move inputtedMove = null;
 			while (!moveEntered) {
-				System.out.println(Colors.ANSI_GREEN + "Enter Move:" + Colors.ANSI_RESET);
+				System.out.println(Colors.ansiGreen() + "Enter Move:" + Colors.ansiReset());
 				String inputLine = this.in.nextLine();
 				if (Arrays.asList(INSTRUCTIONS_PROMPTS).contains(inputLine)) {
 					System.out.println("\n" + INSTRUCTIONS + "\n");

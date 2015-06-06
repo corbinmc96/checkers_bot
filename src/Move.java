@@ -100,7 +100,9 @@ public class Move {
 		StringBuilder result = new StringBuilder();
 		for (int i=0; i<waypoints.length; i++) {
 			result.append(waypoints[i][0]);
+			result.append(",");
 			result.append(waypoints[i][1]);
+			result.append(" ");
 		}
 		return result.toString();
 	}

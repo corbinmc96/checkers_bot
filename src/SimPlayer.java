@@ -8,19 +8,19 @@ public class SimPlayer extends Player {
 
 	static final int RECURSION_DEPTH = 9;
 
-	public SimPlayer (String startColor, boolean startsOnZeroSide, Robot startGameRobot, AIEngine startBrain) {
+	public SimPlayer (char startXO, boolean startsOnZeroSide, AIEngine startBrain, Robot startGameRobot, String startColor) {
 		//calls the Player constructor with the same arguments
-		super(startColor, startsOnZeroSide, startGameRobot, startBrain);
+		super(startXO, startsOnZeroSide, startBrain, startGameRobot, startColor);
 	}
 
-	public SimPlayer (String startXO, boolean startOnZeroSide, AIEngine startBrain) {
+	public SimPlayer (char startXO, boolean startOnZeroSide, AIEngine startBrain) {
 		//calls the Player constructor with the same arguments
 		super(startXO, startOnZeroSide, startBrain);
 	}
 
 	@Override
 	public Move takeTurn(Game g) throws InterruptedException {
-		System.out.println(Colors.ANSI_RED + "\n" + "... Opponent is thinking ..." + Colors.ANSI_RESET);
+		System.out.println(Colors.ansiRed() + "\n" + "... Opponent is thinking ..." + Colors.ansiReset());
 		//calculates the best move to make the specified number of plies ahead
 		Move m = this.calculateBestMove(g, RECURSION_DEPTH);
 		//performs the move on the stored (and the physical) board

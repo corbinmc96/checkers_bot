@@ -28,9 +28,22 @@ public class Starter {
 				r.resetPosition();
 			}
 		
+			Player humanPlayer;
+			Player robotPlayer;
+			if (args.length > 1) {
+				humanPlayer = new Human('o', false, new MultithreadedAI(), r, args[0]);
+			} else {
+				humanPlayer = new Human('o', false, new MultithreadedAI(), r, Robot.DARK_COLOR);
+			}
+
+			if (args.length > 2) {
+				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, args[1]);
+			} else {
+				robotPlayer = new SimPlayer('x', true, new MultithreadedAI(), r, Robot.LIGHT_COLOR);
+			}
 			Game theGame = new Game(
-				new Human(args.length > 1 ? args[1] : "o", false, r, new MultithreadedAI()),
-				new SimPlayer(args.length > 0 ? args[0] : "x", true, r, new MultithreadedAI()),
+				humanPlayer,
+				robotPlayer,
 				(args.length > 3 && args[3].equals("official")),
 				r
 			);

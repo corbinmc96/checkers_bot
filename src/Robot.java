@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -45,13 +46,13 @@ public class Robot {
 	private int[] deadLocation;
 
 	// CLASS VARIABLES
-	public static String darkColor = "black";
-	public static String middleColor = "green";
-	public static String lightColor = "gray";
+	public static final String DARK_COLOR = "black";
+	public static final String MIDDLE_COLOR = "green";
+	public static final String LIGHT_COLOR = "gray";
 	
-	public static final String BOARD_COLOR = "green";
+	public static final String BOARD_COLOR = Robot.MIDDLE_COLOR;
 
-
+	// brick connection addresses
 	public static final String CART_BRICK_ADDRESS = "001653058875";
 	public static final String ARCH_BRICK_ADDRESS = "001653058A82";
 
@@ -374,13 +375,15 @@ public class Robot {
 		this.xMotor.resetTachoCount();
 	}
 	
-	public String examineLocation(int[] location) {
+	public String examineLocation(int[] location) throws InterruptedException {
 		this.yMotor1.rotateTo((int) -Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
 		this.yMotor2.rotateTo((int) -Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
 		this.xMotor.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (location[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE + Robot.SENSOR_OFFSET_X)));
 		while (this.yMotor1.isMoving());
 		while (this.yMotor2.isMoving());
 			//do nothing
+
+		Thread.sleep(200);
 
 		int lightValue = this.lightSensor.getNormalizedLightValue();
 		System.out.println(lightValue);
@@ -391,11 +394,11 @@ public class Robot {
 		}
 
 		if (lightValue <= this.middle_cutoff) {
-			return Robot.darkColor;
+			return Robot.DARK_COLOR;
 		} else if (lightValue <= this.light_cutoff) {
-			return Robot.middleColor;
+			return Robot.MIDDLE_COLOR;
 		} else {
-			return Robot.lightColor;
+			return Robot.LIGHT_COLOR;
 		}
 	}
 
@@ -426,7 +429,7 @@ public class Robot {
 		}
 	}
 
-	public void calibrate() {
+	public void calibrate() throws InterruptedException {
 		int[] light_values = new int[3];
 		int[] board_values = new int[3];
 		int[] dark_values = new int[3];
@@ -497,7 +500,7 @@ public class Robot {
 		System.out.println(light_cutoff);
 	}
 
-	public Move detectLastMove(Game g, Player p) {
+	public Move detectLastMove(Game g, Player p) throws InterruptedException {
 		//wait until player signifies they are done with their move
 		waitForSensorPress();
 
@@ -536,7 +539,7 @@ public class Robot {
 				ranks[locationNum] = stdev;
 			}
 
-			double minRank = 0;
+			int minRank = 0;
 			for (int i = 1; i < ranks.length; i++) {
 				if (ranks[i] < ranks[minRank]) {
 					minRank = i;
@@ -544,19 +547,45 @@ public class Robot {
 			}
 		
 			String location_color = this.examineLocation(unscannedLocations.get(minRank));
+			System.out.println(location_color);
 			currentLocation = unscannedLocations.get(minRank);
 
-			for (int i = possibleMoves.size(); i>=0; i--) {
-				Move m = possibleMoves.get(i);
-				if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation) == null && location_color != middleColor) {
-					possibleMoves.remove(m);
-				}
-				if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation).getPlayer().getColor() != location_color) {
-					possibleMoves.remove(m);
-				}
-			}
-		}
+			ArrayList<Move> newPossibleMoves = new ArrayList<Move>();
 
+			System.out.println("----------");
+			for (int i = possibleMoves.size()-1; i>=0; i--) {
+				Move m = possibleMoves.get(i);
+				System.out.println(m);
+				System.out.println(location_color);
+				Piece piece = (new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation);
+				if (piece == null) {
+					System.out.println("null");
+					if (location_color.equals(Robot.MIDDLE_COLOR)) {
+
+						newPossibleMoves.add(m);
+					}
+					continue;
+				}
+				System.out.println(piece.getPlayer().getColor());
+				if (piece.getPlayer().getColor().equals(location_color)) {
+					newPossibleMoves.add(m);
+				}
+				// if (location_color != Robot.MIDDLE_COLOR) {
+				// 	if ((new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation) == null) {
+				// 		possibleMoves.remove(m);
+				// 	}
+				// 	continue;
+				// }
+				// Piece piece = (new Game(g, m)).getGameBoard().getPieceAtLocation(currentLocation);
+				// if (piece == null) {
+				// 	System.out.println("Piece is null");
+				// }
+				// if (piece.getPlayer().getColor() != location_color) {
+				// 	possibleMoves.remove(m);
+				// }
+			}
+			possibleMoves = newPossibleMoves;
+		}
 		return possibleMoves.get(0);
 	}
 }

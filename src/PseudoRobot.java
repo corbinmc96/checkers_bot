@@ -19,13 +19,8 @@ public class PseudoRobot extends Robot {
 
 	public int[] deadLocation;
 
-	// CLASS VARIABLES
-	public static String darkColor = "black";
-	public static String middleColor = "green";
-	public static String lightColor = "gray";
-	
+	// CLASS VARIABLES	
 	public static final String BOARD_COLOR = "green";
-
 
 	public static void main(String[] args) {
 		PseudoRobot r = new PseudoRobot();
@@ -175,11 +170,11 @@ public class PseudoRobot extends Robot {
 		}
 
 		if (lightValue <= this.middle_cutoff) {
-			return Robot.darkColor;
+			return Robot.DARK_COLOR;
 		} else if (lightValue <= this.light_cutoff) {
-			return Robot.middleColor;
+			return Robot.MIDDLE_COLOR;
 		} else {
-			return Robot.lightColor;
+			return Robot.LIGHT_COLOR;
 		}
 	}
 
