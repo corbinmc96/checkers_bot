@@ -17,5 +17,5 @@ if [ "$1" = "tui" ]; then
 		TUIStarter 2> charva.log
 else
 	nxjpcc Starter.java
-	nxjpc Starter ${1}
+	nxjpc -Xmx256M Starter ${1}
 fi
