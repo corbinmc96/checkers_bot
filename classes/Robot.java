@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class Robot {
 
 	// INSTANCE VARIABLES
-	private NXTConnector conn1;
-	private NXTConnector conn2;
+	private NXTConnector cartConnector;
+	private NXTConnector archConnector;
 
 	private RemoteMotor xMotor;
 	private RemoteMotor yMotor1;
@@ -20,6 +20,7 @@ public class Robot {
 
 	private LightSensor lightSensor;
 	private TouchSensor touchSensor;
+
 	private boolean isHoldingPiece;
 	private Thread hook;
 	private boolean connected;
@@ -31,6 +32,8 @@ public class Robot {
 	public static String darkColor = "black";
 	public static String middleColor = "gray";
 	public static String lightColor = "green";
+	
+	public static final String BOARD_COLOR = "green";
 
 	public static final int[] DEAD_LOCATION = new int[] {0, -1};
 
@@ -48,12 +51,12 @@ public class Robot {
 	private static final double WHEEL_CIRCUMFERENCE = 3.7 * Math.PI;
 
 	private static final double SENSOR_OFFSET_X = 12.5;
-	private static final double SENSOR_OFFSET_Y = 1;
+	private static final double SENSOR_OFFSET_Y = -1;
 
 	public Robot() {
 		this.connected = false;
-		this.conn1 = new NXTConnector();
-		this.conn2 = new NXTConnector();
+		this.cartConnector = new NXTConnector();
+		this.archConnector = new NXTConnector();
 
 		this.hook = new Thread() {
 			public void start() {
@@ -167,19 +170,20 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			System.out.println(this.conn1.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
-			System.out.println(this.conn2.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.cartConnector.connectTo(null, Robot.CART_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
+			System.out.println(this.archConnector.connectTo(null, Robot.ARCH_BRICK_ADDRESS, NXTCommFactory.USB, NXTComm.LCP));
 
-			this.xMotor = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 2);
-			this.yMotor1 = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 0);
-			this.yMotor2 = new RemoteMotor(new NXTCommand(this.conn2.getNXTComm()), 0);
-			this.magnetMotor = new RemoteMotor(new NXTCommand(this.conn1.getNXTComm()), 1);
+			NXTCommand comm1 = new NXTCommand(this.cartConnector.getNXTComm());
+			NXTCommand comm2 = new NXTCommand(this.archConnector.getNXTComm());
 
-			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn1.getNXTComm()));
+			this.xMotor = new RemoteMotor(comm1, 0);
+			this.yMotor1 = new RemoteMotor(comm2, 1);
+			this.yMotor2 = new RemoteMotor(comm1, 1);
+			this.magnetMotor = new RemoteMotor(comm1, 2);
 
 			Runtime.getRuntime().addShutdownHook(this.hook);
 
-			this.touchSensor = new TouchSensor(SensorPort.S2);
+			this.touchSensor = new TouchSensor(SensorPort.S1);
 			this.lightSensor = new LightSensor(SensorPort.S1);
 
 			this.yMotor1.setSpeed(100);
@@ -195,7 +199,7 @@ public class Robot {
 			this.xMotor.resetTachoCount();
 			this.magnetMotor.resetTachoCount();
 
-			// this.calibrate();
+			this.calibrate();
 
 			this.resetPosition();
 
@@ -204,16 +208,14 @@ public class Robot {
 	}
 
 	public void disconnect() throws IOException {
-		// System.out.println("in disconnect");
 		if (this.connected) {
-			// System.out.println("disconnecting");
 
 			// MotorPort.A.controlMotor(0, 4);
 			// MotorPort.B.controlMotor(0, 4);
 			// MotorPort.C.controlMotor(0, 4);
 
-			this.conn1.close();
-			this.conn2.close();
+			this.cartConnector.close();
+			this.archConnector.close();
 
 			Runtime.getRuntime().removeShutdownHook(this.hook);
 
@@ -225,8 +227,9 @@ public class Robot {
 			this.touchSensor = null;
 			this.lightSensor = null;
 
+			this.isHoldingPiece = false;
+
 			this.connected = false;
-			// System.out.println("done disconnecting");
 		}
 	}
 
@@ -276,7 +279,7 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			this.magnetMotor.rotateTo(-240);
+			this.magnetMotor.rotateTo(-210);
 			this.isHoldingPiece = true;
 		}
 	}

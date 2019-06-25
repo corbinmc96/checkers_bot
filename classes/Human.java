@@ -51,7 +51,7 @@ public class Human extends Player {
 			try {
 				t.join();
 			} catch (InterruptedException e) {
-				System.out.print(e);
+				e.printStackTrace();
 			}
 
 			//iterates over all possible moves
@@ -66,22 +66,21 @@ public class Human extends Player {
 				boolean shouldContinue = false;
 				//iterates over all waypoints which should be empty
 				for (int[] waypoint : ArraysHelper.copyOfRange(waypoints, 0, waypoints.length-1)) {
+					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
 					if (scannedLocations.contains(waypoint)) {
 						//sets pointColor to the previously stored value
-						System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-						System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 						pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
+						System.out.println("Already know color: "+pointColor+"\n");
 					} else {
 						//scans the board to get pointColor
-						System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-						System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
-						pointColor = this.getRobot().examineLocation(waypoint);
+						pointColor = r.examineLocation(waypoint);
+						System.out.println("Color found: "+pointColor+"\n");
 						//stores the color in the pair of arrays holding the scanned locations and values
 						scannedLocations.add(waypoint);
 						locationValues.add(pointColor);
 					}
 					//breaks and continues to the next move if the square is not empty
-					if (pointColor!=Board.COLOR) {
+					if (!pointColor.equals(Robot.BOARD_COLOR)) {
 						System.out.println("The piece was NOT moved. Moving on to next move\n");
 						shouldContinue = true;
 						break;
@@ -97,22 +96,21 @@ public class Human extends Player {
 				//sets last waypoint
 				int[] waypoint = waypoints[waypoints.length-1];
 				//checks the color of the last waypoint
+				System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
 				if (scannedLocations.contains(waypoint)) {
 					//sets pointColor to the previously stored value
-					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-					System.out.println("Already know color: "+locationValues.get(scannedLocations.indexOf(waypoint))+"\n");
 					pointColor = locationValues.get(scannedLocations.indexOf(waypoint));
+					System.out.println("Already know color: "+pointColor+"\n");
 				} else {
 					//scans the board to get pointColor
-					System.out.println("Examining: "+waypoint[0]+","+waypoint[1]+"\n");
-					System.out.println("Color found: "+this.getRobot().examineLocation(waypoint)+"\n");
-					pointColor = this.getRobot().examineLocation(waypoints[waypoints.length-1]);
+					pointColor = r.examineLocation(waypoint);
+					System.out.println("Color found: "+pointColor+"\n");
 					//stores the color in the pair of arrays holding the scanned locations and values
 					scannedLocations.add(waypoint);
 					locationValues.add(pointColor);
 				}
 				//returns the move if the final square matches the color of this player's pieces
-				if (pointColor==this.getColor()) {
+				if (pointColor.equals(this.getColor())) {
 					for (Move like_m : possibleMoves) {
 						boolean is_correct = true;
 						int[][] m_waypoints = m.getWaypoints();
@@ -123,7 +121,7 @@ public class Human extends Player {
 						Integer[] last_like_m = Human.convert(like_m_waypoints[like_m_waypoints.length - 1]);
 						if (Arrays.deepEquals(first_m, first_like_m) && Arrays.deepEquals(last_m, last_like_m)) {
 							for (Piece jumped_piece : like_m.calculatePiecesToJump()) {
-								if (this.getRobot().examineLocation(jumped_piece.getLocation())!="green"){
+								if (!r.examineLocation(jumped_piece.getLocation()).equals(Robot.BOARD_COLOR)) {
 									is_correct = false;
 									break;
 								} 
@@ -133,7 +131,8 @@ public class Human extends Player {
 							}
 						} 
 					}
-					return m;
+					System.err.println("No jumps exist with the correct endpoints and all jumped pieces removed");
+					return null;
 				}
 				System.out.println("Endpoint is not the Human's color. Checking next move...\n");
 			}

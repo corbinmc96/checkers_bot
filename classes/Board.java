@@ -7,7 +7,6 @@ public class Board {
 
 	private ArrayList<Piece> piecesOnBoard;
 
-	public static final String COLOR = "black";
 	public static final double MAX_BOARD_VALUE = 36;
 
 	public Board (Player[] players) {
