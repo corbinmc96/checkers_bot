@@ -10,10 +10,17 @@ import java.util.Arrays;
 public class Robot {
 
 	// INSTANCE VARIABLES
-	private NXTConnector conn;
+	private NXTConnector conn1;
+	private NXTConnector conn2;
+
+	private RemoteMotor xMotor;
+	private RemoteMotor yMotor1;
+	private RemoteMotor yMotor2;
+	private RemoteMotor magnetMotor;
+
 	private LightSensor lightSensor;
 	private TouchSensor touchSensor;
-	private int[] armLocation;
+
 	private boolean isHoldingPiece;
 	private Thread hook;
 	private boolean connected;
@@ -43,7 +50,8 @@ public class Robot {
 
 	public Robot() {
 		this.connected = false;
-		this.conn = new NXTConnector();
+		this.conn1 = new NXTConnector();
+		this.conn2 = new NXTConnector();
 
 		this.hook = new Thread() {
 			public void start() {
@@ -157,20 +165,32 @@ public class Robot {
 
 	public void connect() {
 		if (!this.connected) {
-			this.conn.connectTo(NXTComm.LCP);
-			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn.getNXTComm()));
-			Runtime.getRuntime().addShutdownHook(this.hook);
+			this.conn1.connectTo(null, null, NXTCommFactory.USB, NXTComm.LCP);
+			this.conn2.connectTo(null, null, NXTCommFactory.USB, NXTComm.LCP);
 
-			Motor.A.setSpeed(150);
-			Motor.B.setSpeed(150);
-			Motor.C.setSpeed(150);
+			NXTCommand comm1 = new NXTCommand(this.conn1.getNXTComm());
+			NXTCommand comm2 = new NXTCommand(this.conn2.getNXTComm());
 
-			Motor.A.resetTachoCount();
-			Motor.B.resetTachoCount();
-			Motor.C.resetTachoCount();
+			this.xMotor = new RemoteMotor(comm1, 0);
+			this.yMotor1 = new RemoteMotor(comm1, 1);
+			this.yMotor2 = new RemoteMotor(comm1, 2);
+			this.magnetMotor = new RemoteMotor(comm2, 0);
 
+			NXTCommandConnector.setNXTCommand(new NXTCommand(this.conn1.getNXTComm()));
 			this.touchSensor = new TouchSensor(SensorPort.S1);
 			this.lightSensor = new LightSensor(SensorPort.S2);
+
+			Runtime.getRuntime().addShutdownHook(this.hook);
+
+			this.yMotor1.setSpeed(150);
+			this.yMotor2.setSpeed(150);
+			this.xMotor.setSpeed(150);
+			this.magnetMotor.setSpeed(150);
+
+			this.yMotor1.resetTachoCount();
+			this.yMotor2.resetTachoCount();
+			this.xMotor.resetTachoCount();
+			this.magnetMotor.resetTachoCount();
 
 			this.calibrate();
 
@@ -187,11 +207,19 @@ public class Robot {
 			// MotorPort.B.controlMotor(0, 4);
 			// MotorPort.C.controlMotor(0, 4);
 
-			this.conn.close();
+			this.conn1.close();
+			this.conn2.close();
 			Runtime.getRuntime().removeShutdownHook(this.hook);
+
+			this.xMotor = null;
+			this.yMotor1 = null;
+			this.yMotor2 = null;
+			this.magnetMotor = null;
 
 			this.touchSensor = null;
 			this.lightSensor = null;
+
+			this.isHoldingPiece = false;
 
 			this.connected = false;
 			// System.out.println("done disconnecting");
@@ -203,23 +231,29 @@ public class Robot {
 	}
 	
 	public void moveToXY(int[] newXY) {
-		Motor.A.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (newXY[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE)), true);
-		Motor.B.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (newXY[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE)));
-		while (Motor.A.isMoving());
+		this.yMotor1.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (newXY[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE)), true);
+		this.yMotor2.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (newXY[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE)), true);
+		this.xMotor.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (newXY[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE)));
+		while (this.yMotor1.isMoving());
+		while (this.yMotor2.isMoving());
 			//do nothing
 	}
 	
 	public void resetPosition() {
-		Motor.A.rotateTo(0, true);
-		Motor.B.rotateTo(0);
-		while (Motor.A.isMoving());
+		this.yMotor1.rotateTo(0, true);
+		this.yMotor2.rotateTo(0, true);
+		this.xMotor.rotateTo(0);
+		while (this.yMotor1.isMoving());
+		while (this.yMotor2.isMoving());
 			//do nothing
 	}
 	
 	public String examineLocation(int[] location) {
-		Motor.A.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
-		Motor.B.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (location[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE + Robot.SENSOR_OFFSET_X)));
-		while (Motor.A.isMoving());
+		this.yMotor1.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
+		this.yMotor2.rotateTo((int) Math.round(360 / Robot.WHEEL_CIRCUMFERENCE * (location[1]*Robot.Y_SQUARE_SPACING + Robot.BASELINE_Y_DISTANCE + Robot.SENSOR_OFFSET_Y)), true);
+		this.xMotor.rotateTo((int) Math.round(360 / Robot.GEAR_CIRCUMFERENCE * (location[0]*Robot.X_SQUARE_SPACING + Robot.BASELINE_X_DISTANCE + Robot.SENSOR_OFFSET_X)));
+		while (this.yMotor1.isMoving());
+		while (this.yMotor2.isMoving());
 			//do nothing
 
 		int lightValue = this.lightSensor.readValue();
@@ -235,15 +269,15 @@ public class Robot {
 
 	public void pickUpPiece() {
 		if (!this.isHoldingPiece) {
-			Motor.C.rotateTo(-240);
+			this.magnetMotor.rotateTo(-240);
 			this.isHoldingPiece = true;
 		}
 	}
 
 	public void dropPiece() {
 		if (this.isHoldingPiece) {
-			Motor.C.rotateTo(-360);
-			Motor.C.resetTachoCount();
+			this.magnetMotor.rotateTo(-360);
+			this.magnetMotor.resetTachoCount();
 			this.isHoldingPiece = false;
 		}
 	}
@@ -257,13 +291,12 @@ public class Robot {
 
 	public void calibrate() {
 		int[] check_values = new int[] {0,0,0};
-		LightSensor light = new LightSensor(SensorPort.S1);
 		for (int[] check_location : new int[][] {new int[] {0,1},new int[] {0,3},new int[] {0,7}}) {
 			this.examineLocation(check_location);
 
 			for (int i = 0; i<3; i++) {
 				if (check_values[i]==0) {
-					check_values[i]=light.getLightValue();
+					check_values[i]=this.lightSensor.getLightValue();
 					break;
 				}
 			}
